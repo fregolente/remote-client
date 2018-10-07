@@ -1,17 +1,15 @@
 import React from 'react';
-import { Switch, Route } from 'react-router-dom';
+import { Switch, Route, Redirect } from 'react-router-dom';
 
 // Constants
 import * as routes from '~/constants/routes';
 
 // Components
-// import Container from './pages';
-import Login from './pages/login';
-import LandingPage from './pages/landingPage';
+import LoginDedicated from './pages/login';
 
 export default (
   <Switch>
-    <Route path={routes.LOGIN} component={Login} exact />
-    <Route path="/" component={LandingPage} />
+    <Route path={routes.LOGIN} component={LoginDedicated} exact />
+    <Redirect from="/" to={routes.LOGIN} />
   </Switch>
 );

@@ -10,6 +10,7 @@ import {
 const initialState = {
   theme: 'greyTheme', // default theme
   isPageLoading: true,
+  sidebarOpen: false,
 };
 
 export default function uiActionsReducer(state = initialState, action) {

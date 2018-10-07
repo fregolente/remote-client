@@ -49,8 +49,7 @@ class About extends React.Component {
         alignItems="flex-start"
         justify="flex-start"
         direction="row"
-        spacing={24}
-      >
+        spacing={24}>
         <Grid item md={7} xs={12}>
           <div>
             <Timeline dataTimeline={data} />
@@ -73,8 +72,7 @@ class About extends React.Component {
                   }
                   label="60% Progress"
                   className={classes.chip}
-                  color="primary"
-                />
+                  color="primary" />
               </Grid>
               <LinearProgress variant="determinate" className={classes.progress} value={60} />
             </Paper>
@@ -105,7 +103,7 @@ class About extends React.Component {
             </List>
           </PapperBlock>
           {/* ----------------------------------------------------------------------*/}
-          {/* My Albums */}
+          {/* My Albums 
           <PapperBlock title="My Albums (6)" whiteBg desc="">
             <div className={classes.albumRoot}>
               <GridList cellHeight={180} className={classes.gridList}>
@@ -138,7 +136,7 @@ class About extends React.Component {
                 See All
               </Button>
             </Grid>
-          </PapperBlock>
+          </PapperBlock> */}
           {/* ----------------------------------------------------------------------*/}
           {/* My Connection Me */}
           <PapperBlock title="My Connection" whiteBg desc="">

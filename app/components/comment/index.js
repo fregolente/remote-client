@@ -130,12 +130,12 @@ Comment.propTypes = {
   handleClose: PropTypes.func.isRequired,
   submitComment: PropTypes.func.isRequired,
   classes: PropTypes.object.isRequired,
-  dataComment: PropTypes.object,
+  dataComment: PropTypes.array,
   fullScreen: PropTypes.bool.isRequired,
 };
 
 Comment.defaultProps = {
-  dataComment: undefined
+  dataComment: []
 };
 
 const CommentResponsive = withMobileDialog()(Comment);

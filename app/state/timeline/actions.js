@@ -1,7 +1,7 @@
 
 export const FETCH_TIMELINE_DATA = 'FETCH_TIMELINE_DATA';
 export const fetchAction = (items) => {
-  console.debug(`${FETCH_TIMELINE_DATA} Action: `, items);
+  console.debug(`Timeline Fetch Action -> ${FETCH_TIMELINE_DATA}: `, items);
   return {
     type: FETCH_TIMELINE_DATA,
     items,

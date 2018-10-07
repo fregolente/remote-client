@@ -1,109 +1,36 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
-// import { Link } from 'react-router-dom';
+import React from 'react';
+import { PropTypes } from 'prop-types';
 import { withRouter } from 'react-router';
-
-// Material Imports
 import { withStyles } from '@material-ui/core/styles';
-import Grid from '@material-ui/core/Grid';
 import Hidden from '@material-ui/core/Hidden';
-import Typography from '@material-ui/core/Typography';
-import ArrowForward from '@material-ui/icons/ArrowForward';
-
-// Components
-import Type from '~/styles/components/Typography.scss';
-import LoginForm from '~/components/forms/loginForm';
-import PageHelmet from '~/components/pageHelmet';
-
-import Logo from 'svg-inline-loader?classPrefix=~/../static/images/logo.svg';
-import styles from './style';
-
-// Utilities
 import brand from '~/utilities/brand';
+import logo from '~/../static/images/logo.svg';
 
-class Login extends Component {
-  constructor(props) {
-    super(props);
-    this.props = props;
+import Login from './components/loginPage';
 
-    this.inputs = {
-      userNameOrEmail: null,
-      password: null,
-    };
-  }
+import styles from './styles';
 
-  componentWillMount() {
-    // this.props.newLogin();
-  }
-
-  login = (e) => {
-    e.preventDefault();
-    // this.props.loginRequested(this.inputs.userNameOrEmail.value, this.inputs.password.value);
-  };
-
-  submitForm(values) {
-    console.info('form values: ', JSON.stringify(values, null, 2));
-  }
-
+class LoginDedicated extends React.Component {
   render() {
     const { classes } = this.props;
-
     return (
-      <div className={classes.root}>
-        <PageHelmet title="Login" />
-        <div className={classes.container}>
-          <Grid container spacing={24} alignItems="center" direction="row" justify="center">
-            <Grid item container justify="center" spacing={0} className={classes.loginWrap}>
-              <Hidden smDown>
-                <Grid item md={6} className={classes.welcomeWrap}>
-                  {/* Welcome Login */}
-                  <div className={classes.welcome}>
-                    <div className={classes.welcomeContent}>
-                      <div className={classes.brand}>
-                        <Logo />
-                        <h3>{brand.name}</h3>
-                      </div>
-                      <Typography variant="display2">
-                        <span className={Type.light}>Hello there,</span>
-                      </Typography>
-                      <Typography variant="title" className={classes.brandText}>
-                        <span className={Type.regular}>
-                          welcome to {brand.name}
-                        </span>
-                      </Typography>
-                    </div>
-                    <ArrowForward className={classes.decoBottom} />
-                  </div>
-                </Grid>
-              </Hidden>
-              <Grid item md={6} sm={8} xs={11}>
-                {/* ----------------------------------------------------------------------*/}
-                {/* Load Login Form */}
-                <LoginForm
-                  handleSubmit={(values) => this.submitForm(values)}
-                  pristine={true}
-                  submitting={false} />
-              </Grid>
-            </Grid>
-          </Grid>
-        </div>
+      <div className={classes.appFrameOuter}>
+        <main className={classes.outerContent} id="mainContent">
+          <Hidden mdUp>
+            <div className={classes.brand}>
+              <img src={logo} alt={brand.name} />
+              <h3>{brand.name}</h3>
+            </div>
+          </Hidden>
+          <Login />
+        </main>
       </div>
     );
   }
 }
 
-Login.defaultProps = {
-};
-
-Login.propTypes = {
+LoginDedicated.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-const mapStateToProps = state => ({
-});
-
-const mapDispatchToProps = {
-};
-
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(Login)));
+export default withRouter((withStyles(styles)(LoginDedicated)));

@@ -72,8 +72,7 @@ class ProfileCard extends Component {
         <CardActions>
           <BottomNavigation
             showLabels
-            className={classes.bottomLink}
-          >
+            className={classes.bottomLink}>
             <BottomNavigationAction label="20 Connection" icon={<SupervisorAccount />} />
             <BottomNavigationAction label="10 Favorites" icon={<Favorite />} />
             <BottomNavigationAction label="5 Albums" icon={<PhotoLibrary />} />

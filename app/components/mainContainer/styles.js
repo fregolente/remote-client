@@ -9,11 +9,13 @@ const appFrame = {
 
 const styles = theme => ({
   root: {
+    position: 'fixed',
+    top: 0,
+    left: 0,
+    background: '#fafafa',
     width: '100%',
     height: '100%',
-    marginTop: 0,
-    zIndex: 1,
-    overflow: 'auto',
+    zIndex: '1000',
   },
   appFrameInner: {
     ...appFrame,

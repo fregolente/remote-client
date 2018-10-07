@@ -70,9 +70,7 @@ class Timeline extends Component {
 
     const { anchorElOpt } = this.state;
 
-    console.log(dataTimeline);
-
-    dataTimeline.map(data => (
+    return dataTimeline.map(data => (
       <li key={data.id}>
         <div className={classes.iconBullet}>
           <Tooltip id={'tooltip-icon-' + data.id} title={data.time}>
@@ -149,21 +147,19 @@ class Timeline extends Component {
               maxHeight: ITEM_HEIGHT * 4.5,
               width: 200,
             },
-          }}
-        >
+          }}>
           {optionsOpt.map(option => (
             <MenuItem key={option} selected={option === 'Edit Profile'} onClick={this.handleCloseOpt}>
               {option}
             </MenuItem>
           ))}
         </Menu>
-        { dataTimeline.comments && <Comment
+        <Comment
           open={openComment}
           handleClose={this.handleCloseComment}
           submitComment={submitComment}
-          dataComment={dataTimeline.comments[commentIndex]} /> 
-        }
-        <ul className={classes.timeline}>
+          dataComment={dataTimeline[commentIndex].comments} />
+        <ul id="timeline-posts" className={classes.timeline}>
           {this.getItem()}
         </ul>
       </Fragment>

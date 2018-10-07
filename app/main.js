@@ -11,11 +11,6 @@ import { ConnectedRouter, routerMiddleware } from 'react-router-redux';
 // import { createBlacklistFilter } from 'redux-persist-transform-filter';
 import 'babel-polyfill';
 
-import {
-  createMuiTheme,
-  MuiThemeProvider,
-} from '@material-ui/core/styles';
-
 // Middleware
 import refreshTokenMW from '~/state/authorization/middleware';
 import detectActivityMW from '~/state/activity/middleware';
@@ -32,14 +27,11 @@ import mainRoutes from './routes';
 // Components
 import MainContainer from './components/mainContainer';
 
-// Utilities
-import ThemePallete from '~/utilities/themePallet';
-
 if (!window.fetch) {
   require('whatwg-fetch'); // eslint-disable-line global-require
 }
 
-const loggerMW = createLogger({ predicate: true });
+const loggerMW = createLogger({ predicate: false });
 const history = createHistory();
 const routerMW = routerMiddleware(history);
 const sagaMW = createSagaMiddleware();
@@ -68,9 +60,6 @@ function configureStore() {
   });
 }
 
-const defaultTheme = 'greyTheme';
-const theme = createMuiTheme(ThemePallete[defaultTheme]);
-
 // This is necessary to wait store being hydrated by redux-persist
 // before re-render components
 async function init() {
@@ -80,9 +69,7 @@ async function init() {
     <Provider store={store}>
       <ConnectedRouter history={history}>
         <MainContainer history={history}>
-          <MuiThemeProvider theme={theme}>
-            {mainRoutes}
-          </MuiThemeProvider>
+          {mainRoutes}
         </MainContainer>
       </ConnectedRouter>
     </Provider>,

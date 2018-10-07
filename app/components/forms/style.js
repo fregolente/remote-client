@@ -33,14 +33,14 @@ const styles = theme => ({
   btnArea: {
     justifyContent: 'space-between',
     display: 'flex',
-    alignItems: 'center',
+    alignItems: 'right',
     marginBottom: theme.spacing.unit * 3,
+    '& button': {
+      width: '100%',
+      margin: 5
+    },
     [theme.breakpoints.down('sm')]: {
       flexDirection: 'column',
-      '& button': {
-        width: '100%',
-        margin: 5
-      }
     },
   },
   noMargin: {

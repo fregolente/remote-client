@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import Radium from 'Radium';
 import { connect } from 'react-redux';
 import PageHelmet from '~/components/pageHelmet';
 import PropTypes from 'prop-types';
@@ -27,6 +28,8 @@ import {
   fetchAction
 } from '~/state/timeline/actions';
 
+import * as styles from './styles';
+
 class LandingPage extends Component {
   constructor(props) {
     super(props);
@@ -37,7 +40,6 @@ class LandingPage extends Component {
   }
 
   componentDidMount() {
-    console.log(timelineData);
     this.props.fetchData(timelineData);
   }
 
@@ -50,14 +52,13 @@ class LandingPage extends Component {
     const { dataProps } = this.props;
     const { value } = this.state;
     return (
-      <div id="landing-page">
+      <div id="landing-page" style={styles.landingPage}>
         <PageHelmet title="Profile" />
         <Cover
           coverImg="/images/material_bg.svg"
           avatar={dummy.user.avatar}
           name={dummy.user.name}
-          desc="Lorem ipsum dolor sit amet, consectetur adipiscing elit."
-        />
+          desc="Lorem ipsum dolor sit amet, consectetur adipiscing elit." />
         <AppBar position="static" color="default">
           <Hidden mdUp>
             <Tabs
@@ -92,7 +93,7 @@ class LandingPage extends Component {
         </AppBar>
         {value === 0 &&
           <TabContainer>
-            <About data={timelineData} />
+            <About data={dataProps} />
           </TabContainer>
         }
         {value === 1 &&
@@ -123,8 +124,8 @@ const mapStateToProps = state => ({
   dataProps: state.timeline.dataTimeline,
 });
 
-const mapDispatchToProps = (dispatch) => ({
+const mapDispatchToProps = {
   fetchData: fetchAction,
-});
+};
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(LandingPage));
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Radium(LandingPage)));

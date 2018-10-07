@@ -97,13 +97,13 @@ class LoginForm extends React.Component {
               </FormControl>
             </div>
             <div className={classes.btnArea}>
-              <FormControlLabel control={<Field name="checkbox" component={Checkbox} />} label="Remember" />
+              {/* <FormControlLabel control={<Field name="checkbox" component={Checkbox} />} label="Remember me" /> */}
               <Button variant="raised" color="primary" type="submit">
-                Continue
+                Login
                 <ArrowForward className={classNames(classes.rightIcon, classes.iconSmall)} disabled={submitting || pristine} />
               </Button>
             </div>
-            <ContentDivider content="OR" />
+            {/* <ContentDivider content="OR" />
             <div className={classes.btnArea}>
               <Button variant="raised" size="small" className={classes.redBtn} type="button">
                 <AllInclusive className={classNames(classes.leftIcon, classes.iconSmall)} />
@@ -117,11 +117,11 @@ class LoginForm extends React.Component {
                 <People className={classNames(classes.leftIcon, classes.iconSmall)} />
                 Socmed 3
               </Button>
-            </div>
+                </div> */}
             <div className={classes.footer}>
-              Cannot Login?
-              <Button size="small" color="secondary" className={classes.button}>Forgot Password</Button>
-              | <Button size="small" color="secondary" className={classes.button}>Register</Button>
+              Don't have a user?
+              {/*<Button size="small" color="secondary" className={classes.button}>Forgot Password</Button>
+              |*/} <Button size="small" color="secondary" className={classes.button}>Register</Button>
             </div>
           </form>
         </PapperBlock>

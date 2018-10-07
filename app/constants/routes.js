@@ -2,5 +2,6 @@ export const paginationUrl = (baseUrl, pageNumber) => `${baseUrl}/Pages/${pageNu
 
 // Basic routes
 export const LOGIN = '/Login';
+export const LANDING_PAGE = '/RemoteLegal';
 
-export const tokenlessRoutes = [LOGIN];
+export const tokenlessRoutes = [LOGIN, LANDING_PAGE];

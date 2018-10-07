@@ -11,7 +11,6 @@ const styles = theme => ({
     position: 'relative',
     width: '100%',
     overflow: 'hidden',
-    height: 360,
     backgroundColor: theme.palette.primary.main,
     display: 'flex',
     justifyContent: 'center',

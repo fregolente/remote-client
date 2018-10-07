@@ -1,3 +1,6 @@
+import cyan from '@material-ui/core/colors/cyan';
+import indigo from '@material-ui/core/colors/indigo';
+import red from '@material-ui/core/colors/red';
 const styles = theme => ({
   root: {
     display: 'flex',
@@ -12,6 +15,82 @@ const styles = theme => ({
     [theme.breakpoints.down('md')]: {
       overflow: 'hidden'
     },
+  },
+  formControl: {
+    width: '100%',
+    marginBottom: theme.spacing.unit * 3
+  },
+  loginWrap: {
+    [theme.breakpoints.up('md')]: {
+      width: 860
+    },
+  },
+  formWrap: {
+    [theme.breakpoints.up('md')]: {
+      marginTop: -24
+    },
+  },
+  btnArea: {
+    justifyContent: 'space-between',
+    display: 'flex',
+    alignItems: 'center',
+    marginBottom: theme.spacing.unit * 3,
+    [theme.breakpoints.down('sm')]: {
+      flexDirection: 'column',
+      '& button': {
+        width: '100%',
+        margin: 5
+      }
+    },
+  },
+  noMargin: {
+    margin: 0
+  },
+  optArea: {
+    justifyContent: 'space-between',
+    display: 'flex',
+    alignItems: 'center',
+    width: '100%',
+    [theme.breakpoints.up('sm')]: {
+      width: '60%'
+    },
+  },
+  redBtn: {
+    color: theme.palette.getContrastText(red[500]),
+    backgroundColor: red[500],
+    '&:hover': {
+      backgroundColor: red[700],
+    },
+  },
+  blueBtn: {
+    color: theme.palette.getContrastText(indigo[500]),
+    backgroundColor: indigo[500],
+    '&:hover': {
+      backgroundColor: indigo[700],
+    },
+  },
+  cyanBtn: {
+    color: theme.palette.getContrastText(cyan[700]),
+    backgroundColor: cyan[500],
+    '&:hover': {
+      backgroundColor: cyan[700],
+    },
+  },
+  leftIcon: {
+    marginRight: theme.spacing.unit,
+  },
+  rightIcon: {
+    marginLeft: theme.spacing.unit,
+  },
+  iconSmall: {
+    fontSize: 20,
+  },
+  footer: {
+    textAlign: 'center',
+    padding: 5,
+    background: theme.palette.grey[100],
+    fontSize: 14,
+    position: 'relative'
   },
   welcomeWrap: {
     position: 'relative'

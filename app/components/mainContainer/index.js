@@ -1,4 +1,5 @@
 import PropTypes from 'prop-types';
+import classNames from 'classnames';
 import { connect } from 'react-redux';
 import React, { Component } from 'react';
 import Loading from 'react-loading-bar';
@@ -6,8 +7,16 @@ import Loading from 'react-loading-bar';
 // import { push } from 'react-router-redux';
 // import { withRouter } from 'react-router';
 import {
-  withStyles,
+  withTheme, withStyles,
+  createMuiTheme, MuiThemeProvider
 } from '@material-ui/core/styles';
+import Fade from '@material-ui/core/Fade';
+
+// Components
+import PageHeader from '~/components/pageHeader';
+import Sidebar from '~/components/sidebar';
+import BreadCrumb from '~/components/breadcrumb';
+
 
 // Actions
 import {
@@ -15,9 +24,14 @@ import {
   setPageLoadingAction,
 } from '~/state/uiActions/actions';
 
-
-// Global CSS file
+// react-loading-bar CSS file
 import '~/styles/components/vendors/react-loading-bar/index.css';
+
+import { } from '~/styles/normalize.scss';
+import { } from '~/styles/layout/_base.scss'; // eslint-disable-line
+
+// Utilities
+import ThemePallete from '~/utilities/themePallet';
 
 // MainContainer Style
 import styles from './styles';
@@ -26,6 +40,11 @@ class MainContainer extends Component {
   constructor(props) {
     super(props);
     this.props = props;
+
+    this.state = {
+      showLoading: true,
+      transform: 0,
+    }
   }
 
   componentWillMount = () => {
@@ -37,6 +56,7 @@ class MainContainer extends Component {
 
     this.playProgress();
     this.unlisten = history.listen(() => {
+      console.log('Show')
       this.playProgress();
     });
   }
@@ -46,11 +66,30 @@ class MainContainer extends Component {
     this.onProgressShow();
   }
 
+  toggleDrawer() {
+    console.log('Drawer toggled');
+    // TODO: call uiAction
+  }
+
+  loadTransition() {
+    console.log('Load transition')
+    // TODO: call uiAction
+  }
+
+  handleScroll = (event) => {
+    const scoll = event.target.scrollTop;
+    this.setState({
+      transform: scoll
+    });
+  }
+
   onProgressShow = () => {
+    this.setState({ showLoading: true });
     this.props.setIsPageLoading(true);
   }
 
   onProgressHide = () => {
+    this.setState({ showLoading: false });
     this.props.setIsPageLoading(false);
   }
 
@@ -64,17 +103,20 @@ class MainContainer extends Component {
   render() {
     const {
       classes,
-      isPageLoading,
     } = this.props;
 
+    const defaultTheme = 'greyTheme';
+    const theme = createMuiTheme(ThemePallete[defaultTheme]);
 
     return (
       <div id="main-container" className={classes.root}>
         <Loading
-          show={isPageLoading}
-          color="rgba(255,255,255,.9)"
-          showSpinner={false} />
-        {this.props.children}
+          show={this.state.showLoading}
+          color="red"
+          showSpinner={true} />
+        <MuiThemeProvider theme={theme}>
+          {this.props.children}
+        </MuiThemeProvider>
       </div>
     );
   }
@@ -87,23 +129,19 @@ MainContainer.propTypes = {
   children: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   classes: PropTypes.object.isRequired,
   history: PropTypes.object.isRequired,
-  color: PropTypes.string.isRequired,
-  isPageLoading: PropTypes.bool.isRequired,
 };
 
 const mapStateToProps = state => ({
-  color: state.uiActions.theme,
-  isPageLoading: state.uiActions.isPageLoading,
 });
 
-const mapDispatchToProps = () => ({
+const mapDispatchToProps = {
   changeTheme: changeThemeAction,
   setIsPageLoading: setPageLoadingAction,
-});
+};
 
 const MainContainerMapped = connect(
   mapStateToProps,
   mapDispatchToProps
 )(MainContainer);
 
-export default withStyles(styles)(MainContainerMapped);
+export default withTheme()(withStyles(styles)(MainContainerMapped));
