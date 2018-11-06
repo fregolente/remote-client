@@ -150,7 +150,7 @@ class MaterialDropZone extends React.Component {
           <Button
             className={classes.button}
             fullWidth
-            variant="raised"
+            variant="contained"
             onClick={() => {
               dropzoneRef.open();
             }}

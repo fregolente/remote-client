@@ -1,30 +1,12 @@
 {
   "presets": [
-    [
-      "env",
-      {
-        "modules": false
-      }
-    ],
+    "env",
     "react",
-    "stage-0"
+    "stage-2"
   ],
-  "env": {
-    "production": {
-      "only": [
-        "app"
-      ],
-      "plugins": [
-        "transform-react-remove-prop-types",
-        "transform-react-constant-elements",
-        "transform-react-inline-elements"
-      ]
-    },
-    "test": {
-      "plugins": [
-        "transform-es2015-modules-commonjs",
-        "dynamic-import-node"
-      ]
-    }
-  }
+  "plugins": [
+    "inline-react-svg",
+    "transform-object-rest-spread",
+    "transform-class-properties"
+  ]
 }

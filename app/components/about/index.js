@@ -59,7 +59,7 @@ class About extends React.Component {
           {/* Profile Progress */}
           <div className={classes.progressRoot}>
             <Paper className={classes.styledPaper} elevation={4}>
-              <Typography className={classes.title} variant="headline" component="h3">
+              <Typography className={classes.title} variant="h5" component="h3">
                 <span className={Type.light}>Profile Strength: </span>
                 <span className={Type.bold}>Intermediate</span>
               </Typography>

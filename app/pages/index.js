@@ -1,8 +1,18 @@
-import Radium from 'radium';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { withRouter } from 'react-router';
+
+// Material UI
+import { withStyles } from '@material-ui/core/styles';
+import Grid from '@material-ui/core/Grid';
+
+// Components
+import Header from '~/components/header';
+import AppDrawer from '~/components/appDrawer';
+import Breadcrumb from '~/components/breadcrumb';
+
+// Styles
+import styles from '~/styles/baseStyles';
 
 // Routes
 import RemoteLegalRoutes from './routes';
@@ -13,60 +23,54 @@ class Container extends Component {
     this.props = props;
 
     this.state = {
-      transform: 0,
+      isDrawerOpen: false,
     };
   }
 
-  render() {
-    const {
-      classes,
-      isPageLoading,
-      sidebarOpen,
-    } = this.props;
+  componentWillMount() {
+  }
 
+  handleDrawerOpen = () => {
+    console.log('[Container] handleDrawerOpen')
+    this.setState({ isDrawerOpen: true })
+  }
+
+  handleDrawerClose = () => {
+    console.log('[Container] handleDrawerClose')
+    this.setState({ isDrawerOpen: false })
+  }
+
+  render() {
+    const { classes } = this.props;
+    // TODO: get this dynamically
+    const location = { pathname: '/remote-legal/explorer' };
 
     return (
-      <div className={classes.appFrameInner}>
-        <PageHeader toggleDrawerOpen={this.toggleDrawer} turnDarker={this.state.transform > 30 && darker} margin={sidebarOpen} />
-        <Sidebar
-          open={sidebarOpen}
-          toggleDrawerOpen={this.toggleDrawer}
-          loadTransition={this.loadTransition}
-          turnDarker={this.state.transform > 30 && darker} />
-        <main className={classNames(classes.content, !sidebarOpen && classes.contentPadding)} id="mainContent">
-          <div className={classes.bgbar} />
-          <section className={classes.mainWrap}>
-            <BreadCrumb separator=" › " theme="light" location={this.props.history.location} />
-            {isPageLoading && (<img src="/images/spinner.gif" alt="spinner" className={classes.circularProgress} />)}
-            <Fade
-              in={!isPageLoading}
-              mountOnEnter
-              unmountOnExit
-              {...(!isPageLoading ? { timeout: 700 } : {})}>
-              <div className={isPageLoading ? classes.hideApp : ''}>
-                <RemoteLegalRoutes />
-              </div>
-            </Fade>
-          </section>
-        </main>
-      </div>);
+      <Grid container spacing={24}>
+        <Grid item xs={12}>
+          <Header handleDrawerOpen={this.handleDrawerOpen} />
+          <AppDrawer
+            isDrawerOpen={this.state.isDrawerOpen}
+            handleDrawerClose={this.handleDrawerClose} />
+        </Grid>
+
+        <Grid item xs={12} className={classes.breadcrumbContainer}>
+          <Breadcrumb theme="dark" separator=" › " location={location} />
+        </Grid>
+
+        <Grid item xs={12}>
+          <RemoteLegalRoutes />
+        </Grid>
+
+
+      </Grid>
+    );
   }
 }
 
+
 Container.propTypes = {
   classes: PropTypes.object.isRequired,
-  isPageLoading: PropTypes.bool.isRequired,
-  sidebarOpen: PropTypes.bool.isRequired,
 };
 
-const mapStateToProps = state => ({
-  isPageLoading: state.uiActions.isPageLoading,
-  sidebarOpen: state.uiActions.sidebarOpen,
-});
-
-const mapDispatchToProps = {
-};
-
-const ContainerConnected = connect(mapStateToProps, mapDispatchToProps)(Container);
-
-export default withRouter(ContainerConnected);
+export default withRouter(withStyles(styles)(Container));

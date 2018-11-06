@@ -1,4 +1,4 @@
-{
+module.exports = {
   "env": {
     "browser": true,
     "node": true,
@@ -11,6 +11,20 @@
     "allowImportExportEverywhere": true
   },
   "rules": {
+    // override default options for rules from base configuration
+    'jsx-a11y/no-static-element-interactions': [
+      'error',
+      {
+        handlers: [
+
+          'onMouseDown',
+          'onMouseUp',
+          'onKeyPress',
+          'onKeyDown',
+          'onKeyUp',
+        ],
+      },
+    ],
     "no-underscore-dangle": [
       "error",
       {
@@ -65,7 +79,7 @@
     "no-multi-spaces": [
       2,
       {
-        "exceptions": {
+      exceptions: {
           "ImportDeclaration": true,
           "Property": true,
           "VariableDeclarator": true,
@@ -86,11 +100,6 @@
   },
   "globals": {
     "API_URL": true,
-    "API_KEY": true,
-    "API_CP_URL": true,
-    "API_EC_URL": true,
-    "WORD_PRESS_URL": true,
-    "TABLEAU_ADD": true
   },
   "plugins": [
     "react",
@@ -103,5 +112,5 @@
         "config": "webpack.config.js"
       }
     }
-  }
-}
+  },
+};

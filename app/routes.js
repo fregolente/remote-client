@@ -1,15 +1,19 @@
 import React from 'react';
-import { Switch, Route, Redirect } from 'react-router-dom';
+import { Switch, Route } from 'react-router-dom';
 
 // Constants
 import * as routes from '~/constants/routes';
 
 // Components
-import LoginDedicated from './pages/login';
+import Container from './pages';
+import Login from './pages/login';
+import Register from './pages/register';
 
 export default (
   <Switch>
-    <Route path={routes.LOGIN} component={LoginDedicated} exact />
-    <Redirect from="/" to={routes.LOGIN} />
+    {/* Tokenless routes */}
+    <Route path={routes.LOGIN} component={Login} exact />
+    <Route path={routes.REGISTER} component={Register} exact />
+    <Route path="/" component={Container} />
   </Switch>
 );

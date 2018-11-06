@@ -4,6 +4,7 @@ const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const webpack = require('webpack');
 const path = require('path');
+const autoprefixer = require('autoprefixer');
 
 const paths = {
   source: path.resolve(__dirname, '../app'),
@@ -72,22 +73,23 @@ const rules = [{
   },
 }, {
   test: /\.css$/,
-  use: ['style-loader', 'css-loader'],
+  exclude: /node_modules/,
+  use: ['style-loader', 'css-loader?url=false'],
 }, {
   // Preprocess our own .scss files
   test: /\.scss$/,
   exclude: /node_modules/,
-  use: ['style-loader', 'css-loader', 'sass-loader'],
+  use: ['style-loader', 'css-loader?url=false', 'sass-loader'],
 },
 {
   // Preprocess 3rd party .css files located in node_modules
   test: /\.css$/,
   include: /node_modules/,
-  use: ['style-loader', 'css-loader'],
+  use: ['style-loader', 'css-loader?url=false'],
 }, {
   test: /\.(png|jpg|jpeg|gif|svg|woff|woff2)$/,
   use: 'url-loader?limit=10000'
-},];
+}];
 
 const minimizer = [
   new UglifyJsPlugin({
@@ -117,9 +119,8 @@ if (IS_PRODUCTION || IS_STAGING) {
 const resolve = {
   alias: {
     '~': path.resolve(__dirname, '..', 'app'),
-    '@static': path.resolve(__dirname, '..', 'static'),
+    'static': path.resolve(__dirname, '../static/'),
   },
-  extensions: ['.js', '.jsx', '.json', '.scss'],
 };
 
 module.exports = {

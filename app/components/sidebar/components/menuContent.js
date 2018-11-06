@@ -8,7 +8,7 @@ import Divider from '@material-ui/core/Divider';
 
 import brand from '~/utilities/brand';
 import dummy from '~/utilities/dummyContents';
-import logo from '~/../static/images/logo.svg';
+// import logo from '~/../static/images/logo.svg';
 
 import MainMenu from './mainMenu';
 import OtherMenu from './otherMenu';

@@ -1,14 +1,12 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import thunk from 'redux-thunk';
-import { createLogger } from 'redux-logger';
 import { Provider } from 'react-redux';
 import createSagaMiddleware from 'redux-saga';
 import createHistory from 'history/createBrowserHistory';
 import { persistStore, autoRehydrate } from 'redux-persist';
 import { compose, createStore, applyMiddleware } from 'redux';
-import { ConnectedRouter, routerMiddleware } from 'react-router-redux';
-// import { createBlacklistFilter } from 'redux-persist-transform-filter';
+import { ConnectedRouter, connectRouter, routerMiddleware } from 'connected-react-router';
+import { createBlacklistFilter } from 'redux-persist-transform-filter';
 import 'babel-polyfill';
 
 // Middleware
@@ -27,11 +25,17 @@ import mainRoutes from './routes';
 // Components
 import MainContainer from './components/mainContainer';
 
+// react-loading-bar CSS file
+import '~/styles/components/vendors/react-loading-bar/index.css';
+
+import { } from '~/styles/components/Typography.scss';
+import { } from '~/styles/normalize.scss';
+import { } from '~/styles/layout/_base.scss'; // eslint-disable-line
+
 if (!window.fetch) {
   require('whatwg-fetch'); // eslint-disable-line global-require
 }
 
-const loggerMW = createLogger({ predicate: false });
 const history = createHistory();
 const routerMW = routerMiddleware(history);
 const sagaMW = createSagaMiddleware();
@@ -40,17 +44,17 @@ function configureStore() {
   return new Promise((resolve, reject) => {
     try {
       const store = createStore(
-        rootReducer,
+        connectRouter(history)(rootReducer),
         window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__(),
         compose(
-          applyMiddleware(routerMW, sagaMW, refreshTokenMW, detectActivityMW, loggerMW, thunk),
+          applyMiddleware(routerMW, sagaMW, refreshTokenMW, detectActivityMW),
           autoRehydrate(),
         ),
       );
       /* eslint-enable */
       persistStore(store, {
         blacklist: [],
-        // transforms: [createBlacklistFilter('login', ['error'])],
+        transforms: [createBlacklistFilter('login', ['error'])],
       }, () => resolve(store));
 
       sagaMW.run(rootSaga);
@@ -64,11 +68,12 @@ function configureStore() {
 // before re-render components
 async function init() {
   const store = await configureStore();
+  
 
   ReactDOM.render(
     <Provider store={store}>
       <ConnectedRouter history={history}>
-        <MainContainer history={history}>
+        <MainContainer>
           {mainRoutes}
         </MainContainer>
       </ConnectedRouter>

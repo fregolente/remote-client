@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import Radium from 'Radium';
+import Radium from 'radium';
 import { connect } from 'react-redux';
 import PageHelmet from '~/components/pageHelmet';
 import PropTypes from 'prop-types';

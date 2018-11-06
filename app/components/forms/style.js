@@ -43,6 +43,9 @@ const styles = theme => ({
       flexDirection: 'column',
     },
   },
+  btnRegister: {
+    width: '40%',
+  },
   noMargin: {
     margin: 0
   },

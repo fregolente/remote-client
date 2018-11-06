@@ -82,10 +82,8 @@ const likePost = (dataTimeline, post) => {
 }
 
 export default function timelineReducer(state = initialState, action = {}) {
-  console.log('Timeline Reducer, before switch: ', action);
   switch (action.type) {
     case FETCH_TIMELINE_DATA:
-      console.log(`Timeline Reducer -> ${action.type}, and: `, action.items)
       return {
         ...state,
         dataTimeline: action.items,

@@ -54,7 +54,7 @@ class ProfileCard extends Component {
         />
         <CardContent className={classes.contentProfile}>
           <Avatar alt="avatar" src={avatar} className={classes.avatarBig} />
-          <Typography variant="title" className={classes.name} gutterBottom>
+          <Typography variant="h6" className={classes.name} gutterBottom>
             {name}
             {isVerified && <VerifiedUser className={classes.verified} />}
           </Typography>

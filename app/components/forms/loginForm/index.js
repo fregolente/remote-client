@@ -1,25 +1,26 @@
 import React from 'react';
+import { connect } from 'react-redux';
+import { push } from 'react-router-redux';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import classNames from 'classnames';
-import { Field, reduxForm } from 'redux-form/immutable';
-import { Checkbox, TextField } from 'redux-form-material-ui';
+import * as R from 'ramda';
+
+// Material UI
 import Button from '@material-ui/core/Button';
-import { connect } from 'react-redux';
-import IconButton from '@material-ui/core/IconButton';
-import Visibility from '@material-ui/icons/Visibility';
-import VisibilityOff from '@material-ui/icons/VisibilityOff';
-import InputAdornment from '@material-ui/core/InputAdornment';
+import Input from '@material-ui/core/Input';
+import InputLabel from '@material-ui/core/InputLabel';
 import FormControl from '@material-ui/core/FormControl';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import AllInclusive from '@material-ui/icons/AllInclusive';
-import Brightness5 from '@material-ui/icons/Brightness5';
-import People from '@material-ui/icons/People';
 import ArrowForward from '@material-ui/icons/ArrowForward';
+
+// Constants
+import * as routes from '~/constants/routes';
+
+// Components
+import PapperBlock from '~/components/papperBlock';
+
 import styles from '../style';
 
-import { ContentDivider } from '~/components/divider';
-import PapperBlock from '~/components/papperBlock';
 
 // validation functions
 const required = value => (value == null ? 'Required' : undefined);
@@ -33,9 +34,19 @@ class LoginForm extends React.Component {
   constructor(props) {
     super(props);
     this.props = props;
+
     this.state = {
-      showPassword: false
+      primary: '',
+      password: '',
     }
+  }
+
+  login = () => {
+    console.group('Logging in');
+    console.log('You are logging in as:')
+    console.log(this.state);
+    console.groupEnd('Logging in');
+    this.props.push(routes.EXPLORER);
   }
 
   handleClickShowPassword = () => {
@@ -45,6 +56,40 @@ class LoginForm extends React.Component {
   handleMouseDownPassword = event => {
     event.preventDefault();
   };
+
+  handleInputChange = event => {
+    const capitalize = R.compose(
+      R.join(''),
+      R.juxt([R.compose(R.toUpper, R.head), R.tail])
+    );;
+
+    const idToVarName = (id) => {
+      const nameArr = id.split('-');
+      let returnName = null;
+      nameArr.forEach((value, index) => {
+        if (index === 0) {
+          returnName = value;
+        } else {
+          returnName = returnName.concat(capitalize(value));
+        }
+      })
+
+      return returnName;
+    }
+
+
+    if (event) {
+      const name = event.target.id;
+      const varName = idToVarName(name);
+
+      const value = event.target.value;
+      this.setState({ [varName]: value });
+    }
+  }
+
+  goToRegister = () => {
+    this.props.push(routes.REGISTER);
+  }
 
   render() {
     const {
@@ -56,76 +101,38 @@ class LoginForm extends React.Component {
     return (
       <div className={classes.formWrap}>
         <PapperBlock whiteBg title="Login" desc="">
-          <form onSubmit={handleSubmit}>
+          <form>
             <div>
               <FormControl className={classes.formControl}>
-                <Field
-                  name="email"
-                  component={TextField}
-                  placeholder="Your Email"
-                  label="Your Email"
-                  required
-                  validate={[required, email]}
-                  className={classes.field}
-                />
+                <InputLabel htmlFor="primary">Username or Email</InputLabel>
+                <Input id="primary" value={this.state.primary} onChange={this.handleInputChange} />
               </FormControl>
             </div>
             <div>
               <FormControl className={classes.formControl}>
-                <Field
-                  name="password"
-                  component={TextField}
-                  type={this.state.showPassword ? 'text' : 'password'}
-                  label="Your Password"
-                  InputProps={{
-                    endAdornment: (
-                      <InputAdornment position="end">
-                        <IconButton
-                          aria-label="Toggle password visibility"
-                          onClick={this.handleClickShowPassword}
-                          onMouseDown={this.handleMouseDownPassword}
-                        >
-                          {this.state.showPassword ? <VisibilityOff /> : <Visibility />}
-                        </IconButton>
-                      </InputAdornment>
-                    )
-                  }}
-                  required
-                  validate={required}
-                  className={classes.field}
-                />
+                <InputLabel htmlFor="password">Password</InputLabel>
+                <Input id="password" type="password" value={this.state.password} onChange={this.handleInputChange} />
               </FormControl>
             </div>
             <div className={classes.btnArea}>
-              {/* <FormControlLabel control={<Field name="checkbox" component={Checkbox} />} label="Remember me" /> */}
-              <Button variant="raised" color="primary" type="submit">
+              <Button variant="contained" color="primary" onClick={() => this.login()}>
                 Login
-                <ArrowForward className={classNames(classes.rightIcon, classes.iconSmall)} disabled={submitting || pristine} />
+              <ArrowForward className={classNames(classes.rightIcon, classes.iconSmall)} />
               </Button>
             </div>
-            {/* <ContentDivider content="OR" />
-            <div className={classes.btnArea}>
-              <Button variant="raised" size="small" className={classes.redBtn} type="button">
-                <AllInclusive className={classNames(classes.leftIcon, classes.iconSmall)} />
-                Socmed 1
-              </Button>
-              <Button variant="raised" size="small" className={classes.blueBtn} type="button">
-                <Brightness5 className={classNames(classes.leftIcon, classes.iconSmall)} />
-                Socmed 2
-              </Button>
-              <Button variant="raised" size="small" className={classes.cyanBtn} type="button">
-                <People className={classNames(classes.leftIcon, classes.iconSmall)} />
-                Socmed 3
-              </Button>
-                </div> */}
             <div className={classes.footer}>
               Don't have a user?
-              {/*<Button size="small" color="secondary" className={classes.button}>Forgot Password</Button>
-              |*/} <Button size="small" color="secondary" className={classes.button}>Register</Button>
+            <Button
+                onClick={() => this.goToRegister()}
+                size="small"
+                color="secondary"
+                className={classes.button}>
+                Register
+              </Button>
             </div>
           </form>
         </PapperBlock>
-      </div>
+      </div >
     );
   }
 }
@@ -137,9 +144,17 @@ LoginForm.propTypes = {
   submitting: PropTypes.bool.isRequired,
 };
 
-const LoginFormReduxed = reduxForm({
-  form: 'loginForm',
-  enableReinitialize: true,
-})(LoginForm);
+const mapStateToProps = state => ({
+});
 
-export default withStyles(styles)(LoginFormReduxed);
+const mapDispatchToProps = {
+  push,
+};
+
+
+const LoginFormMapped = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(LoginForm);
+
+export default withStyles(styles)(LoginFormMapped);

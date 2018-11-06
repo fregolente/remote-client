@@ -5,13 +5,13 @@ import { Switch, Route } from 'react-router-dom';
 
 // Constants
 import * as routes from '~/constants/routes';
-import { Container } from '~/pages';
-import { LandingPage } from '~/pages/landingPage';
-import { Login } from '~/pages/login';
+import ProfilePage from '~/pages/profilePage'
+import Explorer from '~/pages/explorer'
 
 const RemoteLegalRoutes = () => (
   <Switch>
-    <Route path={routes.LANDING_PAGE} component={LandingPage} exact />
+    <Route path={routes.PROFILE_PAGE} component={ProfilePage} exact />
+    <Route path={routes.EXPLORER} component={Explorer} exact />
   </Switch>
 );
 

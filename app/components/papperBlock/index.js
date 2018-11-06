@@ -20,7 +20,7 @@ function PaperSheet(props) {
   return (
     <div>
       <Paper className={classNames(classes.root, noMargin && classes.noMargin, colorMode && classes.colorMode)} elevation={4}>
-        <Typography variant="title" component="h2" className={classes.title}>
+        <Typography variant="h6" component="h2" className={classes.title}>
           {title}
         </Typography>
         <Typography component="p" className={classes.description}>

@@ -1,4 +1,6 @@
-import bg from '~/../static/images/material_bg.svg';
+// import bg from '~/../static/images/material_bg.svg';
+// import bg from '../../../static/images/material_bg.svg';
+const bg = '';
 
 const appFrame = {
   position: 'relative',

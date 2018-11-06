@@ -1,21 +1,20 @@
 import PropTypes from 'prop-types';
-import classNames from 'classnames';
+import { withRouter } from 'react-router';
 import { connect } from 'react-redux';
 import React, { Component } from 'react';
 import Loading from 'react-loading-bar';
 // import jwt from 'jsonwebtoken';
 // import { push } from 'react-router-redux';
-// import { withRouter } from 'react-router';
 import {
   withTheme, withStyles,
   createMuiTheme, MuiThemeProvider
 } from '@material-ui/core/styles';
 import Fade from '@material-ui/core/Fade';
 
+// Utilities
+import ThemePallete from '~/utilities/themePallet';
+
 // Components
-import PageHeader from '~/components/pageHeader';
-import Sidebar from '~/components/sidebar';
-import BreadCrumb from '~/components/breadcrumb';
 
 
 // Actions
@@ -23,15 +22,6 @@ import {
   changeThemeAction,
   setPageLoadingAction,
 } from '~/state/uiActions/actions';
-
-// react-loading-bar CSS file
-import '~/styles/components/vendors/react-loading-bar/index.css';
-
-import { } from '~/styles/normalize.scss';
-import { } from '~/styles/layout/_base.scss'; // eslint-disable-line
-
-// Utilities
-import ThemePallete from '~/utilities/themePallet';
 
 // MainContainer Style
 import styles from './styles';
@@ -56,7 +46,6 @@ class MainContainer extends Component {
 
     this.playProgress();
     this.unlisten = history.listen(() => {
-      console.log('Show')
       this.playProgress();
     });
   }
@@ -64,23 +53,6 @@ class MainContainer extends Component {
   componentWillUnmount() {
     this.unlisten();
     this.onProgressShow();
-  }
-
-  toggleDrawer() {
-    console.log('Drawer toggled');
-    // TODO: call uiAction
-  }
-
-  loadTransition() {
-    console.log('Load transition')
-    // TODO: call uiAction
-  }
-
-  handleScroll = (event) => {
-    const scoll = event.target.scrollTop;
-    this.setState({
-      transform: scoll
-    });
   }
 
   onProgressShow = () => {
@@ -104,9 +76,13 @@ class MainContainer extends Component {
     const {
       classes,
     } = this.props;
-
     const defaultTheme = 'greyTheme';
-    const theme = createMuiTheme(ThemePallete[defaultTheme]);
+    const theme = createMuiTheme({
+      typography: {
+        useNextVariants: true,
+      },
+      ...ThemePallete[defaultTheme],
+    });
 
     return (
       <div id="main-container" className={classes.root}>
@@ -144,4 +120,4 @@ const MainContainerMapped = connect(
   mapDispatchToProps
 )(MainContainer);
 
-export default withTheme()(withStyles(styles)(MainContainerMapped));
+export default withRouter(withTheme()(withStyles(styles)(MainContainerMapped)));

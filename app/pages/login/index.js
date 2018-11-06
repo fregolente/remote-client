@@ -1,36 +1,64 @@
 import React from 'react';
+import Radium from 'radium';
+import { connect } from 'react-redux';
 import { PropTypes } from 'prop-types';
 import { withRouter } from 'react-router';
 import { withStyles } from '@material-ui/core/styles';
 import Hidden from '@material-ui/core/Hidden';
 import brand from '~/utilities/brand';
-import logo from '~/../static/images/logo.svg';
 
-import Login from './components/loginPage';
+// import LogoURI from 'static/images/logo.svg';
+import LogoURI from '../../../static/images/logo.svg';
+// import LogoURI from 'static/logo.jpg';
 
-import styles from './styles';
+import { getUtilitiesRequested } from '~/state/utilities/actions';
 
-class LoginDedicated extends React.Component {
+import LoginPage from '~/components/loginPage';
+
+import { styles, background } from './styles';
+
+const RadiumLogoIcon = Radium(LogoURI);
+
+class Dedicated extends React.Component {
+  componentWillMount() {
+    const callback = (utilities) => {
+      // TODO
+    }
+
+    this.props.getUtilities(callback);
+  }
+
   render() {
     const { classes } = this.props;
+    console.log(LogoURI);
     return (
       <div className={classes.appFrameOuter}>
-        <main className={classes.outerContent} id="mainContent">
+        <main className={classes.outerContent} style={background} id="mainContent">
           <Hidden mdUp>
             <div className={classes.brand}>
-              <img src={logo} alt={brand.name} />
+              <img src={require('../../../static/images/logo.svg')} alt="" />
+              <RadiumLogoIcon />
               <h3>{brand.name}</h3>
             </div>
           </Hidden>
-          <Login />
+          <LoginPage />
         </main>
-      </div>
+      </div >
     );
   }
 }
 
-LoginDedicated.propTypes = {
+Dedicated.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-export default withRouter((withStyles(styles)(LoginDedicated)));
+const mapStateToProps = state => ({
+});
+
+const mapDispatchToProps = {
+  getUtilities: getUtilitiesRequested,
+};
+
+const ReduxedDedicated = connect(mapStateToProps, mapDispatchToProps)(Dedicated)
+
+export default withRouter(Radium((withStyles(styles)(ReduxedDedicated))));

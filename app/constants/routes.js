@@ -2,6 +2,11 @@ export const paginationUrl = (baseUrl, pageNumber) => `${baseUrl}/Pages/${pageNu
 
 // Basic routes
 export const LOGIN = '/Login';
-export const LANDING_PAGE = '/RemoteLegal';
+export const REGISTER = '/Register';
 
-export const tokenlessRoutes = [LOGIN, LANDING_PAGE];
+// Logged in pages
+export const APP = '/App';
+export const PROFILE_PAGE = '/Profile';
+export const EXPLORER = '/Explorer';
+
+export const tokenlessRoutes = [LOGIN, REGISTER];

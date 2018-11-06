@@ -1,13 +1,20 @@
-import bg from '~/../static/images/material_bg.svg';
+// import bg from '~/../static/images/material_bg.svg';
+import bg from  './../../../static/images/material_bg.svg';
 
-const appFrame = {
+export const appFrame = {
   position: 'relative',
   display: 'flex',
   width: '100%',
   zIndex: 1,
 };
 
-const styles = theme => ({
+export const background = {
+  backgroundImage: 'url(/images/material_bg.svg)',
+  backgroundRepeat: 'no-repeat',
+  backgroundPosition: 'left bottom',
+};
+
+export const styles = theme => ({
   root: {
     width: '100%',
     height: '100%',
@@ -36,7 +43,7 @@ const styles = theme => ({
     },
   },
   outerContent: {
-    background: `url(${bg}) no-repeat ${theme.palette.primary.main} left bottom`,
+    backgroundColor: theme.palette.primary.main,
     width: '100%',
     backgroundSize: 'cover',
     flexDirection: 'column',
@@ -110,5 +117,3 @@ const styles = theme => ({
     }
   }
 });
-
-export default styles;

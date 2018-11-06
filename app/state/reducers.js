@@ -5,11 +5,14 @@ import { routerReducer } from 'react-router-redux';
 import authorizationReducer from './authorization/reducers';
 import uiActionsReducer from './uiActions/reducers';
 import timelineReducer from './timeline/reducers';
+import registerReducer from './register/reducers';
+import utilitiesReducer from './utilities/reducers';
 
 export default combineReducers({
   router: routerReducer,
   uiActions: uiActionsReducer,
   authorization: authorizationReducer,
   timeline: timelineReducer,
+  utilities: utilitiesReducer,
 });
 

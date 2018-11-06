@@ -18,7 +18,7 @@ class Quote extends React.Component {
 
     return (
       <div className={classNames(classes.quoteWrap, align === 'right' ? classes.quoteRight : classes.quoteLeft)}>
-        <Typography variant="subheading" className={classes.quoteBody} gutterBottom>
+        <Typography variant="subtitle1" className={classes.quoteBody} gutterBottom>
           {content}
         </Typography>
         <Typography variant="caption">
