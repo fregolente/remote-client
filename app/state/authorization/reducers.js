@@ -14,6 +14,28 @@ const initialState = {};
 
 export default function autorizationReducer(state = initialState, action) {
   switch (action.type) {
+    case LOGIN_REQUESTED:
+      return {
+        ...state,
+        email: action.email,
+        password: action.password,
+        logginIn: true,
+      };
+    case LOGIN_SUCCEEDED:
+      return {
+        ...state,
+        password: '',
+        email: '',
+        logginIn: false,
+      };
+    case LOGIN_FAILED:
+      return {
+        ...state,
+        error: action.error,
+        logginIn: false,
+        password: '',
+        email: '',
+      };
     default:
       return state;
   }

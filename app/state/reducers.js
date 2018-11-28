@@ -7,6 +7,7 @@ import uiActionsReducer from './uiActions/reducers';
 import timelineReducer from './timeline/reducers';
 import registerReducer from './register/reducers';
 import utilitiesReducer from './utilities/reducers';
+import currentUserReducer from './currentUser/reducers';
 
 export default combineReducers({
   router: routerReducer,
@@ -14,5 +15,6 @@ export default combineReducers({
   authorization: authorizationReducer,
   timeline: timelineReducer,
   utilities: utilitiesReducer,
+  user: currentUserReducer,
 });
 

@@ -7,17 +7,13 @@ import { withStyles } from '@material-ui/core/styles';
 import Hidden from '@material-ui/core/Hidden';
 import brand from '~/utilities/brand';
 
-// import LogoURI from 'static/images/logo.svg';
-import LogoURI from '../../../static/images/logo.svg';
-// import LogoURI from 'static/logo.jpg';
+import Logo from '../../../static/images/logo.svg';
 
 import { getUtilitiesRequested } from '~/state/utilities/actions';
 
 import LoginPage from '~/components/loginPage';
 
 import { styles, background } from './styles';
-
-const RadiumLogoIcon = Radium(LogoURI);
 
 class Dedicated extends React.Component {
   componentWillMount() {
@@ -30,14 +26,12 @@ class Dedicated extends React.Component {
 
   render() {
     const { classes } = this.props;
-    console.log(LogoURI);
     return (
       <div className={classes.appFrameOuter}>
         <main className={classes.outerContent} style={background} id="mainContent">
           <Hidden mdUp>
             <div className={classes.brand}>
-              <img src={require('../../../static/images/logo.svg')} alt="" />
-              <RadiumLogoIcon />
+              <Logo />
               <h3>{brand.name}</h3>
             </div>
           </Hidden>

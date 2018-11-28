@@ -1,6 +1,10 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { push } from 'react-router-redux';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
+
+
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Divider from '@material-ui/core/Divider';
@@ -11,13 +15,38 @@ import AccountCircle from '@material-ui/icons/AccountCircle';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 
+// Constants
+import * as routes from '~/constants/routes';
+
 import styles from './styles';
 
 class Header extends Component {
-  state = {
-    auth: true,
-    anchorEl: null,
-  };
+  constructor(props) {
+    super(props);
+    this.props = props;
+
+    this.state = {
+      auth: true,
+      anchorEl: null,
+    };
+  }
+
+  goTo = (route) => {
+    const { push } = this.props;
+    switch (route) {
+      case 'profile':
+        push(routes.PROFILE_PAGE);
+        break;
+      case 'logout':
+        // TODO: do logout action
+        push(routes.LOGIN);
+        break;
+      default:
+        null;
+    }
+
+    this.handleClose();
+  }
 
   handleChange = event => {
     this.setState({ auth: event.target.checked });
@@ -32,11 +61,16 @@ class Header extends Component {
   };
 
   render() {
-    const { classes, handleDrawerOpen } = this.props;
-    const { anchorEl } = this.state;
-    const open = Boolean(anchorEl);
+    const { 
+      classes,
+      handleDrawerOpen,
+      firstName,
+      lastName,
+    } = this.props;
+    
     const bull = <span className={classes.bullet}>•</span>;
     const auth = true;
+    const loggedInUser = `${firstName} ${lastName}`;
 
     return (
       <div className={classes.root}>
@@ -53,33 +87,9 @@ class Header extends Component {
               remote{bull}legal
             </Typography>
             {auth && (
-              <div>
-                <IconButton
-                  aria-owns={open ? 'menu-appbar' : undefined}
-                  aria-haspopup="true"
-                  onClick={this.handleMenu}
-                  color="inherit"
-                >
-                  <AccountCircle />
-                </IconButton>
-                <Menu
-                  id="menu-appbar"
-                  anchorEl={anchorEl}
-                  anchorOrigin={{
-                    vertical: 'top',
-                    horizontal: 'right',
-                  }}
-                  transformOrigin={{
-                    vertical: 'top',
-                    horizontal: 'right',
-                  }}
-                  open={open}
-                  onClose={this.handleClose}
-                >
-                  <MenuItem onClick={this.handleClose}>My Profile</MenuItem>
-                  <Divider />
-                  <MenuItem onClick={this.handleClose}>Logout</MenuItem>
-                </Menu>
+              <div style={{ display: 'flex' }}>
+                <AccountCircle style={{ marginRight: '5px' }} />
+                {loggedInUser}
               </div>
             )}
           </Toolbar>
@@ -89,10 +99,25 @@ class Header extends Component {
   }
 }
 
-
 Header.propTypes = {
   classes: PropTypes.object.isRequired,
   handleDrawerOpen: PropTypes.func.isRequired,
+  firstName: PropTypes.string.isRequired,
+  lastName: PropTypes.string.isRequired,
 };
 
-export default withStyles(styles)(Header);
+const mapStateToProps = state => ({
+  firstName: state.user.currentUser.first,
+  lastName: state.user.currentUser.last,
+});
+
+const mapDispatchToProps = {
+  push,
+};
+
+const HeaderMapped = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Header);
+
+export default withStyles(styles)(HeaderMapped);

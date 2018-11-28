@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { push } from 'react-router-redux';
 import PropTypes from 'prop-types';
 
 // Material UI
@@ -16,8 +18,15 @@ import ListItemText from '@material-ui/core/ListItemText';
 // icons
 import InboxIcon from '@material-ui/icons/MoveToInbox';
 import MailIcon from '@material-ui/icons/Mail';
+import Chat from '@material-ui/icons/Chat';
+import Explore from '@material-ui/icons/Explore';
+import ExitToApp from '@material-ui/icons/ExitToApp';
+import Person from '@material-ui/icons/Person';
+import Search from '@material-ui/icons/Search';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
-import ChevronRightIcon from '@material-ui/icons/ChevronRight';
+// import ChevronRightIcon from '@material-ui/icons/ChevronRight';
+
+import * as ROUTES from '~/constants/routes';
 
 import styles from './styles';
 
@@ -26,6 +35,11 @@ class AppDrawer extends Component {
   constructor(props) {
     super(props);
     this.props = props;
+  }
+
+  clickedOnListItem = (route) => {
+    this.props.handleDrawerClose();
+    this.props.push(route);
   }
 
   render() {
@@ -37,32 +51,48 @@ class AppDrawer extends Component {
         variant="persistent"
         anchor="left"
         open={isDrawerOpen}
-        classes={{
-          paper: classes.drawerPaper,
-        }}
-      >
+        classes={{ paper: classes.drawerPaper }} >
         <div className={classes.drawerHeader}>
           <IconButton onClick={handleDrawerClose}>
-            <ChevronLeftIcon /> Close Drawer
+            <ChevronLeftIcon />
           </IconButton>
         </div>
         <Divider />
         <List>
-          {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
-            <ListItem button key={text}>
-              <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
-              <ListItemText primary={text} />
-            </ListItem>
-          ))}
+          <ListItem button key={ROUTES.EXPLORER_TEXT} onClick={() => this.clickedOnListItem(ROUTES.EXPLORER)}>
+            <ListItemIcon>
+              <Explore />
+            </ListItemIcon>
+            <ListItemText primary={ROUTES.EXPLORER_TEXT} secondary={ROUTES.EXPLORER_SECONDARY_TEXT} />
+          </ListItem>
+          <ListItem button key={ROUTES.CHAT_TEXT} onClick={() => this.clickedOnListItem(ROUTES.CHAT)}>
+            <ListItemIcon>
+              <Chat />
+            </ListItemIcon>
+            <ListItemText primary={ROUTES.CHAT_TEXT} secondary={ROUTES.CHAT_SECONDARY_TEXT} />
+          </ListItem>
+          <ListItem button key={ROUTES.SEARCH_TEXT} onClick={() => this.clickedOnListItem(ROUTES.SEARCH)}>
+            <ListItemIcon>
+              <Search />
+            </ListItemIcon>
+            <ListItemText primary={ROUTES.SEARCH_TEXT} />
+          </ListItem>
+
         </List>
         <Divider />
         <List>
-          {['All mail', 'Trash', 'Spam'].map((text, index) => (
-            <ListItem button key={text}>
-              <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
-              <ListItemText primary={text} />
-            </ListItem>
-          ))}
+          <ListItem button key={ROUTES.PROFILE_PAGE_TEXT} onClick={() => this.clickedOnListItem(ROUTES.PROFILE_PAGE)}>
+            <ListItemIcon>
+              <Person />
+            </ListItemIcon>
+            <ListItemText primary={ROUTES.PROFILE_PAGE_TEXT} />
+          </ListItem>
+          <ListItem button key={ROUTES.LOGOUT_TEXT} onClick={() => this.clickedOnListItem(ROUTES.LOGIN)}>
+            <ListItemIcon>
+              <ExitToApp />
+            </ListItemIcon>
+            <ListItemText primary={ROUTES.LOGOUT_TEXT} />
+          </ListItem>
         </List>
       </Drawer>
     );
@@ -75,4 +105,8 @@ AppDrawer.propTypes = {
   handleDrawerClose: PropTypes.func.isRequired,
 };
 
-export default withStyles(styles)(AppDrawer);
+const mapDispatchToProps = {
+  push,
+};
+
+export default withStyles(styles)(connect(null, mapDispatchToProps)(AppDrawer));

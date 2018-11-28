@@ -15,9 +15,17 @@ import ArrowForward from '@material-ui/icons/ArrowForward';
 
 // Constants
 import * as routes from '~/constants/routes';
+import { USER_TOKEN } from '~/constants/localstorageItems';
+
+// Actions
+import { loginRequested } from '~/state/authorization/actions';
+import { cleanUser, updateUser, getUserByIdRequest } from '~/state/currentUser/actions';
 
 // Components
 import PapperBlock from '~/components/papperBlock';
+
+// Utilities
+import { addToLocalStorage, removeFromLocalStorage } from '~/utilities/localStorage';
 
 import styles from '../style';
 
@@ -36,17 +44,31 @@ class LoginForm extends React.Component {
     this.props = props;
 
     this.state = {
-      primary: '',
+      email: '',
       password: '',
+      errorMessage: null,
+    }
+  }
+
+  componentWillMount() {
+    this.props.cleanUser();
+    removeFromLocalStorage(USER_TOKEN);
+  }
+
+  loginCallback = (response) => {
+    if (response.message) {
+      this.setState({ errorMessage: response.message })
+    } else {
+      const { user, token } = response;
+      this.props.updateUser(user);
+      addToLocalStorage(USER_TOKEN, token);
+      this.props.push(routes.EXPLORER);
     }
   }
 
   login = () => {
-    console.group('Logging in');
-    console.log('You are logging in as:')
-    console.log(this.state);
-    console.groupEnd('Logging in');
-    this.props.push(routes.EXPLORER);
+    const { email, password } = this.state;
+    this.props.requestLogin(email, password, this.loginCallback);
   }
 
   handleClickShowPassword = () => {
@@ -104,8 +126,8 @@ class LoginForm extends React.Component {
           <form>
             <div>
               <FormControl className={classes.formControl}>
-                <InputLabel htmlFor="primary">Username or Email</InputLabel>
-                <Input id="primary" value={this.state.primary} onChange={this.handleInputChange} />
+                <InputLabel htmlFor="email">Email</InputLabel>
+                <Input id="email" value={this.state.email} onChange={this.handleInputChange} />
               </FormControl>
             </div>
             <div>
@@ -113,6 +135,9 @@ class LoginForm extends React.Component {
                 <InputLabel htmlFor="password">Password</InputLabel>
                 <Input id="password" type="password" value={this.state.password} onChange={this.handleInputChange} />
               </FormControl>
+            </div>
+            <div>
+              <span> { this.state.errorMessage } </span>
             </div>
             <div className={classes.btnArea}>
               <Button variant="contained" color="primary" onClick={() => this.login()}>
@@ -138,17 +163,24 @@ class LoginForm extends React.Component {
 }
 
 LoginForm.propTypes = {
+  authorization: PropTypes.object.isRequired,
   classes: PropTypes.object.isRequired,
   handleSubmit: PropTypes.func.isRequired,
   pristine: PropTypes.bool.isRequired,
   submitting: PropTypes.bool.isRequired,
+  requestLogin: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = state => ({
+  authorization: state.authorization,
 });
 
 const mapDispatchToProps = {
   push,
+  requestLogin: loginRequested,
+  updateUser,
+  cleanUser,
+  getUserByIdRequest,
 };
 
 

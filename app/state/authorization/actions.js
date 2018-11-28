@@ -4,12 +4,12 @@ export const LOGIN_SUCCEEDED = 'LOGIN_SUCCEEDED';
 export const LOGIN_FAILED = 'LOGIN_FAILED';
 export const NEW_LOGIN = 'NEW_LOGIN';
 
-export function loginRequested(userName, password, closeDialog = false) {
+export function loginRequested(email, password, callback) {
   return {
     type: LOGIN_REQUESTED,
-    userName,
+    email,
     password,
-    closeDialog,
+    callback,
   };
 }
 

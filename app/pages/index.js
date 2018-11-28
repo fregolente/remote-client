@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import Radium from 'radium';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router';
 
@@ -12,7 +13,7 @@ import AppDrawer from '~/components/appDrawer';
 import Breadcrumb from '~/components/breadcrumb';
 
 // Styles
-import styles from '~/styles/baseStyles';
+import * as styles from './styles';
 
 // Routes
 import RemoteLegalRoutes from './routes';
@@ -31,22 +32,20 @@ class Container extends Component {
   }
 
   handleDrawerOpen = () => {
-    console.log('[Container] handleDrawerOpen')
-    this.setState({ isDrawerOpen: true })
+    this.setState({ isDrawerOpen: true });
   }
 
   handleDrawerClose = () => {
-    console.log('[Container] handleDrawerClose')
-    this.setState({ isDrawerOpen: false })
+    this.setState({ isDrawerOpen: false });
   }
 
   render() {
     const { classes } = this.props;
     // TODO: get this dynamically
-    const location = { pathname: '/remote-legal/explorer' };
+    const location = this.props.location;
 
     return (
-      <Grid container spacing={24}>
+      <Grid container id="container" style={styles.container}>
         <Grid item xs={12}>
           <Header handleDrawerOpen={this.handleDrawerOpen} />
           <AppDrawer
@@ -54,7 +53,7 @@ class Container extends Component {
             handleDrawerClose={this.handleDrawerClose} />
         </Grid>
 
-        <Grid item xs={12} className={classes.breadcrumbContainer}>
+        <Grid item xs={12} style={styles.breadcrumbContainer}>
           <Breadcrumb theme="dark" separator=" › " location={location} />
         </Grid>
 
@@ -73,4 +72,4 @@ Container.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-export default withRouter(withStyles(styles)(Container));
+export default withRouter(withStyles(styles)(Radium(Container)));

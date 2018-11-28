@@ -9,9 +9,14 @@ const styles = theme => ({
     textAlign: 'left',
   },
   filterContainer: {
+    padding: '15px 0',
+    marginBottom: '10px',
     backgroundColor: 'white',
     textAlign: 'center',
     boxShadow: '0px 1px 3px 0px rgba(0, 0, 0, 0.2), 0px 1px 1px 0px rgba(0, 0, 0, 0.14), 0px 2px 1px -1px rgba(0, 0, 0, 0.12)',
+  },
+  cardContainer: {
+    marginRight: '10px',
   },
   card: {
     minWidth: 275,

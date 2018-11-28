@@ -7,3 +7,11 @@ export function getFromLocalStorage(key) {
   const value = localStorage.getItem(key);
   return JSON.parse(value);
 }
+
+export function removeFromLocalStorage(key) {
+  localStorage.removeItem(key);
+}
+
+export function cleanLocalStorage() {
+  localStorage.clear();
+}

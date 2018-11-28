@@ -1,14 +1,11 @@
+import { USER_TOKEN } from '~/constants/localstorageItems';
+
 export function baseHeader(orgUid) {
   const header = new Headers({
     Accept: 'application/json',
-    Authorization: `JWT ${localStorage.getItem('token')}`,
+    Authorization: localStorage.getItem(USER_TOKEN),
     'Content-Type': 'application/json',
-    'x-api-key': API_KEY,
   });
-
-  if (orgUid) {
-    header.append('Organization', orgUid);
-  }
 
   return header;
 }

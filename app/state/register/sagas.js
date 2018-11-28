@@ -10,11 +10,14 @@ import {
 
 // Get User Regions
 function* createUser(action) {
+  const { callback } = action;
   try {
     const { user } = action
     const response = yield call(userAPI.createUser, user);
+    if (callback) callback(response);
     yield put(createUserSuccess(response));
   } catch (error) {
+    if (callback) callback(error);
     yield put(createUserError(error));
   }
 }

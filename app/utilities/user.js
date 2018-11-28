@@ -21,16 +21,18 @@ export function parseRegisterFormDataToMongoUser(user) {
     const {
       biography,
       linkedinUrl,
+      linkedinURL,
       practiceArea,
       graduationDate,
+      institution,
       graduatedInstitution,
     } = user;
 
     lawyerInfo = {
       biography,
-      linkedinUrl,
+      linkedinURL: linkedinUrl || linkedinURL,
       graduationDate,
-      institution: graduatedInstitution,
+      institution: institution || graduatedInstitution,
       practiceArea: practiceArea.map(area => extractIdFromObject(area)),
     };
   }
@@ -45,8 +47,9 @@ export function parseRegisterFormDataToMongoUser(user) {
     userRegion: userRegion.map(region => extractIdFromObject(region)),
     lawyerInfo: lawyerInfo,
   };
-
-
-
   return responseUser;
 }
+
+export function parseStateToProfileForm(stateObjectUser) {
+
+};

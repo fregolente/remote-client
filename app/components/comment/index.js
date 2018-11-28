@@ -61,7 +61,11 @@ class Comment extends React.Component {
               <Avatar alt="avatar" src={data.avatar} className={classes.avatar} />
               <section>
                 <Typography variant="subtitle1">{data.from}</Typography>
-                <Typography variant="caption"><span className={classNames(Type.light, Type.textGrey)}>{data.date}</span></Typography>
+                <Typography variant="subheading">
+                  <span className={classNames(Type.light, Type.textGrey)}>
+                    {data.date}
+                  </span>
+                </Typography>
               </section>
             </div>
             <Typography className={classes.commentText}>{data.message}</Typography>

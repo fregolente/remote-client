@@ -2,10 +2,11 @@ export const CREATE_USER_REQUESTED = 'CREATE_USER_REQUESTED';
 export const CREATE_USER_SUCCESS = 'CREATE_USER_SUCCESS';
 export const CREATE_USER_ERROR = 'CREATE_USER_ERROR';
 
-export function createUserRequested(user) {
+export function createUserRequested(user, callback) {
   return {
     type: CREATE_USER_REQUESTED,
     user,
+    callback,
   };
 }
 

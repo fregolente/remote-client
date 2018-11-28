@@ -28,9 +28,7 @@ class Favorites extends React.Component {
       <Grid
         container
         justify="center"
-        direction="row"
-        spacing={24}
-      >
+        direction="row">
         <Grid item md={6}>
           <PostCard
             liked={1}

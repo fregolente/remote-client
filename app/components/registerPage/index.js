@@ -38,13 +38,12 @@ class RegisterPage extends Component {
 
   render() {
     const { classes } = this.props;
-    console.log(this.props);
 
     return (
       <div className={classes.root}>
         <PageHelmet title="Register" />
         <div className={classes.container}>
-          <Grid container spacing={24} alignItems="center" direction="row" justify="center">
+          <Grid container alignItems="center" direction="row" justify="center">
             <Grid item container justify="center" spacing={0} className={classes.loginWrap}>
               <Hidden smDown>
                 <Grid item md={5} className={classes.welcomeWrap}>
@@ -77,7 +76,6 @@ class RegisterPage extends Component {
 
 RegisterPage.propTypes = {
   classes: PropTypes.object.isRequired,
-  createUser: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = state => ({

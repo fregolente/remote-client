@@ -20,9 +20,7 @@ function Albums(props) {
     <div className={classes.root}>
       <Grid
         container
-        direction="row"
-        spacing={24}
-      >
+        direction="row">
         <Grid item md={6} sm={12} xs={12}>
           <ButtonBase
             focusRipple

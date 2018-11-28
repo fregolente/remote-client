@@ -1,12 +1,11 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { push } from 'react-router-redux';
 import * as R from 'ramda';
 import Radium from 'radium';
 import moment from 'moment';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-
-import { Field, reduxForm } from 'redux-form/immutable';
 
 import Checkbox from '@material-ui/core/Checkbox';
 
@@ -27,20 +26,24 @@ import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
 import Typography from '@material-ui/core/Typography';
 
+import MultiChipSelect from '~/components/downshiftMultiple';
 import PapperBlock from '~/components/papperBlock';
-import DownshiftMultiple from '~/components/downshiftMultiple';
 
-import { getFromLocalStorage } from '~/utilities/localStorage';
+import { addToLocalStorage, getFromLocalStorage } from '~/utilities/localStorage';
 import { parseRegisterFormDataToMongoUser } from '~/utilities/user';
+
+import * as routes from '~/constants/routes';
+import { USER_TOKEN } from '~/constants/localstorageItems';
 
 // Actions
 import { createUserRequested } from '~/state/register/actions';
+import { updateUser, getUserByIdRequest } from '~/state/currentUser/actions';
 
 import styles from '../style';
 // fix styles
 import * as registerFormStyle from './style';
 
-// validation functions
+// TODO: validation functions
 const required = value => (value == null ? 'Required' : undefined);
 const email = value => (
   value && !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(value)
@@ -60,15 +63,20 @@ class RegisterForm extends Component {
   constructor(props) {
     super(props);
     this.props = props
+    this.utilities = getFromLocalStorage('utilities');
+
     this.state = {
       userType: '2',
       gender: '1',
       termsAgree: false,
+      errorMessage: '',
+      userRegion: [],
+      userRegionInput: '',
+      userRegionOptions: this.utilities.userRegion,
+      practiceArea: [],
+      practiceAreaInput: '',
+      practiceAreaOptions: this.utilities.practiceArea,
     };
-  }
-
-  componentWillMount() {
-    this.utilities = getFromLocalStorage('utilities');
   }
 
   handleClickShowPassword = () => {
@@ -127,27 +135,45 @@ class RegisterForm extends Component {
     this.setState({ termsAgree: !this.state.termsAgree });
   }
 
+  formSubmitCallback = (response) => {
+    console.log('formSubmitCallback', response);
+    if (response.success === false) {
+      this.setState({ errorMessage: response.error })
+    } else {
+      const { user, token } = response;
+      this.props.updateUser(user);
+      addToLocalStorage(USER_TOKEN, token)
+      // this.props.getUserByIdRequest(user.id);
+      this.props.push(routes.EXPLORER);
+    }
+  }
+
   submitForm = () => {
     const {
       graduationDate,
       userType,
       gender,
+      userRegion,
+      practiceArea,
     } = this.state;
 
-    const passOnState = R.omit(['confirmPassword'], this.state);
+    const passOnState = R.omit(['confirmPassword',
+      'userRegionInput',
+      'userRegionOptions',
+      'practiceAreaInput',
+      'practiceAreaOptions'], this.state);
 
     const formValues = {
       ...passOnState,
       graduationDate: moment(graduationDate).format("YYYY-MM-DD HH:mm:ss"),
       userType: R.find(R.propEq('value', Number(userType)))(this.utilities.userType),
-      gender: R.find(R.propEq('value', Number(gender)))(this.utilities.gender)
+      gender: R.find(R.propEq('value', Number(gender)))(this.utilities.gender),
+      userRegion: userRegion.map(region => R.find(R.propEq('label', region))(this.utilities.userRegion)),
+      practiceArea: practiceArea.map(area => R.find(R.propEq('label', area))(this.utilities.practiceArea)),
     };
 
     const parsedUser = parseRegisterFormDataToMongoUser(formValues)
-
-    this.props.createUser(parsedUser);
-
-    this.props.handleSubmit();
+    this.props.createUser(parsedUser, this.formSubmitCallback);
   }
 
   renderOptions = (optionsArray) => {
@@ -156,17 +182,37 @@ class RegisterForm extends Component {
     });
   }
 
-  onSelectPracticeArea = (selectedValues) => {
-    this.setState({ practiceArea: [...selectedValues] });
+  handlePracticeAreaChange = selectedItem => {
+    if (this.state.practiceAreaOptions.includes(selectedItem)) {
+      this.removeSelectedPracticeArea(selectedItem);
+    } else {
+      this.addSelectedPracticeArea(selectedItem);
+    }
+  };
+
+  addSelectedPracticeArea(item) {
+    this.setState(({ practiceArea }) => ({
+      practiceAreaInput: '',
+      practiceArea: [...practiceArea, item],
+    }));
   }
 
-  onSelectUserRegion = (selectedValues) => {
-    this.setState({ userRegion: [...selectedValues] });
-  }
+  removeSelectedPracticeArea = item => {
+    this.setState(({ practiceArea }) => ({
+      practiceAreaInput: '',
+      practiceArea: practiceArea.filter(i => i !== item),
+    }));
+  };
+
+  handlePracticeAreaChangeInput = inputVal => {
+    const t = inputVal.split(",");
+    if (JSON.stringify(t) !== JSON.stringify(this.state.practiceArea)) {
+      this.setState({ practiceAreaInput: inputVal });
+    }
+  };
 
   renderLawyerInfo = () => {
     const { classes } = this.props;
-    const { practiceArea } = this.utilities;
 
     if (this.state.userType === '1') {
       return (<div>
@@ -175,12 +221,15 @@ class RegisterForm extends Component {
         </Typography>
         <div>
           <FormControl className={classes.formControl}>
-            <DownshiftMultiple
+            <MultiChipSelect
               id={'practice-area'}
-              onValueSelect={this.onSelectPracticeArea}
-              selectValues={practiceArea}
               label={'Practice Area'}
-              placeholder={'Start typing a practice area'} />
+              onChange={this.handlePracticeAreaChange}
+              selectedItem={this.state.practiceArea}
+              onRemoveItem={this.removeSelectedPracticeArea}
+              inputValue={this.state.practiceAreaInput}
+              onInputValueChange={this.handlePracticeAreaChangeInput}
+              availableItems={this.state.practiceAreaOptions} />
           </FormControl>
         </div>
         <div>
@@ -231,6 +280,37 @@ class RegisterForm extends Component {
     return null;
   }
 
+
+
+  handleUserRegionChange = selectedItem => {
+    if (this.state.userRegionOptions.includes(selectedItem)) {
+      this.removeSelectedUserRegion(selectedItem);
+    } else {
+      this.addSelectedUserRegion(selectedItem);
+    }
+  };
+
+  addSelectedUserRegion(item) {
+    this.setState(({ userRegion }) => ({
+      userRegionInput: '',
+      userRegion: [...userRegion, item],
+    }));
+  }
+
+  removeSelectedUserRegion = item => {
+    this.setState(({ userRegion }) => ({
+      userRegionInput: '',
+      userRegion: userRegion.filter(i => i !== item),
+    }));
+  };
+
+  handleUserRegionChangeInput = inputVal => {
+    const t = inputVal.split(",");
+    if (JSON.stringify(t) !== JSON.stringify(this.state.userRegion)) {
+      this.setState({ userRegionInput: inputVal });
+    }
+  };
+
   render() {
     const {
       classes,
@@ -259,12 +339,6 @@ class RegisterForm extends Component {
           </div>
           <div>
             <FormControl className={classes.formControl}>
-              <InputLabel htmlFor="username">Username</InputLabel>
-              <Input id="username" value={this.state.username} onChange={this.handleInputChange} />
-            </FormControl>
-          </div>
-          <div>
-            <FormControl className={classes.formControl}>
               <InputLabel htmlFor="email">Email</InputLabel>
               <Input id="email" type="email" value={this.state.email} onChange={this.handleInputChange} />
             </FormControl>
@@ -289,12 +363,15 @@ class RegisterForm extends Component {
           </div>
           <div>
             <FormControl className={classes.formControl}>
-              <DownshiftMultiple
+              <MultiChipSelect
                 id={'user-region'}
-                onValueSelect={this.onSelectUserRegion}
-                selectValues={userRegion}
                 label={'User Region'}
-                placeholder={'Start typing a region'} />
+                onChange={this.handleUserRegionChange}
+                selectedItem={this.state.userRegion}
+                onRemoveItem={this.removeSelectedUserRegion}
+                inputValue={this.state.userRegionInput}
+                onInputValueChange={this.handleUserRegionChangeInput}
+                availableItems={this.state.userRegionOptions} />
             </FormControl>
           </div>
           <div>
@@ -336,6 +413,16 @@ class RegisterForm extends Component {
 
           {this.renderLawyerInfo()}
 
+          {this.state.errorMessage !== '' &&
+            (<div>
+              <Typography
+                color="error"
+                variant="subtitle1">
+                {this.state.errorMessage}
+              </Typography>
+            </div>)
+          }
+
           <div className={classNames(classes.btnArea, classes.noMargin)}>
             <div className={classes.optArea}>
               <FormControlLabel
@@ -367,8 +454,6 @@ class RegisterForm extends Component {
 RegisterForm.propTypes = {
   classes: PropTypes.object.isRequired,
   handleSubmit: PropTypes.func.isRequired,
-  pristine: PropTypes.bool.isRequired,
-  submitting: PropTypes.bool.isRequired,
   createUser: PropTypes.func.isRequired,
 };
 
@@ -377,6 +462,9 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = {
   createUser: createUserRequested,
+  push,
+  updateUser,
+  getUserByIdRequest,
 };
 
 const RegisterFormConnected = connect(mapStateToProps, mapDispatchToProps)(RegisterForm);

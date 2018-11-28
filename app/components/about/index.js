@@ -48,8 +48,7 @@ class About extends React.Component {
         container
         alignItems="flex-start"
         justify="flex-start"
-        direction="row"
-        spacing={24}>
+        direction="row"}>
         <Grid item md={7} xs={12}>
           <div>
             <Timeline dataTimeline={data} />

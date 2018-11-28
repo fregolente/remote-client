@@ -17,7 +17,6 @@ const styles = theme => ({
     background: '#fafafa',
     width: '100%',
     height: '100%',
-    zIndex: '1000',
   },
   appFrameInner: {
     ...appFrame,

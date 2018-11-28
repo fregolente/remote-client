@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 import Radium from 'radium';
@@ -22,6 +23,9 @@ import Divider from '@material-ui/core/Divider';
 // Components
 import PageHelmet from '~/components/pageHelmet';
 
+// Selector
+import { utilitiesSelector } from '~/state/utilities/selectors';
+
 import styles, { casesContainer } from './styles';
 
 class Explorer extends Component {
@@ -30,8 +34,19 @@ class Explorer extends Component {
 
     this.state = {
       region: '',
+      area: '',
       labelWidth: 0,
+      userRegion: [],
+      practiceArea: [],
     };
+  }
+
+  componentWillReceiveProps(nextProps) {
+    const { utilities } = nextProps;
+    if (utilities && utilities.userRegion) {
+      const { userRegion, practiceArea } = nextProps.utilities;
+      this.setState({ userRegion, practiceArea });
+    }
   }
 
   componentDidMount() {
@@ -85,7 +100,7 @@ class Explorer extends Component {
 
     const casesObj = casesArray.map((c) => {
       return (
-        <Grid item xs={3} key={c.id}>
+        <Grid item xs={3} key={c.id} className={classes.cardContainer}>
           <Card className={classes.card}>
             <CardContent>
               <Typography variant="h5" component="h2">
@@ -115,53 +130,97 @@ class Explorer extends Component {
     return casesObj;
   }
 
+  regionSelectOptions = (userRegions) => {
+    const options = userRegions.map((region) =>
+      (<MenuItem key={region.id} value={region.value}>
+        {region.label}
+      </MenuItem>))
+    return options;
+  }
+
+  practiceAreaSelectOptions = (practiceAreas) => {
+    const options = practiceAreas.map((area) =>
+      (<MenuItem key={area.id} value={area.value}>
+        {area.label}
+      </MenuItem>))
+    return options;
+  }
+
   render() {
     const { classes } = this.props;
+    const { practiceArea, userRegion } = this.state;
 
     return (
-      <div>
+      <Grid container>
         <PageHelmet title="Explore" />
-        <Grid container spacing={24}>
-          <Grid item xs={12} className={classes.filterContainer}>
-            <form>
-              <FormControl variant="outlined" className={classes.formControl}>
-                <InputLabel
-                  ref={ref => this.InputLabelRef = ref}
-                  htmlFor="region">
-                  Region
+        <Grid item xs={12} className={classes.filterContainer}>
+          <form>
+            <FormControl variant="outlined" className={classes.formControl}>
+              <InputLabel
+                ref={ref => this.InputLabelRef = ref}
+                htmlFor="region">
+                Region
                 </InputLabel>
-                <Select
-                  value={this.state.region}
-                  onChange={this.handleChange}
-                  input={
-                    <OutlinedInput
-                      labelWidth={this.state.labelWidth}
-                      name="region"
-                      id="region" />
-                  }>
-                  <MenuItem value="">
-                    <em>All</em>
-                  </MenuItem>
-                  <MenuItem value={10}>Ten</MenuItem>
-                  <MenuItem value={20}>Twenty</MenuItem>
-                  <MenuItem value={30}>Thirty</MenuItem>
-                </Select>
-              </FormControl>
-            </form>
-          </Grid>
-          <Grid item xs={12} style={casesContainer}>
-            <Grid container spacing={8}>
-              {this.showCasesCards()}
-            </Grid>
+              <Select
+                value={this.state.region}
+                onChange={this.handleChange}
+                input={
+                  <OutlinedInput
+                    labelWidth={this.state.labelWidth}
+                    name="region"
+                    id="region" />
+                }>
+                <MenuItem value="">
+                  <em>All</em>
+                </MenuItem>
+                {this.regionSelectOptions(userRegion)}
+              </Select>
+            </FormControl>
+            <FormControl variant="outlined" className={classes.formControl}>
+              <InputLabel
+                ref={ref => this.InputLabelRef = ref}
+                htmlFor="area">
+                Practice Area
+                </InputLabel>
+              <Select
+                value={this.state.area}
+                onChange={this.handleChange}
+                input={
+                  <OutlinedInput
+                    labelWidth={this.state.labelWidth}
+                    name="area"
+                    id="area" />
+                }>
+                <MenuItem value="">
+                  <em>All</em>
+                </MenuItem>
+                {this.practiceAreaSelectOptions(practiceArea)}
+              </Select>
+            </FormControl>
+          </form>
+        </Grid>
+        <Grid item xs={12} style={casesContainer}>
+          <Grid container>
+            {this.showCasesCards()}
           </Grid>
         </Grid>
-      </div>
+      </Grid>
     )
   }
 }
 
 Explorer.propTypes = {
   classes: PropTypes.object.isRequired,
+  utilities: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(Radium(Explorer));
+const mapStateToProps = state => ({
+  utilities: utilitiesSelector(state),
+});
+
+const mapDispatchToProps = {
+};
+
+const ReduxedExplorer = connect(mapStateToProps, mapDispatchToProps)(Explorer)
+
+export default withStyles(styles)(Radium(ReduxedExplorer));

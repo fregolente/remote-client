@@ -11,6 +11,7 @@ import VerifiedUser from '@material-ui/icons/VerifiedUser';
 import Info from '@material-ui/icons/Info';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import { withStyles } from '@material-ui/core/styles';
+import Tooltip from '@material-ui/core/Tooltip';
 
 import styles from './styles';
 
@@ -52,50 +53,17 @@ class Cover extends React.Component {
     const { anchorElOpt } = this.state;
     return (
       <div className={classes.cover} style={{ backgroundImage: `url(${coverImg})` }}>
-        <div className={classes.opt}>
-          <IconButton className={classes.button} aria-label="Delete">
-            <Info />
-          </IconButton>
-          <IconButton
-            aria-label="More"
-            aria-owns={anchorElOpt ? 'long-menu' : null}
-            aria-haspopup="true"
-            className={classes.button}
-            onClick={this.handleClickOpt}
-          >
-            <MoreVertIcon />
-          </IconButton>
-          <Menu
-            id="long-menu"
-            anchorEl={anchorElOpt}
-            open={Boolean(anchorElOpt)}
-            onClose={this.handleCloseOpt}
-            PaperProps={{
-              style: {
-                maxHeight: ITEM_HEIGHT * 4.5,
-                width: 200,
-              },
-            }}
-          >
-            {optionsOpt.map(option => (
-              <MenuItem key={option} selected={option === 'Edit Profile'} onClick={this.handleCloseOpt}>
-                {option}
-              </MenuItem>
-            ))}
-          </Menu>
-        </div>
         <div className={classes.content}>
           <Avatar alt={name} src={avatar} className={classes.avatar} />
           <Typography variant="h4" className={classes.name} gutterBottom>
             {name}
-            <VerifiedUser className={classes.verified} />
+            <Tooltip title="Your user is ready to go!">
+              <VerifiedUser className={classes.verified} />
+            </Tooltip>
           </Typography>
           <Typography className={classes.subheading} gutterBottom>
             {desc}
           </Typography>
-          <Button className={classes.button} size="large" variant="contained" color="secondary">
-            Add to Connection
-          </Button>
         </div>
       </div>
     );
