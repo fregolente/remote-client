@@ -61,7 +61,7 @@ class ProfileCard extends Component {
           <Typography className={classes.subheading} gutterBottom>
             <span className={Type.regular}>{title}</span>
           </Typography>
-          <Typography variant="caption" component="p">
+          <Typography variant="caption">
             {connection} connection
           </Typography>
           <Button className={classes.buttonProfile} size="large" variant="outlined" color="secondary">

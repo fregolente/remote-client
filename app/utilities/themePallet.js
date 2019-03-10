@@ -147,13 +147,13 @@ module.exports = {
     palette: {
       primary: {
         light: '#ECEFF1',
-        main: '#607D8B',
+        main: '#30a5ff',
         dark: '#455A64',
         contrastText: '#fff',
       },
       secondary: {
         light: '#F5F5F5',
-        main: '#757575',
+        main: '#222222',
         dark: '#424242',
         contrastText: '#fff',
       },

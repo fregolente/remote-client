@@ -8,7 +8,12 @@ import {
   EDIT_USER_ERROR,
 } from './actions';
 
-const initialState = {};
+const initialState = {
+  currentUser: {},
+  user: {},
+  error: null,
+  userId: null,
+};
 
 export default function currentUserReducer(state = initialState, action) {
   switch (action.type) {

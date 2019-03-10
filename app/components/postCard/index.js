@@ -98,7 +98,7 @@ class PostCard extends React.Component {
           />
         }
         <CardContent>
-          <Typography component="p">
+          <Typography>
             {content}
           </Typography>
         </CardContent>

@@ -4,6 +4,11 @@ const styles = {
   },
   grow: {
     flexGrow: 1,
+    textTransform: 'uppercase',
+    color: '#30a5ff',
+  },
+  page: {
+    color: 'white',
   },
   menuButton: {
     marginRight: 20,

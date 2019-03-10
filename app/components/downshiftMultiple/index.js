@@ -33,19 +33,21 @@ const renderInput = inputProps => {
 
   if (!readOnly) {
     return (
-      <TextField
-        fullWidth
-        label={
-          allItemSelected ? 'All selected' : label
-        }
-        disabled={allItemSelected || readOnly}
-        InputProps={{
-          classes: {
-            input: classes.input
-          },
-          ...InputProps
-        }}
-      />
+      <form>
+        <TextField
+          fullWidth
+          label={
+            allItemSelected ? 'All selected' : label
+          }
+          disabled={allItemSelected || readOnly}
+          InputProps={{
+            classes: {
+              input: classes.input
+            },
+            ...InputProps
+          }}
+        />
+      </form>
     );
   }
 };

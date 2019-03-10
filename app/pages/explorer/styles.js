@@ -1,25 +1,18 @@
 export const casesContainer = {
-  margin: '0 20px',
+  marginLeft: '8px',
 };
 
 const styles = theme => ({
   formControl: {
-    // margin: theme.spacing.unit,
-    minWidth: 120,
-    textAlign: 'left',
+    marginTop: '15px',
+    minWidth: 202,
   },
   filterContainer: {
     padding: '15px 0',
-    marginBottom: '10px',
     backgroundColor: 'white',
     textAlign: 'center',
-    boxShadow: '0px 1px 3px 0px rgba(0, 0, 0, 0.2), 0px 1px 1px 0px rgba(0, 0, 0, 0.14), 0px 2px 1px -1px rgba(0, 0, 0, 0.12)',
-  },
-  cardContainer: {
-    marginRight: '10px',
-  },
-  card: {
-    minWidth: 275,
+    minHeight: '800px',
+    borderRight: '1px solid lightgray',
   },
   bullet: {
     display: 'inline-block',
@@ -31,6 +24,16 @@ const styles = theme => ({
   },
   pos: {
     marginBottom: 12,
+  },
+  cardContent: {
+    minHeight: '200px',
+  },
+  explainText: {
+    marginBottom: '20px',
+    paddingLeft: '20px',
+  },
+  buttonSearch: {
+    marginTop: '20px',
   },
 });
 

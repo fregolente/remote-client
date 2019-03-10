@@ -5,7 +5,6 @@ import Radium from 'radium';
 import moment from 'moment';
 import PropTypes from 'prop-types';
 
-import ArrowForward from '@material-ui/icons/ArrowForward';
 import Button from '@material-ui/core/Button';
 import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
@@ -71,12 +70,14 @@ class ProfilePage extends Component {
       userRegionSelected = user.userRegion.map(region => region.label);
     }
 
-    if (user.lawyerInfo.practiceArea) {
-      const { practiceArea } = this.utilities;
-      practiceAreaSelected = user.lawyerInfo.practiceArea.map(areaId => {
-        const area = practiceArea.filter(area => area.id === areaId)[0];
-        return area.label;
-      });
+    if (user.userType.value === 1) {
+      if (user.lawyerInfo.practiceArea) {
+        const { practiceArea } = this.utilities;
+        practiceAreaSelected = user.lawyerInfo.practiceArea.map(areaId => {
+          const area = practiceArea.filter(area => area.id === areaId)[0];
+          return area.label;
+        });
+      }
     }
 
     if (user.userType.value === 1) {
@@ -176,7 +177,6 @@ class ProfilePage extends Component {
   };
 
   renderLawyerInfo = () => {
-    console.log(this.state)
     if (this.state.userType === '1') {
       return (<div>
         <Typography variant="button">

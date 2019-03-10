@@ -13,18 +13,21 @@ import Select from '@material-ui/core/Select';
 import FormControl from '@material-ui/core/FormControl';
 import InputLabel from '@material-ui/core/InputLabel';
 
-import Card from '@material-ui/core/Card';
-import CardActions from '@material-ui/core/CardActions';
-import CardContent from '@material-ui/core/CardContent';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import Divider from '@material-ui/core/Divider';
 
+import TextField from '@material-ui/core/TextField';
+
 // Components
 import PageHelmet from '~/components/pageHelmet';
+import CaseCard from '~/components/caseCard';
 
 // Selector
 import { utilitiesSelector } from '~/state/utilities/selectors';
+
+// Constants
+import { ALL_LAWYER_CASES } from '~/constants/casesMock';
 
 import styles, { casesContainer } from './styles';
 
@@ -38,6 +41,7 @@ class Explorer extends Component {
       labelWidth: 0,
       userRegion: [],
       practiceArea: [],
+      showHelp: false,
     };
   }
 
@@ -60,73 +64,7 @@ class Explorer extends Component {
   };
 
   showCasesCards = () => {
-    const { classes } = this.props;
-    const casesArray = [
-      {
-        id: 'uuuiiiiddddeeee',
-        title: 'First case',
-        description: 'First case description',
-        suggestedPrice: '$60',
-        priceType: {
-          id: 'ppppttttiiiidddd',
-          label: 'per hour'
-        },
-        _createdAt: '12/25/18 11:50 AM',
-        status: {
-          id: 'ssssttttiiiidddd',
-          label: 'Open'
-        },
-        caseRegions: ['1', '2', '3'],
-        caseAreas: ['1', '2', '3'],
-      },
-      {
-        id: 'uuuiiiiddddffff',
-        title: 'Second case',
-        description: 'Second case description',
-        suggestedPrice: '$60',
-        priceType: {
-          id: 'ppppttttiiiidddd',
-          label: 'per hour'
-        },
-        _createdAt: '12/25/18 11:52 AM',
-        status: {
-          id: 'ssssttttiiiidddd',
-          label: 'Open'
-        },
-        caseRegions: ['1', '2'],
-        caseAreas: ['1', '3'],
-      }
-    ];
-
-    const casesObj = casesArray.map((c) => {
-      return (
-        <Grid item xs={3} key={c.id} className={classes.cardContainer}>
-          <Card className={classes.card}>
-            <CardContent>
-              <Typography variant="h5" component="h2">
-                {c.title}
-              </Typography>
-              <Typography className={classes.pos} color="textSecondary">
-                Created at {c._createdAt}
-              </Typography>
-              <Typography component="p">
-                {c.description}
-                <br />
-                region | area
-              </Typography>
-            </CardContent>
-            <Divider />
-            <CardActions>
-              <Button size="small">Apply</Button>
-              <Button size="small">Favorite</Button>
-              <Button size="small">Quick View</Button>
-            </CardActions>
-          </Card>
-        </Grid>
-      )
-    });
-
-
+    const casesObj = ALL_LAWYER_CASES.map((c) => (<CaseCard isInExplorerPage={true} columns={4} userCase={c} key={`caseCard---${c.id}`}/>));
     return casesObj;
   }
 
@@ -146,6 +84,11 @@ class Explorer extends Component {
     return options;
   }
 
+  toggleHelp = () => {
+    const { showHelp } = this.state;
+    this.setState({ showHelp: !showHelp });
+  }
+
   render() {
     const { classes } = this.props;
     const { practiceArea, userRegion } = this.state;
@@ -153,54 +96,89 @@ class Explorer extends Component {
     return (
       <Grid container>
         <PageHelmet title="Explore" />
-        <Grid item xs={12} className={classes.filterContainer}>
+        <Grid item xs={12} className={classes.explainText}>
+          <Typography variant="h5" gutterBottom>
+            Explore Cases <Button size="small" onClick={() => this.toggleHelp()} >help</Button>
+          </Typography>
+          {this.state.showHelp && (
+            <div>
+              <Typography variant="body2" gutterBottom>
+                Use this page to explore user created cases and apply to those you see fit. Use the left column to filter cases and search title text.
+                </Typography>
+              <Divider />
+            </div>)}
+        </Grid>
+        <Grid item xs={2} className={classes.filterContainer}>
           <form>
-            <FormControl variant="outlined" className={classes.formControl}>
-              <InputLabel
-                ref={ref => this.InputLabelRef = ref}
-                htmlFor="region">
-                Region
+            <h4>Filters</h4>
+            <Grid container>
+              <Grid item xs={12}>
+                <FormControl variant="outlined" className={classes.formControl}>
+                  <TextField
+                    id="outlined-name"
+                    label="Search title"
+                    margin="normal"
+                    variant="outlined"
+                  />
+                </FormControl>
+              </Grid>
+              <Grid item xs={12}>
+                <FormControl variant="outlined" className={classes.formControl}>
+                  <InputLabel
+                    ref={ref => this.InputLabelRef = ref}
+                    htmlFor="region">
+                    Region
+                  </InputLabel>
+                  <Select
+                    value={this.state.region}
+                    onChange={this.handleChange}
+                    input={
+                      <OutlinedInput
+                        labelWidth={this.state.labelWidth}
+                        name="region"
+                        id="region" />
+                    }>
+                    <MenuItem value="">
+                      <em>All</em>
+                    </MenuItem>
+                    {this.regionSelectOptions(userRegion)}
+                  </Select>
+                </FormControl>
+              </Grid>
+              <Grid item xs={12}>
+                <FormControl variant="outlined" className={classes.formControl}>
+                  <InputLabel
+                    ref={ref => this.InputLabelRef = ref}
+                    htmlFor="area">
+                    Practice Area
                 </InputLabel>
-              <Select
-                value={this.state.region}
-                onChange={this.handleChange}
-                input={
-                  <OutlinedInput
-                    labelWidth={this.state.labelWidth}
-                    name="region"
-                    id="region" />
-                }>
-                <MenuItem value="">
-                  <em>All</em>
-                </MenuItem>
-                {this.regionSelectOptions(userRegion)}
-              </Select>
-            </FormControl>
-            <FormControl variant="outlined" className={classes.formControl}>
-              <InputLabel
-                ref={ref => this.InputLabelRef = ref}
-                htmlFor="area">
-                Practice Area
-                </InputLabel>
-              <Select
-                value={this.state.area}
-                onChange={this.handleChange}
-                input={
-                  <OutlinedInput
-                    labelWidth={this.state.labelWidth}
-                    name="area"
-                    id="area" />
-                }>
-                <MenuItem value="">
-                  <em>All</em>
-                </MenuItem>
-                {this.practiceAreaSelectOptions(practiceArea)}
-              </Select>
-            </FormControl>
+                  <Select
+                    value={this.state.area}
+                    onChange={this.handleChange}
+                    input={
+                      <OutlinedInput
+                        labelWidth={this.state.labelWidth}
+                        name="area"
+                        id="area" />
+                    }>
+                    <MenuItem value="">
+                      <em>All</em>
+                    </MenuItem>
+                    {this.practiceAreaSelectOptions(practiceArea)}
+                  </Select>
+                </FormControl>
+              </Grid>
+              <Grid item xs={6} className={classes.buttonSearch}>
+                <Button color="default">Clear</Button>
+              </Grid>
+              <Grid item xs={6} className={classes.buttonSearch}>
+                <Button variant="contained" color="primary">Search</Button>
+              </Grid>
+            </Grid>
           </form>
         </Grid>
-        <Grid item xs={12} style={casesContainer}>
-          <Grid container>
+        <Grid item xs={9} style={casesContainer}>
+          <Grid container spacing={8}>
             {this.showCasesCards()}
           </Grid>
         </Grid>

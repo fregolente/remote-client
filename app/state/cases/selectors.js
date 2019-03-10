@@ -1,0 +1,1 @@
+export const createCaseStatus = state => state.cases;

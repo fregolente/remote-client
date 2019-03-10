@@ -11,6 +11,7 @@ import Grid from '@material-ui/core/Grid';
 import Header from '~/components/header';
 import AppDrawer from '~/components/appDrawer';
 import Breadcrumb from '~/components/breadcrumb';
+import Divider from '@material-ui/core/Divider';
 
 // Styles
 import * as styles from './styles';
@@ -55,6 +56,7 @@ class Container extends Component {
 
         <Grid item xs={12} style={styles.breadcrumbContainer}>
           <Breadcrumb theme="dark" separator=" › " location={location} />
+          <Divider />
         </Grid>
 
         <Grid item xs={12}>

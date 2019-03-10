@@ -23,7 +23,7 @@ function PaperSheet(props) {
         <Typography variant="h6" component="h2" className={classes.title}>
           {title}
         </Typography>
-        <Typography component="p" className={classes.description}>
+        <Typography className={classes.description}>
           {desc}
         </Typography>
         <section className={classNames(classes.content, whiteBg && classes.whiteBg, overflowX && classes.overflowX)}>

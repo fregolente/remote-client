@@ -25,7 +25,7 @@ import { cleanUser, updateUser, getUserByIdRequest } from '~/state/currentUser/a
 import PapperBlock from '~/components/papperBlock';
 
 // Utilities
-import { addToLocalStorage, removeFromLocalStorage } from '~/utilities/localStorage';
+import { addToLocalStorage, removeFromLocalStorage, getFromLocalStorage } from '~/utilities/localStorage';
 
 import styles from '../style';
 
@@ -61,8 +61,19 @@ class LoginForm extends React.Component {
     } else {
       const { user, token } = response;
       this.props.updateUser(user);
-      addToLocalStorage(USER_TOKEN, token);
-      this.props.push(routes.EXPLORER);
+      console.log(token)
+      console.log(token.toString())
+      addToLocalStorage(USER_TOKEN, token.toString());
+
+      const tokenens = getFromLocalStorage(USER_TOKEN);
+      console.log(tokenens);
+      console.log(tokenens.toString());
+
+      if (user.userType.value === 1) {
+        this.props.push(routes.EXPLORER);
+      } else {
+        this.props.push(routes.MY_CASES);
+      }
     }
   }
 

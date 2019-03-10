@@ -136,15 +136,17 @@ class RegisterForm extends Component {
   }
 
   formSubmitCallback = (response) => {
-    console.log('formSubmitCallback', response);
     if (response.success === false) {
       this.setState({ errorMessage: response.error })
     } else {
       const { user, token } = response;
       this.props.updateUser(user);
       addToLocalStorage(USER_TOKEN, token)
-      // this.props.getUserByIdRequest(user.id);
-      this.props.push(routes.EXPLORER);
+      if (user.userType.value === 1) {
+        this.props.push(routes.EXPLORER);
+      } else {
+        this.props.push(routes.MY_CASES);
+      }
     }
   }
 

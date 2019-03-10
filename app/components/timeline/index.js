@@ -101,7 +101,7 @@ class Timeline extends Component {
               title={data.name} />
           }
           <CardContent>
-            <Typography component="p">
+            <Typography>
               {data.content}
             </Typography>
           </CardContent>

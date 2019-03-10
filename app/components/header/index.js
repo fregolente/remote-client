@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { push } from 'react-router-redux';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
+import { withRouter } from 'react-router';
 
 
 import AppBar from '@material-ui/core/AppBar';
@@ -67,14 +68,17 @@ class Header extends Component {
       firstName,
       lastName,
     } = this.props;
+
+    const location = this.props.location;
+    const parts = location.pathname.split('/');
+    const place = parts[parts.length - 1];
     
-    const bull = <span className={classes.bullet}>•</span>;
     const auth = true;
     const loggedInUser = `${firstName} ${lastName}`;
 
     return (
       <div className={classes.root}>
-        <AppBar position="static">
+        <AppBar color="secondary" position="static">
           <Toolbar>
             <IconButton
               className={classes.menuButton}
@@ -84,7 +88,7 @@ class Header extends Component {
               <MenuIcon />
             </IconButton>
             <Typography variant="h6" color="inherit" className={classes.grow}>
-              remote{bull}legal
+              Remote.Legal
             </Typography>
             {auth && (
               <div style={{ display: 'flex' }}>
@@ -120,4 +124,4 @@ const HeaderMapped = connect(
   mapDispatchToProps
 )(Header);
 
-export default withStyles(styles)(HeaderMapped);
+export default withRouter(withStyles(styles)(HeaderMapped));

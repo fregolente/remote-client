@@ -8,6 +8,7 @@ import timelineReducer from './timeline/reducers';
 import registerReducer from './register/reducers';
 import utilitiesReducer from './utilities/reducers';
 import currentUserReducer from './currentUser/reducers';
+import casesReducer from './cases/reducers';
 
 export default combineReducers({
   router: routerReducer,
@@ -16,5 +17,6 @@ export default combineReducers({
   timeline: timelineReducer,
   utilities: utilitiesReducer,
   user: currentUserReducer,
+  cases: casesReducer,
 });
 

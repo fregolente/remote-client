@@ -14,8 +14,6 @@ const Breadcrumbs = (props) => {
   } = props;
   const currentLocation = props.location.pathname;
 
-  console.log('breadcrumb current location', currentLocation);
-
   return (
     <section className={classNames(theme === 'dark' ? classes.dark : classes.light, classes.breadcrumbs)}>
       <Route

@@ -51,7 +51,7 @@ class Favorites extends React.Component {
             <Typography className={classes.pos} color="textSecondary">
               adjective
             </Typography>
-            <Typography component="p">
+            <Typography>
               well meaning and kindly.<br />
               {'"a benevolent smile"'}
             </Typography>
