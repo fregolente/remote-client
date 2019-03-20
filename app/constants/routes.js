@@ -29,6 +29,8 @@ export const CASE_URL = `${APP}/CreateCase`;
 export const CASE_TEXT = 'Create new case';
 export const CASE_SECONDARY_TEXT = '';
 
+export const FULL_CASE_URL = `${APP}/FullCase`;
+
 export const FAVORITE_CASE_URL = `${APP}/FavoriteCases`;
 export const FAVORITE_CASE_TEXT = 'My Favorites';
 export const FAVORITE_CASE_SECONDARY_TEXT = 'See all cases you favorited';

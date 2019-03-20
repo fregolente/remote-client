@@ -1,4 +1,4 @@
-import { all, put, takeLatest, call, select } from 'redux-saga/effects';
+import { all, put, takeLatest, call } from 'redux-saga/effects';
 
 import { addToLocalStorage } from '~/utilities/localStorage';
 
@@ -10,7 +10,6 @@ import {
   getUtilitiesError,
 } from './actions';
 
-// Get User Regions
 function* getUtilities(action) {
   const { callback } = action;
   try {

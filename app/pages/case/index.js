@@ -11,6 +11,7 @@ import {
   Grid,
   TextField,
   MenuItem,
+  InputAdornment,
 } from '@material-ui/core';
 
 // Actions
@@ -32,10 +33,9 @@ import * as styles from './styles';
 const isNilOrEmpty = anyPass([isNil, isEmpty]);
 
 class Case extends Component {
-
   constructor(props) {
     super(props);
-    this.props = props
+    this.props = props;
     this.utilities = getFromLocalStorage('utilities');
 
     this.state = {
@@ -73,7 +73,7 @@ class Case extends Component {
     ));
   }
 
-  hasErrorInField = fieldValue => {
+  hasErrorInField = (fieldValue) => {
     const { submitted } = this.state;
 
     if (submitted === false) {
@@ -88,15 +88,14 @@ class Case extends Component {
     return false;
   }
 
-  handleSelectChange = stateName => event => {
+  handleSelectChange = stateName => (event) => {
     const stateValue = event.target.value;
     this.setState({ [stateName]: stateValue });
   }
 
-  handleInputChange = event => {
+  handleInputChange = (event) => {
     if (event) {
-      const name = event.target.id;
-      const value = event.target.value;
+      const { id: name, value } = event.target;
       this.setState({ [name]: value });
     }
   }
@@ -111,7 +110,6 @@ class Case extends Component {
       casePriceAmount,
     } = this.state;
 
-    const { user } = this.props;
 
     const hasError = (
       isNilOrEmpty(caseTitle) ||
@@ -135,18 +133,20 @@ class Case extends Component {
       hasError: false,
     });
 
+    const { user } = this.props;
+    const { _id: userId } = user;
+
     const newCase = {
-      userId: user._id,
+      userId,
       title: caseTitle,
       description: caseDescription,
       region: caseRegion,
       practiceArea: casePracticeArea,
       priceType: casePriceType,
       suggestedPrice: casePriceAmount,
-    }
+    };
 
     this.props.createCase(newCase);
-
   }
 
   showHelperTexts = () => {
@@ -178,6 +178,7 @@ class Case extends Component {
     const titleHelperText = `Simple and clear title (${titleLimiter} characters limit)`;
     const descriptionHelperText = `Describe what you need help with (${descriptionLimiter} characters limit)`;
     const createButtonText = creatingCase ? 'Creating...' : 'Create';
+    const amountAdorment = <InputAdornment position="start">US$</InputAdornment>;
 
     return (
       <Grid container style={styles.mainContainer}>
@@ -220,8 +221,7 @@ class Case extends Component {
                   style={{ margin: 8 }}
                   InputLabelProps={{
                     shrink: true,
-                  }}
-                />
+                  }} />
               </Grid>
 
               <Grid item xs={labelGridSize}>
@@ -247,8 +247,7 @@ class Case extends Component {
                   inputProps={{ maxLength: descriptionLimiter }}
                   InputLabelProps={{
                     shrink: true,
-                  }}
-                />
+                  }} />
               </Grid>
 
               <Grid item xs={labelGridSize}>
@@ -287,10 +286,8 @@ class Case extends Component {
                   variant={this.state.inputVariant}
                   helperText="Choose a fee that applies to your case"
                   style={{ margin: 8 }}
-                  InputLabelProps={{
-                    shrink: true,
-                  }}
-                />
+                  InputLabelProps={{ shrink: true }}
+                  InputProps={{ startAdornment: amountAdorment }} />
               </Grid>
 
               <Grid item xs={labelGridSize}>
@@ -343,7 +340,7 @@ class Case extends Component {
 
 Case.propTypes = {
   push: PropTypes.func.isRequired,
-  user: PropTypes.object.isRequired,
+  user: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   createCase: PropTypes.func.isRequired,
   caseStatus: PropTypes.shape({
     error: PropTypes.string,
@@ -357,7 +354,7 @@ const mapDispatchToProps = {
   createCase,
 };
 
-const mapStateToProps = (state) => ({
+const mapStateToProps = state => ({
   user: state.user.currentUser,
   caseStatus: createCaseStatus(state),
 });
