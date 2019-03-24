@@ -25,18 +25,10 @@ import { cleanUser, updateUser, getUserByIdRequest } from '~/state/currentUser/a
 import PapperBlock from '~/components/papperBlock';
 
 // Utilities
-import { addToLocalStorage, removeFromLocalStorage, getFromLocalStorage } from '~/utilities/localStorage';
+import { addToLocalStorage, cleanLocalStorage, getFromLocalStorage } from '~/utilities/localStorage';
 
 import styles from '../style';
 
-
-// validation functions
-const required = value => (value == null ? 'Required' : undefined);
-const email = value => (
-  value && !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(value)
-    ? 'Invalid email'
-    : undefined
-);
 
 class LoginForm extends React.Component {
   constructor(props) {
@@ -52,7 +44,7 @@ class LoginForm extends React.Component {
 
   componentWillMount() {
     this.props.cleanUser();
-    removeFromLocalStorage(USER_TOKEN);
+    cleanLocalStorage(USER_TOKEN);
   }
 
   loginCallback = (response) => {
@@ -61,13 +53,10 @@ class LoginForm extends React.Component {
     } else {
       const { user, token } = response;
       this.props.updateUser(user);
-      console.log(token)
-      console.log(token.toString())
-      addToLocalStorage(USER_TOKEN, token.toString());
+      const sanitizedToken = token.replace(/"/g, '');
+      addToLocalStorage(USER_TOKEN, sanitizedToken.toString());
 
       const tokenens = getFromLocalStorage(USER_TOKEN);
-      console.log(tokenens);
-      console.log(tokenens.toString());
 
       if (user.userType.value === 1) {
         this.props.push(routes.EXPLORER);
@@ -86,15 +75,15 @@ class LoginForm extends React.Component {
     this.setState({ showPassword: !this.state.showPassword });
   };
 
-  handleMouseDownPassword = event => {
+  handleMouseDownPassword = (event) => {
     event.preventDefault();
   };
 
-  handleInputChange = event => {
+  handleInputChange = (event) => {
     const capitalize = R.compose(
       R.join(''),
       R.juxt([R.compose(R.toUpper, R.head), R.tail])
-    );;
+    );
 
     const idToVarName = (id) => {
       const nameArr = id.split('-');
@@ -127,9 +116,6 @@ class LoginForm extends React.Component {
   render() {
     const {
       classes,
-      handleSubmit,
-      pristine,
-      submitting
     } = this.props;
     return (
       <div className={classes.formWrap}>
@@ -148,17 +134,17 @@ class LoginForm extends React.Component {
               </FormControl>
             </div>
             <div>
-              <span> { this.state.errorMessage } </span>
+              <span> {this.state.errorMessage} </span>
             </div>
             <div className={classes.btnArea}>
               <Button variant="contained" color="primary" onClick={() => this.login()}>
                 Login
-              <ArrowForward className={classNames(classes.rightIcon, classes.iconSmall)} />
+                <ArrowForward className={classNames(classes.rightIcon, classes.iconSmall)} />
               </Button>
             </div>
             <div className={classes.footer}>
               Don't have a user?
-            <Button
+              <Button
                 onClick={() => this.goToRegister()}
                 size="small"
                 color="secondary"
@@ -174,12 +160,11 @@ class LoginForm extends React.Component {
 }
 
 LoginForm.propTypes = {
-  authorization: PropTypes.object.isRequired,
-  classes: PropTypes.object.isRequired,
-  handleSubmit: PropTypes.func.isRequired,
-  pristine: PropTypes.bool.isRequired,
-  submitting: PropTypes.bool.isRequired,
+  classes: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   requestLogin: PropTypes.func.isRequired,
+  push: PropTypes.func.isRequired,
+  cleanUser: PropTypes.func.isRequired,
+  updateUser: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = state => ({

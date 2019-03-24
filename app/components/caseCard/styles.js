@@ -5,3 +5,7 @@ export const cardContent = {
 export const chip = {
   float: 'right',
 };
+
+export const contentTextApplyDialog = {
+  color: '#333',
+};

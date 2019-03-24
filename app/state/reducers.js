@@ -5,10 +5,10 @@ import { routerReducer } from 'react-router-redux';
 import authorizationReducer from './authorization/reducers';
 import uiActionsReducer from './uiActions/reducers';
 import timelineReducer from './timeline/reducers';
-import registerReducer from './register/reducers';
 import utilitiesReducer from './utilities/reducers';
 import currentUserReducer from './currentUser/reducers';
 import casesReducer from './cases/reducers';
+import lawyersReducer from './lawyers/reducers';
 
 export default combineReducers({
   router: routerReducer,
@@ -18,5 +18,6 @@ export default combineReducers({
   utilities: utilitiesReducer,
   user: currentUserReducer,
   cases: casesReducer,
+  lawyer: lawyersReducer,
 });
 

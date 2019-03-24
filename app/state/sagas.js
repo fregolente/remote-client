@@ -6,6 +6,7 @@ import watchRegisterSagas from './register/sagas';
 import watchUtilitiesSagas from './utilities/sagas';
 import watchCurrentUserSagas from './currentUser/sagas';
 import watchCasesSagas from './cases/sagas';
+import watchLawyersSagas from './lawyers/sagas';
 
 export default function* rootSaga() {
   yield all([
@@ -14,5 +15,6 @@ export default function* rootSaga() {
     watchRegisterSagas(),
     watchUtilitiesSagas(),
     watchCasesSagas(),
+    watchLawyersSagas(),
   ]);
 }

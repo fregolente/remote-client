@@ -23,7 +23,7 @@ export function createCaseError(error) {
   return {
     type: CREATE_CASE_ERROR,
     error,
-  }
+  };
 }
 
 export const GET_USER_CASES = 'GET_USER_CASES';
@@ -123,3 +123,37 @@ export function getAppliedLawyersError(error) {
   };
 }
 
+export const GET_EXPLORER_CASES = 'GET_EXPLORER_CASES';
+
+export function getExplorerCases(filters = {}) {
+  return {
+    type: GET_EXPLORER_CASES,
+    filters,
+  };
+}
+
+export const GET_EXPLORER_CASES_SUCCESS = 'GET_EXPLORER_CASES_SUCCESS';
+
+export function getExplorerCasesSuccess(cases) {
+  return {
+    type: GET_EXPLORER_CASES_SUCCESS,
+    cases,
+  };
+}
+
+export const GET_EXPLORER_CASES_ERROR = 'GET_EXPLORER_CASES_ERROR';
+
+export function getExplorerCasesError(error) {
+  return {
+    type: GET_EXPLORER_CASES_ERROR,
+    error,
+  };
+}
+
+export const CLEAN_EXPLORER_CASES = 'CLEAN_EXPLORER_CASES';
+
+export function cleanExplorerCases() {
+  return {
+    type: CLEAN_EXPLORER_CASES,
+  };
+}

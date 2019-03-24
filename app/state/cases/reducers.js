@@ -14,6 +14,10 @@ import {
   GET_APPLIED_LAWYERS,
   GET_APPLIED_LAWYERS_ERROR,
   GET_APPLIED_LAWYERS_SUCCESS,
+  CLEAN_EXPLORER_CASES,
+  GET_EXPLORER_CASES,
+  GET_EXPLORER_CASES_ERROR,
+  GET_EXPLORER_CASES_SUCCESS,
 } from './actions';
 
 const initialState = {
@@ -24,6 +28,8 @@ const initialState = {
   loadingMyCases: false,
   errorMyCases: '',
   cases: [],
+  loadingExplorerCases: false,
+  explorerCasesError: '',
   selectedCase: null,
   selectedCaseError: '',
   selectedCaseLawyers: [],
@@ -121,7 +127,33 @@ export default function casesReducer(state = initialState, action) {
         selectedCaseLawyersError: action.error,
         loadingCaseLawyers: initialState.loadingCaseLawyers,
       };
+    case CLEAN_EXPLORER_CASES:
+      return {
+        ...state,
+        cases: [],
+        loadingExplorerCases: false,
+        explorerCasesError: '',
+      };
+    case GET_EXPLORER_CASES:
+      return {
+        ...state,
+        loadingExplorerCases: true,
+        explorerCasesError: '',
+      };
+    case GET_EXPLORER_CASES_SUCCESS:
+      return {
+        ...state,
+        cases: action.cases,
+        loadingExplorerCases: false,
+        explorerCasesError: '',
+      };
+    case GET_EXPLORER_CASES_ERROR:
+      return {
+        ...state,
+        loadingExplorerCases: false,
+        explorerCasesError: action.error,
+      };
     default:
       return state;
   }
-};
+}

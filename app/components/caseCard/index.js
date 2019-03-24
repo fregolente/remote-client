@@ -3,6 +3,7 @@ import { push } from 'react-router-redux';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import Radium from 'radium';
+import { find, propEq, includes } from 'ramda';
 
 import {
   Button,
@@ -28,11 +29,24 @@ import {
   StarBorder,
 } from '@material-ui/icons';
 
+// Actions
+import { favoriteACase, unfavoriteACase } from '~/state/lawyers/actions';
+
+// Selectors
+import {
+  currentUserLawyerId,
+  lawyerAppliedCases,
+  lawyerFavoritedCases,
+} from '~/state/currentUser/selectors';
+
 // Utilities
 import { formatMoney } from '~/utilities/numbers';
 import { getFormattedDate } from '~/utilities/dateTime';
+import { getFromLocalStorage } from '~/utilities/localStorage';
 
 import * as styles from './styles';
+
+const UTILITIES = getFromLocalStorage('utilities');
 
 class CaseCard extends Component {
   constructor(props) {
@@ -41,13 +55,13 @@ class CaseCard extends Component {
 
     this.state = {
       openDeleteDialog: false,
-      isFavorite: false,
+      openApplyDialog: false,
     };
   }
 
   getFavoriteButton = () => {
-    const { isFavorite } = this.state;
-    const icon = isFavorite ? <Star /> : <StarBorder />
+    // const { isFavorite } = this.state;
+    const icon = this.hasFavoritedCase() ? <Star /> : <StarBorder />;
 
     return (
       <Tooltip title="Favorite">
@@ -58,10 +72,46 @@ class CaseCard extends Component {
     );
   }
 
+  getLawyerApplyButton = () => {
+    const hasApplied = this.hasAppliedToCase();
+    const buttonText = hasApplied ? 'Applied' : 'Apply now!';
+
+    return (
+      <Button
+        onClick={this.handleOpenApplyDialog}
+        variant="contained"
+        size="small"
+        color="secondary"
+        disabled={hasApplied}>
+        {buttonText}
+      </Button>
+    );
+  }
+
+  getCaseRegion = (region) => {
+    if (region.label) {
+      return region.label;
+    }
+
+    const { userRegion } = UTILITIES;
+    const fullRegion = find(propEq('id', region))(userRegion);
+    return fullRegion.label;
+  }
+
+  getCasePracticeArea = (practiceArea) => {
+    if (practiceArea.label) {
+      return practiceArea.label;
+    }
+
+    const { practiceArea: practiceAreas } = UTILITIES;
+    const fullPracticeArea = find(propEq('id', practiceArea))(practiceAreas);
+    return fullPracticeArea.label;
+  }
+
   showUserButtons = () => (
     <div>
       <Tooltip title="Delete">
-        <IconButton color="primary" size="small" aria-label="Favorite" onClick={() => this.handleClickOpen()}>
+        <IconButton color="primary" size="small" aria-label="Favorite" onClick={this.handleClickOpen}>
           <Delete />
         </IconButton>
       </Tooltip>
@@ -69,19 +119,61 @@ class CaseCard extends Component {
         variant="contained"
         size="small"
         color="secondary"
-        onClick={() => this.handleClickFullCase()}>See full case</Button>
+        onClick={this.handleClickFullCase}>
+        See full case
+      </Button>
     </div>
   );
 
-  toggleFavorite = () => this.setState({ isFavorite: !this.state.isFavorite });
+  toggleFavorite = () => {
+    const {
+      currentUserLawyerId: lawyerId,
+      userCase,
+    } = this.props;
+    const {
+      _id: caseId,
+    } = userCase;
+
+    if (this.hasFavoritedCase()) {
+      // unfavorite
+      this.props.unfavoriteACase(caseId, lawyerId);
+      return;
+    }
+
+    // favorite
+    this.props.favoriteACase(caseId, lawyerId);
+  }
 
   handleClickOpen = () => {
     this.setState({ openDeleteDialog: true });
   };
 
+  handleOpenApplyDialog = () => {
+    this.setState({ openApplyDialog: true });
+  };
+
   handleClose = () => {
     this.setState({ openDeleteDialog: false });
   };
+
+  handleCloseApply = () => {
+    this.setState({ openApplyDialog: false });
+  };
+
+  handleApply = () => {
+    if (this.props.caseApplyAction) {
+      const {
+        currentUserLawyerId: lawyerId,
+        userCase,
+      } = this.props;
+      const {
+        _id: caseId,
+      } = userCase;
+
+      this.props.caseApplyAction(caseId, lawyerId);
+    }
+    this.handleCloseApply();
+  }
 
   handleClickFullCase = () => {
     const { fullCaseAction, userCase } = this.props;
@@ -91,13 +183,66 @@ class CaseCard extends Component {
     }
   };
 
+  applyForCaseDialog = () => {
+    return (
+      <Dialog
+        open={this.state.openApplyDialog}
+        onClose={this.handleCloseApply}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description">
+        <DialogTitle id="alert-dialog-title">
+          {'Confirm apply to this case?'}
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description" style={styles.contentTextApplyDialog}>
+            This action will show interest in working for this case.<br />
+            The user will then be able to open a chat with you.<br />
+            This action <strong>can not</strong> be undone<br />
+            <strong>Confirm this apply?</strong>
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={this.handleCloseApply} color="primary" autoFocus>
+            Cancel
+          </Button>
+          <Button onClick={this.handleApply} color="secondary">
+            Apply!
+          </Button>
+        </DialogActions>
+      </Dialog>
+    );
+  }
+
   showLawyerButtons = () => (
     <div>
       {this.getFavoriteButton()}
-      <Button size="small" color="secondary">More</Button>
-      <Button variant="contained" size="small" color="secondary">Apply</Button>
+      {this.getLawyerApplyButton()}
     </div>
   );
+
+  hasFavoritedCase = () => {
+    const {
+      favoritedCases,
+      userCase,
+    } = this.props;
+    const {
+      _id: caseId,
+    } = userCase;
+
+    return includes(caseId, favoritedCases);
+  }
+
+  hasAppliedToCase = () => {
+    const {
+      appliedCases,
+      userCase,
+    } = this.props;
+    const {
+      _id: caseId,
+    } = userCase;
+
+    return includes(caseId, appliedCases);
+  }
 
   renderDeleteDialog = () => {
     const { userCase } = this.props;
@@ -167,7 +312,7 @@ class CaseCard extends Component {
               <br />
               <br />
               <br />
-              {`${region.label} | ${practiceArea.label}`}
+              {`${this.getCaseRegion(region)} | ${this.getCasePracticeArea(practiceArea)}`}
             </Typography>
           </CardContent>
           <Divider />
@@ -175,6 +320,7 @@ class CaseCard extends Component {
             {isInExplorerPage ? this.showLawyerButtons() : this.showUserButtons()}
           </CardActions>
         </Card>
+        {this.applyForCaseDialog()}
         {this.renderDeleteDialog()}
       </Grid>
     );
@@ -185,6 +331,7 @@ CaseCard.defaultProps = {
   isInExplorerPage: true,
   caseStyle: {},
   fullCaseAction: null,
+  caseApplyAction: null,
 };
 
 CaseCard.propTypes = {
@@ -193,10 +340,24 @@ CaseCard.propTypes = {
   isInExplorerPage: PropTypes.bool,
   caseStyle: PropTypes.object, // eslint-disable-line react/forbid-prop-types
   fullCaseAction: PropTypes.func,
+  caseApplyAction: PropTypes.func,
+  favoriteACase: PropTypes.func.isRequired,
+  unfavoriteACase: PropTypes.func.isRequired,
+  currentUserLawyerId: PropTypes.string.isRequired,
+  appliedCases: PropTypes.arrayOf(PropTypes.string).isRequired,
+  favoritedCases: PropTypes.arrayOf(PropTypes.string).isRequired,
 };
 
 const mapDispatchToProps = {
   push,
+  favoriteACase,
+  unfavoriteACase,
 };
 
-export default connect(null, mapDispatchToProps)(Radium(CaseCard));
+const mapStateToProps = state => ({
+  currentUserLawyerId: currentUserLawyerId(state),
+  appliedCases: lawyerAppliedCases(state),
+  favoritedCases: lawyerFavoritedCases(state),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Radium(CaseCard));

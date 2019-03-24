@@ -6,6 +6,7 @@ import {
   GET_USER_BY_ID_ERROR,
   EDIT_USER_REQUEST,
   EDIT_USER_ERROR,
+  UPDATE_USER_LAWYER_INFO,
 } from './actions';
 
 const initialState = {
@@ -15,6 +16,13 @@ const initialState = {
   userId: null,
 };
 
+function updateCurrentUserLawyerInfo(currentUser, lawyerInfo) {
+  return {
+    ...currentUser,
+    lawyerInfo,
+  };
+}
+
 export default function currentUserReducer(state = initialState, action) {
   switch (action.type) {
     case UPDATE_USER:
@@ -22,6 +30,11 @@ export default function currentUserReducer(state = initialState, action) {
         ...state,
         currentUser: action.user,
       };
+    case UPDATE_USER_LAWYER_INFO:
+      return {
+        ...state,
+        currentUser: updateCurrentUserLawyerInfo(state.currentUser, action.lawyerInfo),
+      }
     case GET_USER_BY_ID_REQUEST:
       return {
         ...state,

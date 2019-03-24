@@ -17,3 +17,13 @@ export const getAppliedLawyersData = state => ({
   loadingLawyers: getSelectedCaseLawyersLoading(state),
   appliedLawyersError: getSelectedCaseLawyersError(state),
 });
+
+const getExplorerCases = state => state.cases.cases;
+const getExplorerCasesLoading = state => state.cases.loadingExplorerCases;
+const getExplorerCasesError = state => state.cases.explorerCasesError;
+
+export const getExplorerPageData = state => ({
+  explorerCases: getExplorerCases(state),
+  loadingExplorerCases: getExplorerCasesLoading(state),
+  explorerCasesError: getExplorerCasesError(state),
+});

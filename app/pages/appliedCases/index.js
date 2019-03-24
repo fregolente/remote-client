@@ -11,10 +11,10 @@ import {
 } from '@material-ui/core';
 
 // Actions
-import { getFavoriteCases } from '~/state/lawyers/actions';
+import { getAppliedCases } from '~/state/lawyers/actions';
 
 // Selectors
-import { getFavoriteCasesSelector } from '~/state/lawyers/selectors';
+import { getAppliedCasesSelector } from '~/state/lawyers/selectors';
 
 // Components
 import PageHelmet from '~/components/pageHelmet';
@@ -25,9 +25,9 @@ import * as ROUTES from '~/constants/routes';
 
 import * as styles from './styles';
 
-class FavoriteCases extends Component {
+class AppliedCases extends Component {
   componentDidMount() {
-    this.props.getFavoriteCases();
+    this.props.getAppliedCases();
   }
 
   goToExplorer = () => {
@@ -35,15 +35,15 @@ class FavoriteCases extends Component {
   }
 
   showCasesCards = () => {
-    const { favoriteCasesData } = this.props;
-    const { favoriteCases } = favoriteCasesData;
+    const { appliedCasesData } = this.props;
+    const { appliedCases } = appliedCasesData;
 
-    if (favoriteCases.length === 0) {
-      return <p>Favorite some cases to show here. <Button onClick={this.goToExplorer}>Go to Explorer page</Button></p>;
+    if (appliedCases.length === 0) {
+      return <p>Apply to a case to show here. <Button onClick={this.goToExplorer}>Go to Explorer page</Button></p>;
     }
 
     const isInExplorerPage = true;
-    const casesObj = favoriteCases.map(c => (<CaseCard
+    const casesObj = appliedCases.map(c => (<CaseCard
       isInExplorerPage={isInExplorerPage}
       columns={4}
       userCase={c}
@@ -53,19 +53,19 @@ class FavoriteCases extends Component {
   }
 
   render() {
-    const { favoriteCasesData } = this.props;
-    const { favoriteCasesLoading, favoriteCasesError, favoriteCases } = favoriteCasesData;
+    const { appliedCasesData } = this.props;
+    const { appliedCases, appliedCasesError, appliedCasesLoading } = appliedCasesData;
 
-    const isLoading = favoriteCasesLoading === true && !favoriteCases.length;
-    const hasError = favoriteCasesLoading === false && favoriteCasesError;
-    const errorMessage = <p>{`An error occured: ${favoriteCasesError}`}</p>;
+    const isLoading = appliedCasesLoading === true && !appliedCases.length;
+    const hasError = appliedCasesLoading === false && appliedCasesError;
+    const errorMessage = <p>{`An error occured: ${appliedCasesError}`}</p>;
     const shouldRenderCases = !isLoading && !hasError;
 
     return (
       <Grid container style={styles.mainContainer}>
         <PageHelmet title="My Profile" />
         <Grid item xs={12}>
-          <h1>My Favorited cases</h1>
+          <h1>My Applied cases</h1>
           <hr />
         </Grid>
         <Grid item xs={12}>
@@ -80,23 +80,23 @@ class FavoriteCases extends Component {
   }
 }
 
-FavoriteCases.propTypes = {
-  favoriteCasesData: PropTypes.shape({
-    favoriteCases: PropTypes.array,
-    favoriteCasesError: PropTypes.string,
-    favoriteCasesLoading: PropTypes.bool,
+AppliedCases.propTypes = {
+  appliedCasesData: PropTypes.shape({
+    appliedCases: PropTypes.array,
+    appliedCasesError: PropTypes.string,
+    appliedCasesLoading: PropTypes.bool,
   }).isRequired,
-  getFavoriteCases: PropTypes.func.isRequired,
+  getAppliedCases: PropTypes.func.isRequired,
   push: PropTypes.func.isRequired,
 };
 
 const mapDispatchToProps = {
   push,
-  getFavoriteCases,
+  getAppliedCases,
 };
 
 const mapStateToProps = state => ({
-  favoriteCasesData: getFavoriteCasesSelector(state),
+  appliedCasesData: getAppliedCasesSelector(state),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(Radium(FavoriteCases));
+export default connect(mapStateToProps, mapDispatchToProps)(Radium(AppliedCases));

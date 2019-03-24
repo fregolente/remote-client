@@ -17,6 +17,9 @@ import {
   GET_APPLIED_LAWYERS,
   getAppliedLawyersError,
   getAppliedLawyersSuccess,
+  GET_EXPLORER_CASES,
+  getExplorerCasesError,
+  getExplorerCasesSuccess,
 } from './actions';
 
 function* createNewCase(action) {
@@ -98,11 +101,40 @@ function* watchGetAppliedLawyers() {
   yield takeLatest(GET_APPLIED_LAWYERS, getAppliedLawyers);
 }
 
+function* getExplorerCases(action) {
+  try {
+    const { filters } = action;
+    const {
+      title,
+      description,
+      region,
+      practiceArea,
+      priceType,
+    } = filters;
+
+    const response = yield call(casesAPI.getExplorerCases, title, description, region, practiceArea, priceType);
+    const { success, message, cases } = response;
+
+    if (success === false && message) {
+      yield put(getExplorerCasesError(message));
+    }
+
+    yield put(getExplorerCasesSuccess(cases));
+  } catch (error) {
+    yield put(getExplorerCasesError(error));
+  }
+}
+
+function* watchGetExplorerCases() {
+  yield takeLatest(GET_EXPLORER_CASES, getExplorerCases)
+}
+
 export default function* watchCasesSagas() {
   yield all([
     watchCreateNewCase(),
     watchGetUserCases(),
     watchEditUserCases(),
     watchGetAppliedLawyers(),
+    watchGetExplorerCases(),
   ]);
 }

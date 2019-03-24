@@ -2,7 +2,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { push } from 'react-router-redux';
-import { isNil, isEmpty, anyPass, not, equals } from 'ramda';
+import { isNil, isEmpty, anyPass, not, equals, path } from 'ramda';
 import PropTypes from 'prop-types';
 import Radium from 'radium';
 import { generate } from 'shortid';
@@ -15,7 +15,6 @@ import {
   CardContent,
   CardHeader,
   Grid,
-  Link,
   InputAdornment,
   TextField,
   Typography,
@@ -163,7 +162,7 @@ class FullCase extends Component {
     const noAppliesMessage = 'No lawyers applied to this case yet.';
 
     const showError = loadingLawyers === false && appliedLawyersError;
-    const showTable = loadingLawyers === false && appliedLawyers.length;
+    const showTable = loadingLawyers === false && appliedLawyers.length > 0;
     const showNoAppliesMessage = !showError && !showTable;
 
     return (
@@ -189,13 +188,8 @@ class FullCase extends Component {
     };
 
     const getLabelFromArray = (utilitiesArray) => {
-      const reducer = (accumulator, currentValue) => `${accumulator}, ${currentValue}`;
-
-      if (utilitiesArray.length === 1) {
-        return utilitiesArray[0].label;
-      }
-
-      return utilitiesArray.reduce(reducer);
+      const res = utilitiesArray.map(obj => path(['label'], obj));
+      return res.join(', ');
     };
 
     const graduationDateFormat = 'MM/DD/YYYY';

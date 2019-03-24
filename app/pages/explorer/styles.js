@@ -1,5 +1,5 @@
 export const casesContainer = {
-  marginLeft: '8px',
+  padding: '8px',
 };
 
 const styles = theme => ({

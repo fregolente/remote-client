@@ -35,7 +35,11 @@ export const FAVORITE_CASE_URL = `${APP}/FavoriteCases`;
 export const FAVORITE_CASE_TEXT = 'My Favorites';
 export const FAVORITE_CASE_SECONDARY_TEXT = 'See all cases you favorited';
 
-export const casesUrl = caseUid => `${CASES_URL}/${caseUid}`;
+export const APPLIED_CASE_URL = `${APP}/AppliedCases`;
+export const APPLIED_CASE_TEXT = 'My Applied Cases';
+export const APPLIED_CASE_SECONDARY_TEXT = 'See all cases you applied to';
+
+// export const casesUrl = caseUid => `${CASES_URL}/${caseUid}`;
 
 
 export const tokenlessRoutes = [LOGIN, REGISTER];

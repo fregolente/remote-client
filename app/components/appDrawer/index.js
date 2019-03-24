@@ -83,17 +83,11 @@ class AppDrawer extends Component {
             </ListItemIcon>
             <ListItemText primary={ROUTES.EXPLORER_TEXT} secondary={ROUTES.EXPLORER_SECONDARY_TEXT} />
           </ListItem>)}
-          {isLawyer && (<ListItem button key={ROUTES.SEARCH_TEXT} onClick={() => this.clickedOnListItem(ROUTES.SEARCH)}>
-            <ListItemIcon>
-              <Search />
-            </ListItemIcon>
-            <ListItemText primary={ROUTES.SEARCH_TEXT} /> <Chip label="PRO" color="secondary" variant="outlined" />
-          </ListItem>)}
           <ListItem button key={ROUTES.CHAT_TEXT} onClick={() => this.clickedOnListItem(ROUTES.CHAT)}>
             <ListItemIcon>
               <Chat />
             </ListItemIcon>
-            <ListItemText primary={ROUTES.CHAT_TEXT} secondary={ROUTES.CHAT_SECONDARY_TEXT} /> <Chip label="PRO" color="secondary" variant="outlined" />
+            <ListItemText primary={ROUTES.CHAT_TEXT} secondary={ROUTES.CHAT_SECONDARY_TEXT} />
           </ListItem>
         </List>
         <Divider />
@@ -115,6 +109,12 @@ class AppDrawer extends Component {
               <Assignment />
             </ListItemIcon>
             <ListItemText primary={ROUTES.FAVORITE_CASE_TEXT} secondary={ROUTES.FAVORITE_CASE_SECONDARY_TEXT} />
+          </ListItem>)}
+          {isLawyer && (<ListItem button key={ROUTES.APPLIED_CASE_URL} onClick={() => this.clickedOnListItem(ROUTES.APPLIED_CASE_URL)}>
+            <ListItemIcon>
+              <Assignment />
+            </ListItemIcon>
+            <ListItemText primary={ROUTES.APPLIED_CASE_TEXT} secondary={ROUTES.APPLIED_CASE_SECONDARY_TEXT} />
           </ListItem>)}
         </List>
         <Divider />

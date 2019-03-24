@@ -1,10 +1,10 @@
 import { USER_TOKEN } from '~/constants/localstorageItems';
-const SESSION_TOKEN = localStorage.getItem(USER_TOKEN);
+
 
 
 export function baseHeader() {
-  const sanitizedToken = SESSION_TOKEN.replace(/"/g, '')
-  console.log('base header');
+  const SESSION_TOKEN = localStorage.getItem(USER_TOKEN);
+  const sanitizedToken = SESSION_TOKEN.replace(/"/g, '');
   const header = new Headers({
     Accept: 'application/json',
     Authorization: `Bearer ${sanitizedToken}`,

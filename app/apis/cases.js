@@ -44,9 +44,43 @@ function getAppliedLawyers(id) {
     .then(data => data);
 }
 
+
+function getExplorerCases(title, description, region, practiceArea, priceType) {
+  let fetchURL = `${API_URL}/case?`;
+
+  if (title) {
+    fetchURL = `${fetchURL}&title=${title}`;
+  }
+
+  if (description) {
+    fetchURL = `${fetchURL}&description=${description}`;
+  }
+
+  if (region) {
+    fetchURL = `${fetchURL}&region=${region}`;
+  }
+
+  if (practiceArea) {
+    fetchURL = `${fetchURL}&practiceArea=${practiceArea}`;
+  }
+
+  if (priceType) {
+    fetchURL = `${fetchURL}&priceType=${priceType}`;
+  }
+
+  return fetch(fetchURL, {
+    method: 'GET',
+    headers: baseHeader(),
+  })
+    .then(statusHelper)
+    .then(res => res.json())
+    .then(data => data);
+}
+
 export default {
   createNewCase,
   editCaseById,
   listUserCases,
   getAppliedLawyers,
+  getExplorerCases,
 };

@@ -52,3 +52,12 @@ export function editUserError(error) {
     error,
   }
 }
+
+export const UPDATE_USER_LAWYER_INFO = 'UPDATE_USER_LAWYER_INFO';
+
+export function updateUserLawyerInfo(lawyerInfo) {
+  return {
+    type: UPDATE_USER_LAWYER_INFO,
+    lawyerInfo,
+  };
+}
