@@ -184,7 +184,7 @@ class RegisterForm extends Component {
     });
   }
 
-  handlePracticeAreaChange = selectedItem => {
+  handlePracticeAreaChange = (selectedItem) => {
     if (this.state.practiceAreaOptions.includes(selectedItem)) {
       this.removeSelectedPracticeArea(selectedItem);
     } else {
@@ -199,14 +199,14 @@ class RegisterForm extends Component {
     }));
   }
 
-  removeSelectedPracticeArea = item => {
+  removeSelectedPracticeArea = (item) => {
     this.setState(({ practiceArea }) => ({
       practiceAreaInput: '',
       practiceArea: practiceArea.filter(i => i !== item),
     }));
   };
 
-  handlePracticeAreaChangeInput = inputVal => {
+  handlePracticeAreaChangeInput = (inputVal) => {
     const t = inputVal.split(",");
     if (JSON.stringify(t) !== JSON.stringify(this.state.practiceArea)) {
       this.setState({ practiceAreaInput: inputVal });

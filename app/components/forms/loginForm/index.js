@@ -56,8 +56,6 @@ class LoginForm extends React.Component {
       const sanitizedToken = token.replace(/"/g, '');
       addToLocalStorage(USER_TOKEN, sanitizedToken.toString());
 
-      const tokenens = getFromLocalStorage(USER_TOKEN);
-
       if (user.userType.value === 1) {
         this.props.push(routes.EXPLORER);
       } else {

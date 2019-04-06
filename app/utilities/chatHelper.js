@@ -1,4 +1,14 @@
 import moment from 'moment';
+import {
+  pipe,
+  reject,
+  values,
+  lift,
+  pick,
+  join,
+  slice,
+  filter,
+} from 'ramda';
 
 export const getLatestMessage = (messagesList) => {
   return messagesList.reduce((prev, curr) => {
@@ -6,23 +16,59 @@ export const getLatestMessage = (messagesList) => {
   });
 };
 
-
-export const getUserInitials = (participant) => {
-  const { first, last } = participant;
-
-  return `${first.slice(0,1)}${last.slice(0,1)}`;
+export const getSimpleUserInitials = (user) => {
+  const getFirstLetter = n => slice(0, 1, n);
+  return pipe(
+    pick(['first', 'last']),
+    values,
+    lift(getFirstLetter),
+    join(''),
+  )(user);
 };
 
-export const getSenderName = (message) => {
+export const getUserInitials = (userId, participants) => {
+  const isUser = n => n._id === userId; // eslint-disable-line no-underscore-dangle
+  const getFirstLetter = n => slice(0, 1, n);
+  return pipe(
+    reject(isUser),
+    otherUser => pick(['first', 'last'], otherUser[0]),
+    values,
+    lift(getFirstLetter),
+    join(''),
+  )(participants);
+};
+
+export const getRecipient = (userId, participants) => {
+  const isUser = n => n._id === userId; // eslint-disable-line no-underscore-dangle
+  return pipe(reject(isUser))(participants);
+};
+
+export const getOtherParticipantName = (userId, participants) => {
+  const isUser = n => n._id === userId; // eslint-disable-line no-underscore-dangle
+
+  return pipe(
+    reject(isUser),
+    otherUser => pick(['first', 'last'], otherUser[0]),
+    values,
+    join(' '),
+  )(participants);
+};
+
+export const getSenderName = (message, participants) => {
   const { from } = message;
+  const isUser = n => n._id === from; // eslint-disable-line no-underscore-dangle
 
-  return `${from.first} ${from.last}`;
+  return pipe(
+    filter(isUser),
+    otherUser => pick(['first', 'last'], otherUser[0]),
+    values,
+    join(' '),
+  )(participants);
 };
 
-export const getOtherParticipantName = (participantList, me) => {
-  const { first, last } = participantList[0];
-  return `${first} ${last}`;
-}
+export const checkIfUserSentThisMessage = (userId, message) => {
+  return message.from === userId;
+};
 
 export const getMessageFormatedDate = (message, format = 'MM/DD/YY HH:mm') => {
   return moment(message.date).format(format);

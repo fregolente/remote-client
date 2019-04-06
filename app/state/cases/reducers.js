@@ -18,6 +18,7 @@ import {
   GET_EXPLORER_CASES,
   GET_EXPLORER_CASES_ERROR,
   GET_EXPLORER_CASES_SUCCESS,
+  CLEAR_CREATE_CASE,
 } from './actions';
 
 const initialState = {
@@ -40,6 +41,13 @@ const initialState = {
 
 export default function casesReducer(state = initialState, action) {
   switch (action.type) {
+    case CLEAR_CREATE_CASE:
+      return {
+        ...state,
+        creatingCase: initialState.creatingCase,
+        createSuccess: initialState.createSuccess,
+        error: initialState.error,
+      };
     case CREATE_CASE_ERROR:
       return {
         ...state,
@@ -55,8 +63,10 @@ export default function casesReducer(state = initialState, action) {
       };
     case CREATE_CASE_SUCCESS:
       return {
-        ...initialState,
+        ...state,
+        creatingCase: initialState.creatingCase,
         createSuccess: true,
+        error: initialState.error,
       };
     case GET_USER_CASES:
       return {

@@ -23,6 +23,7 @@ import {
 
 // Actions
 import { editUserCase, getAppliedLawyers } from '~/state/cases/actions';
+import { createNewChat } from '~/state/chats/actions';
 
 // Components
 import PageHelmet from '~/components/pageHelmet';
@@ -35,24 +36,12 @@ import { getSelectedCase, getAppliedLawyersData } from '~/state/cases/selectors'
 
 // Utilities
 import { getFromLocalStorage } from '~/utilities/localStorage';
-import { getUserInitials } from '~/utilities/chatHelper';
+import { getSimpleUserInitials } from '~/utilities/chatHelper';
 import { getEditableCaseFromForm } from '~/utilities/case';
 import { getFormattedDate } from '~/utilities/dateTime';
 
 
 import * as styles from './style';
-
-const LAWYERS_APPLIED = [{
-  appliedDate: '03/05/2019 15:00',
-  first: 'Rodney',
-  last: 'Dawson',
-  description: 'I\'m a awesome animal lawyer that wants bring simple solutions to big problem! You can trust me!',
-}, {
-  appliedDate: '03/06/2019 15:00',
-  first: 'Charles',
-  last: 'Darwin',
-  description: 'I\'m a awesome animal lawyer that wants bring simple solutions to big problem! You can trust me!',
-}];
 
 const isNilOrEmpty = anyPass([isNil, isEmpty]);
 
@@ -200,7 +189,7 @@ class FullCase extends Component {
         <Grid item xs={4} key={generate()}>
           <Card style={styles.lawyerCard}>
             <CardHeader
-              avatar={<Avatar aria-label="Lawyer initials">{getUserInitials(l.user)}</Avatar>}
+              avatar={<Avatar aria-label="Lawyer initials">{getSimpleUserInitials(l.user)}</Avatar>}
               title={getLawyerFullName(l.user)}
               subheader={subtitle} />
             <CardContent>
@@ -214,7 +203,12 @@ class FullCase extends Component {
               <Typography variant="overline" gutterBottom>{l.user.email}</Typography>
             </CardContent>
             <CardActions>
-              <Button size="small" variant="contained" onClick={() => this.startAChatWithALawyer(l.userId)}>Start a Chat</Button>
+              <Button
+                size="small"
+                variant="contained"
+                onClick={() => this.startAChatWithALawyer(l.userId)}>
+                Start a Chat
+              </Button>
             </CardActions>
           </Card>
         </Grid>
@@ -228,10 +222,10 @@ class FullCase extends Component {
     );
   }
 
-  startAChatWithALawyer = (lawyer) => {
-    // TODO: create a chat
-    // TODO: redirect to chat page
-    console.log('startAChatWithALawyer', lawyer);
+  startAChatWithALawyer = (lawyerId) => {
+    const { _id: caseId, title: caseTitle } = this.props.fullCase;
+    this.props.createNewChat(caseId, lawyerId, caseTitle);
+    this.props.push(ROUTES.CHAT);
   }
 
   toggleEditMode = () => {
@@ -539,24 +533,31 @@ class FullCase extends Component {
 }
 
 FullCase.defaultProps = {
+  appliedLawyerData: {
+    appliedLawyers: [],
+    loadingLawyers: false,
+    appliedLawyersError: '',
+  },
 };
 
 FullCase.propTypes = {
   push: PropTypes.func.isRequired,
   editUserCase: PropTypes.func.isRequired,
   getAppliedLawyers: PropTypes.func.isRequired,
+  createNewChat: PropTypes.func.isRequired,
   fullCase: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   appliedLawyerData: PropTypes.shape({
     appliedLawyers: PropTypes.array,
     loadingLawyers: PropTypes.bool,
     appliedLawyersError: PropTypes.string,
-  }).isRequired,
+  }),
 };
 
 const mapDispatchToProps = {
   push,
   editUserCase,
   getAppliedLawyers,
+  createNewChat,
 };
 
 const mapStateToProps = state => ({

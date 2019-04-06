@@ -17,7 +17,7 @@ const IS_PRODUCTION = NODE_ENV === 'production';
 const IS_STAGING = NODE_ENV === 'staging';
 
 
-let API_URL = null;
+let API_URL = 'http://localhost:3000/v1';
 
 const IS_DEPLOYED = IS_PRODUCTION || IS_STAGING || IS_DEVELOPMENT;
 
@@ -52,17 +52,13 @@ const plugins = [
   ], { root: paths.build }),
 ];
 
-plugins.push(
-  new webpack.DefinePlugin(definePluginConfig),
-);
+plugins.push(new webpack.DefinePlugin(definePluginConfig));
 
-plugins.push(
-  new HtmlWebpackPlugin({
-    title: 'Remote Legal',
-    template: path.join(paths.build, 'template.html'),
-    filename: path.join(paths.build, 'index.html'),
-  }),
-);
+plugins.push(new HtmlWebpackPlugin({
+  title: 'Remote Legal',
+  template: path.join(paths.build, 'template.html'),
+  filename: path.join(paths.build, 'index.html'),
+}));
 
 const rules = [{
   test: /\.js$/,
@@ -88,7 +84,7 @@ const rules = [{
   use: ['style-loader', 'css-loader?url=false'],
 }, {
   test: /\.(png|jpg|jpeg|gif|svg|woff|woff2)$/,
-  use: 'url-loader?limit=10000'
+  use: 'url-loader?limit=10000',
 }];
 
 const minimizer = [
@@ -119,7 +115,7 @@ if (IS_PRODUCTION || IS_STAGING) {
 const resolve = {
   alias: {
     '~': path.resolve(__dirname, '..', 'app'),
-    'static': path.resolve(__dirname, '../static/'),
+    static: path.resolve(__dirname, '../static/'),
   },
 };
 

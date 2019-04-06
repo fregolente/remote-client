@@ -4,7 +4,16 @@ import React from 'react';
 import { Switch, Route } from 'react-router-dom';
 
 // Constants
-import * as routes from '~/constants/routes';
+import {
+  PROFILE_PAGE,
+  EXPLORER,
+  FAVORITE_CASE_URL,
+  APPLIED_CASE_URL,
+  CHAT,
+  FULL_CASE_URL,
+  CASE_URL,
+  MY_CASES,
+} from '~/constants/routes';
 import ProfilePage from '~/pages/profilePage';
 import Explorer from '~/pages/explorer';
 import Case from '~/pages/case';
@@ -16,14 +25,14 @@ import AppliedCases from '~/pages/appliedCases';
 
 const RemoteLegalRoutes = () => (
   <Switch>
-    <Route path={routes.PROFILE_PAGE} component={ProfilePage} exact />
-    <Route path={routes.EXPLORER} component={Explorer} exact />
-    <Route path={routes.FAVORITE_CASE_URL} component={FavoriteCases} exact />
-    <Route path={routes.APPLIED_CASE_URL} component={AppliedCases} exact />
-    <Route path={routes.CHAT} component={MyChats} exact />
-    <Route path={routes.MY_CASES} component={MyCases} exact />
-    <Route path={routes.FULL_CASE} component={FullCase} exact />
-    <Route path={routes.CASES_URL} component={Case} exact />
+    <Route path={PROFILE_PAGE} component={ProfilePage} />
+    <Route path={EXPLORER} component={Explorer} />
+    <Route path={FAVORITE_CASE_URL} component={FavoriteCases} />
+    <Route path={APPLIED_CASE_URL} component={AppliedCases} />
+    <Route path={CHAT} component={MyChats} />
+    <Route path={FULL_CASE_URL} component={FullCase} exact />
+    <Route path={CASE_URL} component={Case} exact />
+    <Route path={MY_CASES} component={MyCases} exact />
   </Switch>
 );
 

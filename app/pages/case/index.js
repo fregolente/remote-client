@@ -15,7 +15,7 @@ import {
 } from '@material-ui/core';
 
 // Actions
-import { createCase } from '~/state/cases/actions';
+import { createCase, cleanCreateCase } from '~/state/cases/actions';
 
 // Utilities
 import { getFromLocalStorage } from '~/utilities/localStorage';
@@ -53,6 +53,10 @@ class Case extends Component {
       descriptionLimiter: 250,
       submitted: false,
     };
+  }
+
+  componentDidMount() {
+    this.props.cleanCreateCase();
   }
 
   componentWillReceiveProps(nextProps) {
@@ -198,7 +202,7 @@ class Case extends Component {
           </Button>
         </Grid>
 
-        <Grid item xs={11} style={styles.contentContainer}>
+        <Grid item xs={12} style={styles.contentContainer}>
           <Card style={styles.cardContainer}>
             <Grid container>
               <Grid item xs={labelGridSize}>
@@ -340,6 +344,7 @@ class Case extends Component {
 
 Case.propTypes = {
   push: PropTypes.func.isRequired,
+  cleanCreateCase: PropTypes.func.isRequired,
   user: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   createCase: PropTypes.func.isRequired,
   caseStatus: PropTypes.shape({
@@ -352,6 +357,7 @@ Case.propTypes = {
 const mapDispatchToProps = {
   push,
   createCase,
+  cleanCreateCase,
 };
 
 const mapStateToProps = state => ({

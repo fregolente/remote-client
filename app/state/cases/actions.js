@@ -1,3 +1,10 @@
+export const CLEAR_CREATE_CASE = 'CLEAR_CREATE_CASE';
+export function cleanCreateCase() {
+  return {
+    type: CLEAR_CREATE_CASE,
+  };
+}
+
 export const CREATE_CASE = 'CREATE_CASE';
 
 export function createCase(newCase) {

@@ -5,6 +5,11 @@ function getIdFromValue(value, array) {
   return pathOr(value, ['id'], object);
 }
 
+export function getValueFromId(id, array) {
+  const object = find(propEq('value', id))(array);
+  return pathOr('', ['value'], object);
+}
+
 export function getEditableCaseFromForm(formCase, utilities) {
   const {
     region,

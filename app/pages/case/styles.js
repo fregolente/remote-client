@@ -1,9 +1,9 @@
 export const mainContainer = {
-  margin: '30px',
+  padding: '30px',
 };
 
 export const contentContainer = {
-  marginTop: '20px',
+  paddingTop: '20px',
 };
 
 export const cardContainer = {

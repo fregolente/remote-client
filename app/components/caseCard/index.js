@@ -43,6 +43,7 @@ import {
 import { formatMoney } from '~/utilities/numbers';
 import { getFormattedDate } from '~/utilities/dateTime';
 import { getFromLocalStorage } from '~/utilities/localStorage';
+import { getValueFromId } from '~/utilities/case';
 
 import * as styles from './styles';
 
@@ -232,6 +233,16 @@ class CaseCard extends Component {
     return includes(caseId, favoritedCases);
   }
 
+  getPriceTypeLabel = (priceType) => {
+    if (priceType.label) {
+      return priceType.label;
+    }
+
+    const { priceType: uPriceType } = UTILITIES;
+    const fullPriceType = find(propEq('id', priceType))(uPriceType);
+    return fullPriceType.label;
+  }
+
   hasAppliedToCase = () => {
     const {
       appliedCases,
@@ -292,6 +303,8 @@ class CaseCard extends Component {
       title,
     } = userCase;
 
+    console.log(priceType);
+
     return (
       <Grid item xs={columns} id={`case-card-item----${id}`} key={id} style={caseStyle}>
         <Card >
@@ -299,7 +312,7 @@ class CaseCard extends Component {
             <Typography variant="h5" component="h2">
               {title}
               <Chip
-                label={`${formatMoney(suggestedPrice)} ${priceType.label}`}
+                label={`${formatMoney(suggestedPrice)} ${this.getPriceTypeLabel(priceType)}`}
                 style={styles.chip}
                 color="primary" />
             </Typography>
@@ -332,6 +345,9 @@ CaseCard.defaultProps = {
   caseStyle: {},
   fullCaseAction: null,
   caseApplyAction: null,
+  currentUserLawyerId: '',
+  appliedCases: [],
+  favoritedCases: [],
 };
 
 CaseCard.propTypes = {
@@ -343,9 +359,9 @@ CaseCard.propTypes = {
   caseApplyAction: PropTypes.func,
   favoriteACase: PropTypes.func.isRequired,
   unfavoriteACase: PropTypes.func.isRequired,
-  currentUserLawyerId: PropTypes.string.isRequired,
-  appliedCases: PropTypes.arrayOf(PropTypes.string).isRequired,
-  favoritedCases: PropTypes.arrayOf(PropTypes.string).isRequired,
+  currentUserLawyerId: PropTypes.string,
+  appliedCases: PropTypes.arrayOf(PropTypes.string),
+  favoritedCases: PropTypes.arrayOf(PropTypes.string),
 };
 
 const mapDispatchToProps = {

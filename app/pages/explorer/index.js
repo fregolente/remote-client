@@ -4,11 +4,6 @@ import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 import Radium from 'radium';
 import { withStyles } from '@material-ui/core/styles';
-import {
-  values,
-  any,
-  equals,
-} from 'ramda';
 
 // Material UI
 import Grid from '@material-ui/core/Grid';
