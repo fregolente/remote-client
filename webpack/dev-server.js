@@ -6,6 +6,7 @@ const devServer = {
   host: '0.0.0.0',
   inline: true,
   compress: true,
+  disableHostCheck: true,
 };
 
 module.exports = {
