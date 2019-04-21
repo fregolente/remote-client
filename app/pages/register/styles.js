@@ -8,6 +8,12 @@ const appFrame = {
   zIndex: 1,
 };
 
+export const background = {
+  backgroundImage: 'url(/images/__login.png)',
+  backgroundRepeat: 'no-repeat',
+  backgroundPosition: 'left bottom',
+};
+
 const styles = theme => ({
   root: {
     width: '100%',
@@ -37,7 +43,7 @@ const styles = theme => ({
     },
   },
   outerContent: {
-    background: `url(${bg}) no-repeat ${theme.palette.primary.main} left bottom`,
+    backgroundColor: '#FFF',
     width: '100%',
     backgroundSize: 'cover',
     flexDirection: 'column',

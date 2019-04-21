@@ -4,10 +4,10 @@ import { connect } from 'react-redux';
 import { PropTypes } from 'prop-types';
 import { withRouter } from 'react-router';
 import { withStyles } from '@material-ui/core/styles';
-import Hidden from '@material-ui/core/Hidden';
+/* import Hidden from '@material-ui/core/Hidden';
 import brand from '~/utilities/brand';
 
-import Logo from '../../../static/images/logo.svg';
+import Logo from '../../../static/images/logo.svg'; */
 
 import { getUtilitiesRequested } from '~/state/utilities/actions';
 
@@ -29,12 +29,6 @@ class Dedicated extends React.Component {
     return (
       <div className={classes.appFrameOuter}>
         <main className={classes.outerContent} style={background} id="mainContent">
-          <Hidden mdUp>
-            <div className={classes.brand}>
-              <Logo />
-              <h3>{brand.name}</h3>
-            </div>
-          </Hidden>
           <LoginPage />
         </main>
       </div >

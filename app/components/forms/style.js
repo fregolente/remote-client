@@ -88,12 +88,18 @@ const styles = theme => ({
   iconSmall: {
     fontSize: 20,
   },
+  registerButton: {
+    color: 'rgb(134, 134, 134)',
+    borderBottom: '2px solid rgb(128, 167, 197)',
+    borderBottomRightRadius: 0,
+    borderBottomLeftRadius: 0,
+  },
   footer: {
     textAlign: 'center',
     padding: 5,
-    background: theme.palette.grey[100],
     fontSize: 14,
-    position: 'relative'
+    position: 'relative',
+    color: 'rgb(134, 134, 134)',
   },
   welcomeWrap: {
     position: 'relative'
@@ -177,7 +183,10 @@ const styles = theme => ({
   },
   hint: {
     padding: theme.spacing.unit
-  }
+  },
+  loginButton: {
+    backgroundColor: '#80a7c5',
+  },
 });
 
 export default styles;

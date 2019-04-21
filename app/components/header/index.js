@@ -49,11 +49,11 @@ class Header extends Component {
     this.handleClose();
   }
 
-  handleChange = event => {
+  handleChange = (event) => {
     this.setState({ auth: event.target.checked });
   };
 
-  handleMenu = event => {
+  handleMenu = (event) => {
     this.setState({ anchorEl: event.currentTarget });
   };
 
@@ -62,24 +62,19 @@ class Header extends Component {
   };
 
   render() {
-    const { 
+    const {
       classes,
       handleDrawerOpen,
       firstName,
       lastName,
     } = this.props;
 
-    const location = this.props.location;
-    const parts = location.pathname.split('/');
-    const place = parts[parts.length - 1];
-    
-    const auth = true;
     const loggedInUser = `${firstName} ${lastName}`;
 
     return (
       <div className={classes.root}>
-        <AppBar color="secondary" position="static">
-          <Toolbar>
+        <AppBar color="secondary" position="static" style={{ backgroundColor: '#80a7c5', minHeight: '112px' }}>
+          <Toolbar style={{ minHeight: '112px' }}>
             <IconButton
               className={classes.menuButton}
               color="inherit"
@@ -87,15 +82,11 @@ class Header extends Component {
               onClick={() => handleDrawerOpen()}>
               <MenuIcon />
             </IconButton>
-            <Typography variant="h6" color="inherit" className={classes.grow}>
-              Remote.Legal
-            </Typography>
-            {auth && (
-              <div style={{ display: 'flex' }}>
-                <AccountCircle style={{ marginRight: '5px' }} />
-                {loggedInUser}
-              </div>
-            )}
+            <span className={classes.brand} />
+            <div style={{ display: 'flex' }}>
+              <AccountCircle style={{ marginRight: '5px' }} />
+              {loggedInUser}
+            </div>
           </Toolbar>
         </AppBar>
       </div>

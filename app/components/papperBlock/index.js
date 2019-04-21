@@ -1,4 +1,5 @@
 import React from 'react';
+import Radium from 'radium';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { withStyles } from '@material-ui/core/styles';
@@ -15,14 +16,16 @@ function PaperSheet(props) {
     whiteBg,
     noMargin,
     colorMode,
-    overflowX
+    overflowX,
+    paperStyle,
   } = props;
   return (
     <div>
-      <Paper className={classNames(classes.root, noMargin && classes.noMargin, colorMode && classes.colorMode)} elevation={4}>
-        <Typography variant="h6" component="h2" className={classes.title}>
-          {title}
-        </Typography>
+      <Paper
+        style={paperStyle}
+        className={classNames(classes.root, noMargin && classes.noMargin, colorMode && classes.colorMode)}
+        elevation={4}>
+        <h2 className={classes.title}>{title}</h2>
         <Typography className={classes.description}>
           {desc}
         </Typography>
@@ -43,6 +46,7 @@ PaperSheet.propTypes = {
   colorMode: PropTypes.bool,
   noMargin: PropTypes.bool,
   overflowX: PropTypes.bool,
+  paperStyle: PropTypes.object,
 };
 
 PaperSheet.defaultProps = {
@@ -52,4 +56,4 @@ PaperSheet.defaultProps = {
   overflowX: false
 };
 
-export default withStyles(styles)(PaperSheet);
+export default withStyles(styles)(Radium(PaperSheet));

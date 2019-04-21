@@ -6,28 +6,25 @@ const styles = theme => ({
     display: 'flex',
     width: '100%',
     zIndex: 1,
-    position: 'relative'
+    position: 'relative',
   },
   container: {
     display: 'flex',
     alignItems: 'center',
     width: '100%',
-    [theme.breakpoints.down('md')]: {
-      overflow: 'hidden'
-    },
   },
   formControl: {
     width: '100%',
-    marginBottom: theme.spacing.unit * 3
+    marginBottom: theme.spacing.unit * 3,
   },
   loginWrap: {
     [theme.breakpoints.up('md')]: {
-      width: 860
+      width: 860,
     },
   },
   formWrap: {
     [theme.breakpoints.up('md')]: {
-      marginTop: -24
+      marginTop: -24,
     },
   },
   btnArea: {
@@ -39,12 +36,12 @@ const styles = theme => ({
       flexDirection: 'column',
       '& button': {
         width: '100%',
-        margin: 5
-      }
+        margin: 5,
+      },
     },
   },
   noMargin: {
-    margin: 0
+    margin: 0,
   },
   optArea: {
     justifyContent: 'space-between',
@@ -52,7 +49,7 @@ const styles = theme => ({
     alignItems: 'center',
     width: '100%',
     [theme.breakpoints.up('sm')]: {
-      width: '60%'
+      width: '60%',
     },
   },
   redBtn: {
@@ -90,13 +87,13 @@ const styles = theme => ({
     padding: 5,
     background: theme.palette.grey[100],
     fontSize: 14,
-    position: 'relative'
+    position: 'relative',
   },
   welcomeWrap: {
-    position: 'relative'
+    position: 'relative',
   },
   welcome: {
-    background: theme.palette.secondary.light,
+    background: '#80a7c5',
     position: 'absolute',
     width: '100%',
     height: 'calc(100% + 30px)',
@@ -107,28 +104,36 @@ const styles = theme => ({
     borderRadius: 2,
     display: 'flex',
     alignItems: 'center',
-    overflow: 'hidden'
+    overflow: 'hidden',
+    backgroundImage: 'url(/images/base_shape_azul.png)',
+    backgroundRepeat: 'no-repeat',
+    backgroundPosition: 'center',
   },
   brand: {
+    backgroundImage: 'url(/images/white_logo.png)',
+    backgroundRepeat: 'no-repeat',
     display: 'flex',
     alignItems: 'center',
-    justifyContent: 'flex-start',
-    position: 'relative',
+    justifyContent: 'center',
+    height: 40,
     marginBottom: 20,
     '& img': {
-      width: 32
+      width: 32,
     },
     '& h3': {
       fontSize: 18,
       margin: 0,
       paddingLeft: 10,
       fontWeight: 500,
-      color: theme.palette.grey[700]
-    }
+      color: theme.palette.grey[700],
+    },
+  },
+  brandCall: {
+    color: '#FFF',
   },
   brandText: {
     marginTop: 10,
-    color: 'rgba(0, 0, 0, 0.54)',
+    color: '#FFF',
   },
   decoBottom: {
     fontSize: 480,
@@ -136,7 +141,7 @@ const styles = theme => ({
     left: 10,
     bottom: -190,
     opacity: 0.1,
-    color: theme.palette.secondary.dark
+    color: theme.palette.secondary.dark,
   },
   tab: {
     marginBottom: 20,
@@ -150,15 +155,15 @@ const styles = theme => ({
     color: theme.palette.secondary.main,
     textDecoration: 'none',
     '&:hover': {
-      textDecoration: 'underline'
-    }
+      textDecoration: 'underline',
+    },
   },
   socMedFull: {
-    marginBottom: theme.spacing.unit * 2
+    marginBottom: theme.spacing.unit * 2,
   },
   lockWrap: {
     textAlign: 'center',
-    padding: theme.spacing.unit * 3
+    padding: theme.spacing.unit * 3,
   },
   avatar: {
     width: 150,
@@ -167,14 +172,14 @@ const styles = theme => ({
     [theme.breakpoints.up('md')]: {
       margin: '-75px auto 30px',
     },
-    boxShadow: theme.shadows[8]
+    boxShadow: theme.shadows[8],
   },
   userName: {
-    marginBottom: theme.spacing.unit * 3
+    marginBottom: theme.spacing.unit * 3,
   },
   hint: {
-    padding: theme.spacing.unit
-  }
+    padding: theme.spacing.unit,
+  },
 });
 
 export default styles;

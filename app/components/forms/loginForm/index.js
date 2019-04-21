@@ -102,7 +102,7 @@ class LoginForm extends React.Component {
       const name = event.target.id;
       const varName = idToVarName(name);
 
-      const value = event.target.value;
+      const { value } = event.target;
       this.setState({ [varName]: value });
     }
   }
@@ -122,22 +122,26 @@ class LoginForm extends React.Component {
             <div>
               <FormControl className={classes.formControl}>
                 <InputLabel htmlFor="email">Email</InputLabel>
-                <Input id="email" value={this.state.email} onChange={this.handleInputChange} />
+                <Input id="email" value={this.state.email} onChange={this.handleInputChange} autoComplete="off" />
               </FormControl>
             </div>
             <div>
               <FormControl className={classes.formControl}>
                 <InputLabel htmlFor="password">Password</InputLabel>
-                <Input id="password" type="password" value={this.state.password} onChange={this.handleInputChange} />
+                <Input
+                  id="password"
+                  type="password"
+                  value={this.state.password}
+                  onChange={this.handleInputChange}
+                  autoComplete="off" />
               </FormControl>
             </div>
             <div>
               <span> {this.state.errorMessage} </span>
             </div>
             <div className={classes.btnArea}>
-              <Button variant="contained" color="primary" onClick={() => this.login()}>
+              <Button className={classes.loginButton} variant="contained" color="primary" onClick={() => this.login()}>
                 Login
-                <ArrowForward className={classNames(classes.rightIcon, classes.iconSmall)} />
               </Button>
             </div>
             <div className={classes.footer}>
@@ -146,7 +150,7 @@ class LoginForm extends React.Component {
                 onClick={() => this.goToRegister()}
                 size="small"
                 color="secondary"
-                className={classes.button}>
+                className={classes.registerButton}>
                 Register
               </Button>
             </div>

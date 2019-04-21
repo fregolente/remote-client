@@ -43,26 +43,11 @@ import styles from '../style';
 // fix styles
 import * as registerFormStyle from './style';
 
-// TODO: validation functions
-const required = value => (value == null ? 'Required' : undefined);
-const email = value => (
-  value && !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(value)
-    ? 'Invalid email'
-    : undefined
-);
-
-const passwordsMatch = (value, allValues) => {
-  if (value !== allValues.get('password')) {
-    return 'Passwords dont match';
-  }
-  return undefined;
-};
-
 class RegisterForm extends Component {
 
   constructor(props) {
     super(props);
-    this.props = props
+    this.props = props;
     this.utilities = getFromLocalStorage('utilities');
 
     this.state = {
@@ -83,13 +68,13 @@ class RegisterForm extends Component {
     this.setState({ showPassword: !this.state.showPassword });
   };
 
-  handleMouseDownPassword = event => {
+  handleMouseDownPassword = (event) => {
     event.preventDefault();
   }
 
-  handleRadioChange = name => event => {
+  handleRadioChange = name => (event) => {
     if (event) {
-      const value = event.target.value;
+      const { value } = event.target;
       if (name === 'gender' && value !== '3') {
         this.setState({ customGender: '' });
       }
@@ -97,7 +82,7 @@ class RegisterForm extends Component {
     }
   }
 
-  handleInputChange = event => {
+  handleInputChange = (event) => {
     const capitalize = R.compose(
       R.join(''),
       R.juxt([R.compose(R.toUpper, R.head), R.tail])
@@ -167,7 +152,7 @@ class RegisterForm extends Component {
 
     const formValues = {
       ...passOnState,
-      graduationDate: moment(graduationDate).format("YYYY-MM-DD HH:mm:ss"),
+      graduationDate: moment(graduationDate).format('YYYY-MM-DD HH:mm:ss'),
       userType: R.find(R.propEq('value', Number(userType)))(this.utilities.userType),
       gender: R.find(R.propEq('value', Number(gender)))(this.utilities.gender),
       userRegion: userRegion.map(region => R.find(R.propEq('label', region))(this.utilities.userRegion)),
@@ -176,12 +161,6 @@ class RegisterForm extends Component {
 
     const parsedUser = parseRegisterFormDataToMongoUser(formValues)
     this.props.createUser(parsedUser, this.formSubmitCallback);
-  }
-
-  renderOptions = (optionsArray) => {
-    return optionsArray.map((option) => {
-      return (<FormControlLabel key={option.id} value={option.value.toString()} control={<Radio />} label={option.label} />);
-    });
   }
 
   handlePracticeAreaChange = (selectedItem) => {
@@ -213,82 +192,18 @@ class RegisterForm extends Component {
     }
   };
 
-  renderLawyerInfo = () => {
-    const { classes } = this.props;
-
-    if (this.state.userType === '1') {
-      return (<div>
-        <Typography variant="button" className={classes.divider}>
-          Lawyer Information
-        </Typography>
-        <div>
-          <FormControl className={classes.formControl}>
-            <MultiChipSelect
-              id={'practice-area'}
-              label={'Practice Area'}
-              onChange={this.handlePracticeAreaChange}
-              selectedItem={this.state.practiceArea}
-              onRemoveItem={this.removeSelectedPracticeArea}
-              inputValue={this.state.practiceAreaInput}
-              onInputValueChange={this.handlePracticeAreaChangeInput}
-              availableItems={this.state.practiceAreaOptions} />
-          </FormControl>
-        </div>
-        <div>
-          <FormControl className={classes.formControl}>
-            <InputLabel htmlFor="graduated-institution">Graduated Institution</InputLabel>
-            <Input id="graduated-institution" value={this.state.institution} onChange={this.handleInputChange} />
-          </FormControl>
-        </div>
-        <div>
-          <FormControl className={classes.formControl}>
-            <MuiPickersUtilsProvider utils={MomentUtils}>
-              <DatePicker
-                keyboard
-                label="Graduation date"
-                format="MM/DD/YYYY"
-                placeholder="12/10/2018"
-                mask={[/\d/, /\d/, '/', /\d/, /\d/, '/', /\d/, /\d/, /\d/, /\d/]}
-                value={this.state.graduationDate}
-                onChange={this.handleDateChange}
-                maxDate={new Date()}
-                animateYearScrolling={false} />
-            </MuiPickersUtilsProvider>
-          </FormControl>
-        </div>
-        <div>
-          <FormControl className={classes.formControl}>
-            <InputLabel htmlFor="linkedin-url">Linkedin URL</InputLabel>
-            <Input
-              id="linkedin-url"
-              value={this.state.linkedinURL}
-              onChange={this.handleInputChange}
-              startAdornment={<InputAdornment position="start">http://</InputAdornment>} />
-          </FormControl>
-        </div>
-        <div>
-          <FormControl className={classes.formControl}>
-            <InputLabel htmlFor="biography">Biography</InputLabel>
-            <Input
-              id="biography"
-              value={this.state.biography}
-              onChange={this.handleInputChange}
-              multiline />
-          </FormControl>
-        </div>
-      </div>);
-    }
-
-    return null;
-  }
-
-
-
-  handleUserRegionChange = selectedItem => {
+  handleUserRegionChange = (selectedItem) => {
     if (this.state.userRegionOptions.includes(selectedItem)) {
       this.removeSelectedUserRegion(selectedItem);
     } else {
       this.addSelectedUserRegion(selectedItem);
+    }
+  };
+
+  handleUserRegionChangeInput = (inputVal) => {
+    const t = inputVal.split(",");
+    if (JSON.stringify(t) !== JSON.stringify(this.state.userRegion)) {
+      this.setState({ userRegionInput: inputVal });
     }
   };
 
@@ -299,19 +214,93 @@ class RegisterForm extends Component {
     }));
   }
 
-  removeSelectedUserRegion = item => {
+  removeSelectedUserRegion = (item) => {
     this.setState(({ userRegion }) => ({
       userRegionInput: '',
       userRegion: userRegion.filter(i => i !== item),
     }));
   };
 
-  handleUserRegionChangeInput = inputVal => {
-    const t = inputVal.split(",");
-    if (JSON.stringify(t) !== JSON.stringify(this.state.userRegion)) {
-      this.setState({ userRegionInput: inputVal });
+  renderOptions = (optionsArray) => {
+    return optionsArray.map((option) => {
+      return (<FormControlLabel
+        key={option.id}
+        value={option.value.toString()}
+        control={<Radio />}
+        label={option.label} />);
+    });
+  }
+
+  renderLawyerInfo = () => {
+    const { classes } = this.props;
+
+    if (this.state.userType === '1') {
+      return (
+        <div>
+          <Typography variant="button" className={classes.divider}>
+            Lawyer Information
+          </Typography>
+          <div>
+            <FormControl className={classes.formControl}>
+              <MultiChipSelect
+                id="practice-area"
+                label="Practice Area"
+                onChange={this.handlePracticeAreaChange}
+                selectedItem={this.state.practiceArea}
+                onRemoveItem={this.removeSelectedPracticeArea}
+                inputValue={this.state.practiceAreaInput}
+                onInputValueChange={this.handlePracticeAreaChangeInput}
+                availableItems={this.state.practiceAreaOptions} />
+            </FormControl>
+          </div>
+          <div>
+            <FormControl className={classes.formControl}>
+              <InputLabel htmlFor="graduated-institution">Graduated Institution</InputLabel>
+              <Input id="graduated-institution" value={this.state.institution} onChange={this.handleInputChange} />
+            </FormControl>
+          </div>
+          <div>
+            <FormControl className={classes.formControl}>
+              <MuiPickersUtilsProvider utils={MomentUtils}>
+                <DatePicker
+                  keyboard
+                  label="Graduation date"
+                  format="MM/DD/YYYY"
+                  placeholder="12/10/2018"
+                  mask={[/\d/, /\d/, '/', /\d/, /\d/, '/', /\d/, /\d/, /\d/, /\d/]}
+                  value={this.state.graduationDate}
+                  onChange={this.handleDateChange}
+                  maxDate={new Date()}
+                  animateYearScrolling={false} />
+              </MuiPickersUtilsProvider>
+            </FormControl>
+          </div>
+          <div>
+            <FormControl className={classes.formControl}>
+              <InputLabel htmlFor="linkedin-url">Linkedin URL</InputLabel>
+              <Input
+                id="linkedin-url"
+                value={this.state.linkedinURL}
+                onChange={this.handleInputChange}
+                startAdornment={<InputAdornment position="start">http://</InputAdornment>} />
+            </FormControl>
+          </div>
+          <div>
+            <FormControl className={classes.formControl}>
+              <InputLabel htmlFor="biography">Biography</InputLabel>
+              <Input
+                id="biography"
+                value={this.state.biography}
+                onChange={this.handleInputChange}
+                multiline />
+            </FormControl>
+          </div>
+        </div>
+      );
     }
-  };
+
+    return null;
+  }
 
   render() {
     const {
@@ -321,12 +310,12 @@ class RegisterForm extends Component {
     const {
       gender,
       userType,
-      userRegion,
+      // userRegion,
     } = this.utilities;
 
     return (
-      <div className={classes.formWrap} >
-        <PapperBlock whiteBg title="Create New Account" desc="">
+      <div className={classes.formWrap} id="register-white-box">
+        <PapperBlock whiteBg title="Create New Account" desc="" paperStyle={registerFormStyle.maxHeightProp}>
           <div>
             <FormControl className={classes.formControl}>
               <InputLabel htmlFor="first">First Name</InputLabel>
@@ -442,9 +431,9 @@ class RegisterForm extends Component {
               variant="contained"
               color="primary"
               type="submit"
-              style={{ width: '40%' }}
+              style={registerFormStyle.registerButton}
               onClick={() => this.submitForm()}>
-              Continue <ArrowForward className={classNames(classes.rightIcon, classes.iconSmall)} disabled={!this.state.termsAgree} />
+              Continue
             </Button>
           </div>
         </PapperBlock>
@@ -455,12 +444,10 @@ class RegisterForm extends Component {
 
 RegisterForm.propTypes = {
   classes: PropTypes.object.isRequired,
-  handleSubmit: PropTypes.func.isRequired,
   createUser: PropTypes.func.isRequired,
 };
 
-const mapStateToProps = state => ({
-});
+const mapStateToProps = state => state;
 
 const mapDispatchToProps = {
   createUser: createUserRequested,

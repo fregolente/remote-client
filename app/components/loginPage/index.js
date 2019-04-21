@@ -16,7 +16,6 @@ import Type from '~/styles/components/Typography.scss';
 import LoginForm from '~/components/forms/loginForm';
 import PageHelmet from '~/components/pageHelmet';
 
-import Logo from '../../../static/images/logo.svg';
 import styles from './style';
 
 // Utilities
@@ -33,19 +32,6 @@ class Login extends Component {
     };
   }
 
-  componentWillMount() {
-    // this.props.newLogin();
-  }
-
-  login = (e) => {
-    e.preventDefault();
-    // this.props.loginRequested(this.inputs.userNameOrEmail.value, this.inputs.password.value);
-  };
-
-  submitForm(values) {
-    console.info('form values: ', JSON.stringify(values, null, 2));
-  }
-
   render() {
     const { classes } = this.props;
 
@@ -60,19 +46,15 @@ class Login extends Component {
                   {/* Welcome Login */}
                   <div className={classes.welcome}>
                     <div className={classes.welcomeContent}>
-                      <div className={classes.brand}>
-                        <h3>{brand.name}</h3>
-                      </div>
-                      <Typography variant="h2">
-                        <span className={Type.light}>Hello there,</span>
-                      </Typography>
+                      <div className={classes.brand} />
+                      <Typography variant="h2" className={classes.brandCall}>Hello there,</Typography>
                       <Typography variant="h6" className={classes.brandText}>
                         <span className={Type.regular}>
-                          Welcome to {brand.name}!
+                          welcome to {brand.name}
                         </span>
                       </Typography>
                     </div>
-                    <ArrowForward className={classes.decoBottom} />
+                    {/* <ArrowForward className={classes.decoBottom} /> */}
                   </div>
                 </Grid>
               </Hidden>
@@ -80,8 +62,8 @@ class Login extends Component {
                 {/* ----------------------------------------------------------------------*/}
                 {/* Load Login Form */}
                 <LoginForm
-                  handleSubmit={(values) => this.submitForm(values)}
-                  pristine={true}
+                  handleSubmit={() => true}
+                  pristine
                   submitting={false} />
               </Grid>
             </Grid>

@@ -9,7 +9,7 @@ export const appFrame = {
 };
 
 export const background = {
-  backgroundImage: 'url(/images/material_bg.svg)',
+  backgroundImage: 'url(/images/__login.png)',
   backgroundRepeat: 'no-repeat',
   backgroundPosition: 'left bottom',
 };
@@ -43,7 +43,7 @@ export const styles = theme => ({
     },
   },
   outerContent: {
-    backgroundColor: theme.palette.primary.main,
+    backgroundColor: '#FFF',
     width: '100%',
     backgroundSize: 'cover',
     flexDirection: 'column',

@@ -110,6 +110,10 @@ module.exports = {
     "import/resolver": {
       "webpack": {
         "config": "webpack.config.js"
+      },
+      "node": {
+        "~": ["app"],
+        "static": ["static"]
       }
     }
   },
