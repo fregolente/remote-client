@@ -3,7 +3,9 @@ const styles = theme => ({
   breadcrumbs: {
     position: 'relative',
     display: 'block',
-    fontSize: 12,
+    fontSize: 14,
+    paddingTop: 12,
+    paddingLeft: 15,
     color: 'rgba(255, 255, 255, 0.5)',
     '& p': {
       display: 'block',
@@ -14,16 +16,16 @@ const styles = theme => ({
       '& a': {
         color: theme.palette.common.white,
         textDecoration: 'none',
-        margin: '0 5px'
-      }
+        margin: '0 5px',
+      },
     },
     '&$dark': {
       color: theme.palette.grey[900],
       '& a': {
         color: theme.palette.grey[900]
-      }
-    }
-  }
+      },
+    },
+  },
 });
 
 export default styles;

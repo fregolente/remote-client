@@ -25,6 +25,11 @@ const styles = {
   customAppBar: {
     colorSecondary: '#80a7c5',
   },
+  midGrid: {
+    display: 'flex',
+    position: 'relative',
+    alignItems: 'center',
+  },
 };
 
 export default styles;

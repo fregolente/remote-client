@@ -1,6 +1,20 @@
 export const mainContainer = {
-  padding: '30px',
+  marginTop: '30px',
   width: 'auto',
+};
+
+export const headerStyle = {
+  display: 'flex',
+};
+
+export const textHeaderStyle = {
+  flex: 2,
+};
+
+export const button = {
+  backgroundColor: '#80a7c5',
+  color: 'white',
+  border: 'none',
 };
 
 export const cardContainer = {

@@ -1,7 +1,6 @@
 export const breadcrumbContainer = {
-  padding: '10px 0 0 30px',
-  minHeight: '33px',
-  marginBottom: '10px',
+  minHeight: '47px',
+  backgroundColor: '#cbcbcb',
 };
 
 export const container = {

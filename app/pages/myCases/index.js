@@ -35,7 +35,7 @@ import { getMyCasesStatus } from '~/state/cases/selectors';
 // Utilities
 import { getFromLocalStorage } from '~/utilities/localStorage';
 
-import styles, { caseCard, mainContainer, cardsContainer } from './styles';
+import styles, { caseCard, mainContainer, cardsContainer, headerStyle, textHeaderStyle, button } from './styles';
 
 class MyCases extends Component {
   constructor(props) {
@@ -132,27 +132,20 @@ class MyCases extends Component {
     const { practiceArea, userRegion, priceType } = this.state;
     const { cases, loading, error } = this.props.myCasesStatus;
 
-    if (!cases) {
-      return (<p>deu ruim</p>);
-    }
-
     const showCasesCards = cases;
     const showLoading = loading && isEmpty(error);
     const showError = loading === false && not(isEmpty(error));
-    const showEmptyCases = loading === false && isEmpty(cases);
+    const showEmptyCases = loading === false && isEmpty(cases) && isEmpty(error);
 
     return (
       <Grid container style={mainContainer}>
         <PageHelmet title="My Profile" />
-        <Grid item xs={11}>
-          <h1>My cases</h1>
+        <Grid item xs={12} style={headerStyle}>
+          <h1 style={textHeaderStyle} >My cases</h1>
+          <Button variant="outlined" onClick={this.goToCase} style={button}>Create new case</Button>
         </Grid>
 
-        <Grid item xs={1}>
-          <Button variant="outlined" onClick={this.goToCase}>Create new case</Button>
-        </Grid>
-
-        <Grid item xs={2} className={classes.filterContainer}>
+        <Grid item xs={3} className={classes.filterContainer}>
           <form>
             <h4>Filters</h4>
             <Grid container>
@@ -250,8 +243,7 @@ class MyCases extends Component {
           </form>
         </Grid>
 
-
-        <Grid item xs={10} style={cardsContainer}>
+        <Grid item xs={9} style={cardsContainer}>
           {showCasesCards && this.showCasesCards()}
           {showLoading && (<p>Loading your cases...</p>)}
           {showError && (<p>An error occured</p>)}

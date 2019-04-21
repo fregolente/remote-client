@@ -14,7 +14,7 @@ const styles = theme => ({
     position: 'fixed',
     top: 0,
     left: 0,
-    background: '#e8e8e8',
+    background: '#fff',
     width: '100%',
     height: '100%',
     overflow: 'auto',

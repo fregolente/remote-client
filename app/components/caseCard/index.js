@@ -57,7 +57,37 @@ class CaseCard extends Component {
     this.state = {
       openDeleteDialog: false,
       openApplyDialog: false,
+      showFullDescription: false,
     };
+  }
+
+  getShowMoreButton = () => {
+    const linkText = this.state.showFullDescription ? 'show less' : 'show more';
+    return (
+      <Button onClick={this.toggleFullDescription} size="small">
+        {linkText}
+      </Button>
+    );
+  }
+
+  getDescription = (description) => {
+    if (description.length <= 100) {
+      return description;
+    }
+
+    let cutDescription = description.slice(0, 99);
+
+    if (this.state.showFullDescription) {
+      cutDescription = description;
+    }
+
+    return (
+      <span>
+        {cutDescription}
+        {(this.state.showFullDescription === false) && '...'}
+        {this.getShowMoreButton()}
+      </span>
+    );
   }
 
   getFavoriteButton = () => {
@@ -109,22 +139,15 @@ class CaseCard extends Component {
     return fullPracticeArea.label;
   }
 
-  showUserButtons = () => (
-    <div>
-      <Tooltip title="Delete">
-        <IconButton color="primary" size="small" aria-label="Favorite" onClick={this.handleClickOpen}>
-          <Delete />
-        </IconButton>
-      </Tooltip>
-      <Button
-        variant="contained"
-        size="small"
-        color="secondary"
-        onClick={this.handleClickFullCase}>
-        See full case
-      </Button>
-    </div>
-  );
+  getPriceTypeLabel = (priceType) => {
+    if (priceType.label) {
+      return priceType.label;
+    }
+
+    const { priceType: uPriceType } = UTILITIES;
+    const fullPriceType = find(propEq('id', priceType))(uPriceType);
+    return fullPriceType.label;
+  }
 
   toggleFavorite = () => {
     const {
@@ -184,6 +207,10 @@ class CaseCard extends Component {
     }
   };
 
+  toggleFullDescription = () => {
+    this.setState({ showFullDescription: !this.state.showFullDescription });
+  }
+
   applyForCaseDialog = () => {
     return (
       <Dialog
@@ -233,15 +260,23 @@ class CaseCard extends Component {
     return includes(caseId, favoritedCases);
   }
 
-  getPriceTypeLabel = (priceType) => {
-    if (priceType.label) {
-      return priceType.label;
-    }
-
-    const { priceType: uPriceType } = UTILITIES;
-    const fullPriceType = find(propEq('id', priceType))(uPriceType);
-    return fullPriceType.label;
-  }
+  showUserButtons = () => (
+    <div>
+      <Tooltip title="Delete">
+        <IconButton color="primary" size="small" aria-label="Favorite" onClick={this.handleClickOpen}>
+          <Delete style={styles.icon} />
+        </IconButton>
+      </Tooltip>
+      <Button
+        variant="contained"
+        size="small"
+        color="secondary"
+        style={styles.button}
+        onClick={this.handleClickFullCase}>
+        See full case
+      </Button>
+    </div>
+  );
 
   hasAppliedToCase = () => {
     const {
@@ -303,14 +338,12 @@ class CaseCard extends Component {
       title,
     } = userCase;
 
-    console.log(priceType);
-
     return (
       <Grid item xs={columns} id={`case-card-item----${id}`} key={id} style={caseStyle}>
         <Card >
           <CardContent style={styles.cardContent}>
             <Typography variant="h5" component="h2">
-              {title}
+              <strong>{title}</strong>
               <Chip
                 label={`${formatMoney(suggestedPrice)} ${this.getPriceTypeLabel(priceType)}`}
                 style={styles.chip}
@@ -320,10 +353,7 @@ class CaseCard extends Component {
               Created at {getFormattedDate(createdAt)}
             </Typography>
             <Typography>
-              {description}
-              <br />
-              <br />
-              <br />
+              {this.getDescription(description)}
               <br />
               {`${this.getCaseRegion(region)} | ${this.getCasePracticeArea(practiceArea)}`}
             </Typography>

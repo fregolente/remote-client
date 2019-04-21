@@ -13,6 +13,8 @@ import AppDrawer from '~/components/appDrawer';
 import Breadcrumb from '~/components/breadcrumb';
 import Divider from '@material-ui/core/Divider';
 
+import MarginComponent from '~/components/marginComponent';
+
 // Styles
 import * as styles from './styles';
 
@@ -43,7 +45,7 @@ class Container extends Component {
   render() {
     const { classes } = this.props;
     // TODO: get this dynamically
-    const location = this.props.location;
+    const { location } = this.props;
 
     return (
       <Grid container id="container" style={styles.container}>
@@ -55,13 +57,14 @@ class Container extends Component {
         </Grid>
 
         <Grid item xs={12} style={styles.breadcrumbContainer}>
-          <Breadcrumb theme="dark" separator=" › " location={location} />
-          <Divider />
+          <MarginComponent margin={2} uniqueId="breadcrumb">
+            <Breadcrumb theme="dark" separator=" › " location={location} />
+          </MarginComponent>
         </Grid>
 
-        <Grid item xs={12}>
+        <MarginComponent margin={2} uniqueId="remote-legal-routes">
           <RemoteLegalRoutes />
-        </Grid>
+        </MarginComponent>
 
 
       </Grid>

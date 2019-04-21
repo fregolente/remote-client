@@ -16,6 +16,9 @@ import AccountCircle from '@material-ui/icons/AccountCircle';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 
+
+import MarginComponent from '~/components/marginComponent';
+
 // Constants
 import * as routes from '~/constants/routes';
 
@@ -74,19 +77,22 @@ class Header extends Component {
     return (
       <div className={classes.root}>
         <AppBar color="secondary" position="static" style={{ backgroundColor: '#80a7c5', minHeight: '112px' }}>
-          <Toolbar style={{ minHeight: '112px' }}>
-            <IconButton
-              className={classes.menuButton}
-              color="inherit"
-              aria-label="Menu"
-              onClick={() => handleDrawerOpen()}>
-              <MenuIcon />
-            </IconButton>
-            <span className={classes.brand} />
-            <div style={{ display: 'flex' }}>
-              <AccountCircle style={{ marginRight: '5px' }} />
-              {loggedInUser}
-            </div>
+          <Toolbar style={{ minHeight: '112px', padding: 0 }}>
+            <MarginComponent margin={2} uniqueId="" centerClass={classes.midGrid} >
+              <IconButton
+                className={classes.menuButton}
+                color="inherit"
+                aria-label="Menu"
+                onClick={() => handleDrawerOpen()}>
+                <MenuIcon />
+              </IconButton>
+              <span className={classes.brand} />
+
+              <div style={{ display: 'flex' }}>
+                <AccountCircle style={{ marginRight: '5px' }} />
+                {loggedInUser}
+              </div>
+            </MarginComponent>
           </Toolbar>
         </AppBar>
       </div>
@@ -95,6 +101,7 @@ class Header extends Component {
 }
 
 Header.propTypes = {
+  // eslint-disable-next-line react/forbid-prop-types
   classes: PropTypes.object.isRequired,
   handleDrawerOpen: PropTypes.func.isRequired,
   firstName: PropTypes.string.isRequired,
@@ -112,7 +119,7 @@ const mapDispatchToProps = {
 
 const HeaderMapped = connect(
   mapStateToProps,
-  mapDispatchToProps
+  mapDispatchToProps,
 )(Header);
 
 export default withRouter(withStyles(styles)(HeaderMapped));
