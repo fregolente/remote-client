@@ -1,4 +1,7 @@
 import React, { Component } from 'react';
+import { push } from 'react-router-redux';
+import { isNil, isEmpty } from 'ramda';
+import { connect } from 'react-redux';
 import Radium from 'radium';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router';
@@ -11,15 +14,17 @@ import Grid from '@material-ui/core/Grid';
 import Header from '~/components/header';
 import AppDrawer from '~/components/appDrawer';
 import Breadcrumb from '~/components/breadcrumb';
-import Divider from '@material-ui/core/Divider';
 
 import MarginComponent from '~/components/marginComponent';
 
+import { currentUserId } from '~/state/currentUser/selectors';
 // Styles
 import * as styles from './styles';
 
 // Routes
 import RemoteLegalRoutes from './routes';
+
+import * as ROUTES from '~/constants/routes';
 
 class Container extends Component {
   constructor(props) {
@@ -32,6 +37,12 @@ class Container extends Component {
   }
 
   componentWillMount() {
+    const { userId, location } = this.props;
+    const { pathname } = location;
+
+    if (pathname === '/') {
+      this.props.push(ROUTES.LOGIN);
+    }
   }
 
   handleDrawerOpen = () => {
@@ -43,9 +54,11 @@ class Container extends Component {
   }
 
   render() {
-    const { classes } = this.props;
-    // TODO: get this dynamically
-    const { location } = this.props;
+    const { location, userId } = this.props;
+
+    if (isNil(userId) || isEmpty(userId)) {
+      return null;
+    }
 
     return (
       <Grid container id="container" style={styles.container}>
@@ -72,9 +85,22 @@ class Container extends Component {
   }
 }
 
-
-Container.propTypes = {
-  classes: PropTypes.object.isRequired,
+Container.defaultProps = {
+  userId: null,
 };
 
-export default withRouter(withStyles(styles)(Radium(Container)));
+Container.propTypes = {
+  userId: PropTypes.object, // eslint-disable-line react/forbid-prop-types
+  location: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
+  push: PropTypes.func.isRequired, // eslint-disable-line react/forbid-prop-types
+};
+
+const mapStateToProps = state => ({
+  userId: currentUserId(state),
+});
+
+const mapDispatchToProps = {
+  push,
+};
+
+export default withRouter(withStyles(styles)(Radium(connect(mapStateToProps, mapDispatchToProps)(Container))));

@@ -22,9 +22,7 @@ let API_URL = 'http://localhost:3000/v1';
 const IS_DEPLOYED = IS_PRODUCTION || IS_STAGING || IS_DEVELOPMENT;
 
 if (IS_PRODUCTION) {
-
-} else if (IS_STAGING) {
-
+  API_URL = 'http://ec2-3-16-41-205.us-east-2.compute.amazonaws.com:3000/v1';
 } else {
   API_URL = 'http://localhost:3000/v1';
 }
