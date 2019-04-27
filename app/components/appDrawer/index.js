@@ -21,7 +21,6 @@ import Chat from '@material-ui/icons/Chat';
 import Explore from '@material-ui/icons/Explore';
 import ExitToApp from '@material-ui/icons/ExitToApp';
 import Person from '@material-ui/icons/Person';
-import Search from '@material-ui/icons/Search';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import Assignment from '@material-ui/icons/Assignment';
 import LibraryAdd from '@material-ui/icons/LibraryAdd';
@@ -51,22 +50,15 @@ class AppDrawer extends Component {
       classes,
       isDrawerOpen,
       handleDrawerClose,
-      isLawyer,
-      isRegularUser,
     } = this.props;
 
     return (
       <Drawer
         className={classes.drawer}
-        variant="persistent"
         anchor="left"
         open={isDrawerOpen}
+        onClose={handleDrawerClose}
         classes={{ paper: classes.drawerPaper }} >
-        <div className={classes.drawerHeader}>
-          <IconButton onClick={handleDrawerClose}>
-            <ChevronLeftIcon />
-          </IconButton>
-        </div>
         <List>
           <ListItem button key={ROUTES.PROFILE_PAGE_TEXT} onClick={() => this.clickedOnListItem(ROUTES.PROFILE_PAGE)}>
             <ListItemIcon>
@@ -77,12 +69,15 @@ class AppDrawer extends Component {
         </List>
         <Divider />
         <List>
-          {isLawyer && (<ListItem button key={ROUTES.EXPLORER_TEXT} onClick={() => this.clickedOnListItem(ROUTES.EXPLORER)}>
-            <ListItemIcon>
-              <Explore />
-            </ListItemIcon>
-            <ListItemText primary={ROUTES.EXPLORER_TEXT} secondary={ROUTES.EXPLORER_SECONDARY_TEXT} />
-          </ListItem>)}
+          {this.props.isLawyer
+            && (
+              <ListItem button key={ROUTES.EXPLORER_TEXT} onClick={() => this.clickedOnListItem(ROUTES.EXPLORER)}>
+                <ListItemIcon>
+                  <Explore />
+                </ListItemIcon>
+                <ListItemText primary={ROUTES.EXPLORER_TEXT} secondary={ROUTES.EXPLORER_SECONDARY_TEXT} />
+              </ListItem>
+            )}
           <ListItem button key={ROUTES.CHAT_TEXT} onClick={() => this.clickedOnListItem(ROUTES.CHAT)}>
             <ListItemIcon>
               <Chat />
@@ -92,30 +87,52 @@ class AppDrawer extends Component {
         </List>
         <Divider />
         <List>
-          {isRegularUser && (<ListItem button key={ROUTES.CASE_URL} onClick={() => this.clickedOnListItem(ROUTES.CASE_URL)}>
-            <ListItemIcon>
-              <LibraryAdd />
-            </ListItemIcon>
-            <ListItemText primary={ROUTES.CASE_TEXT} secondary={ROUTES.CASE_SECONDARY_TEXT} />
-          </ListItem>)}
-          {isRegularUser && (<ListItem button key={ROUTES.MY_CASES} onClick={() => this.clickedOnListItem(ROUTES.MY_CASES)}>
-            <ListItemIcon>
-              <Assignment />
-            </ListItemIcon>
-            <ListItemText primary={ROUTES.MY_CASES_TEXT} secondary={ROUTES.MY_CASES_SECONDARY_TEXT} />
-          </ListItem>)}
-          {isLawyer && (<ListItem button key={ROUTES.FAVORITE_CASE_URL} onClick={() => this.clickedOnListItem(ROUTES.FAVORITE_CASE_URL)}>
-            <ListItemIcon>
-              <Assignment />
-            </ListItemIcon>
-            <ListItemText primary={ROUTES.FAVORITE_CASE_TEXT} secondary={ROUTES.FAVORITE_CASE_SECONDARY_TEXT} />
-          </ListItem>)}
-          {isLawyer && (<ListItem button key={ROUTES.APPLIED_CASE_URL} onClick={() => this.clickedOnListItem(ROUTES.APPLIED_CASE_URL)}>
-            <ListItemIcon>
-              <Assignment />
-            </ListItemIcon>
-            <ListItemText primary={ROUTES.APPLIED_CASE_TEXT} secondary={ROUTES.APPLIED_CASE_SECONDARY_TEXT} />
-          </ListItem>)}
+          {
+            this.props.isRegularUser &&
+            (
+              <ListItem button key={ROUTES.CASE_URL} onClick={() => this.clickedOnListItem(ROUTES.CASE_URL)}>
+                <ListItemIcon>
+                  <LibraryAdd />
+                </ListItemIcon>
+                <ListItemText primary={ROUTES.CASE_TEXT} secondary={ROUTES.CASE_SECONDARY_TEXT} />
+              </ListItem>
+            )}
+          {
+            this.props.isRegularUser &&
+            (
+              <ListItem button key={ROUTES.MY_CASES} onClick={() => this.clickedOnListItem(ROUTES.MY_CASES)}>
+                <ListItemIcon>
+                  <Assignment />
+                </ListItemIcon>
+                <ListItemText primary={ROUTES.MY_CASES_TEXT} secondary={ROUTES.MY_CASES_SECONDARY_TEXT} />
+              </ListItem>
+            )}
+          {
+            this.props.isLawyer &&
+            (
+              <ListItem
+                button
+                key={ROUTES.FAVORITE_CASE_URL}
+                onClick={() => this.clickedOnListItem(ROUTES.FAVORITE_CASE_URL)}>
+                <ListItemIcon>
+                  <Assignment />
+                </ListItemIcon>
+                <ListItemText primary={ROUTES.FAVORITE_CASE_TEXT} secondary={ROUTES.FAVORITE_CASE_SECONDARY_TEXT} />
+              </ListItem>
+            )}
+          {
+            this.props.isLawyer &&
+            (
+              <ListItem
+                button
+                key={ROUTES.APPLIED_CASE_URL}
+                onClick={() => this.clickedOnListItem(ROUTES.APPLIED_CASE_URL)}>
+                <ListItemIcon>
+                  <Assignment />
+                </ListItemIcon>
+                <ListItemText primary={ROUTES.APPLIED_CASE_TEXT} secondary={ROUTES.APPLIED_CASE_SECONDARY_TEXT} />
+              </ListItem>
+            )}
         </List>
         <Divider />
         <List>

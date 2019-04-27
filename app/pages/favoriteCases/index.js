@@ -45,7 +45,7 @@ class FavoriteCases extends Component {
     const isInExplorerPage = true;
     const casesObj = favoriteCases.map(c => (<CaseCard
       isInExplorerPage={isInExplorerPage}
-      columns={4}
+      columns={12}
       userCase={c}
       key={`caseCard---${generate()}`}
       caseStyle={styles.caseCard} />));

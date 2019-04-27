@@ -45,7 +45,7 @@ class AppliedCases extends Component {
     const isInExplorerPage = true;
     const casesObj = appliedCases.map(c => (<CaseCard
       isInExplorerPage={isInExplorerPage}
-      columns={4}
+      columns={12}
       userCase={c}
       key={`caseCard---${generate()}`}
       caseStyle={styles.caseCard} />));

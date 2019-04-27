@@ -23,10 +23,10 @@ import {
   ListItem,
   ListItemText,
   ListItemAvatar,
-  Typography,
   TextField,
   IconButton,
 } from '@material-ui/core';
+import { withStyles } from '@material-ui/core/styles';
 
 import SendIcon from '@material-ui/icons/Send';
 
@@ -61,6 +61,7 @@ import {
 } from '~/utilities/chatHelper';
 
 import * as styles from './styles';
+import mui from './mui';
 
 const isNilOrEmpty = anyPass([isNil, isEmpty]);
 
@@ -88,25 +89,34 @@ class MyChats extends Component {
   }
 
   chatList = () => {
-    const { userId, chatData } = this.props;
+    const { userId, chatData, classes } = this.props;
     const { chats } = chatData;
 
     return chats.map((chat) => {
       const latestMessage = getLatestMessage(chat.messages);
       const { participants } = chat;
       return (
-        <ListItem button key={`chat-list-item---${generate()}`} onClick={() => this.selectChat(chat)}>
+        <ListItem
+          button
+          key={`chat-list-item---${generate()}`}
+          onClick={() => this.selectChat(chat)}
+          style={{ borderBottom: '1px solid #6498c0' }}>
           <ListItemAvatar>
-            <Avatar >{getUserInitials(userId, participants)}</Avatar>
+            <Avatar style={{ color: '#333', backgroundColor: '#fff' }} >{getUserInitials(userId, participants)}</Avatar>
           </ListItemAvatar>
           <ListItemText
+            classes={{
+              primary: classes.primary,
+            }}
             primary={chat.topic}
             secondary={
               <React.Fragment>
-                <Typography component="span" color="textPrimary">
+                <div style={{ color: '#FFF', fontSize: '13px' }}>
                   {`${getSenderName(latestMessage, participants)} - ${getMessageFormatedDate(latestMessage)}`}
-                </Typography>
-                {breakString(latestMessage.content)}
+                </div>
+                <div style={{ color: '#FFF' }}>
+                  {breakString(latestMessage.content)}
+                </div>
               </React.Fragment>
             } />
         </ListItem>
@@ -185,7 +195,7 @@ class MyChats extends Component {
   }
 
   openThisChat = () => {
-    const { userId } = this.props;
+    const { userId, classes } = this.props;
     const { chat } = this.state;
     if (isNilOrEmpty(chat)) {
       return (
@@ -195,20 +205,23 @@ class MyChats extends Component {
     }
 
     const latestMessage = getLatestMessage(chat.messages);
-    const chatWith = getOtherParticipantName(userId, chat.participants);
-
-    console.log(userId);
-    console.log(chat.participants);
-    console.log(chatWith);
-
     return (
       <Grid container style={styles.chatOpenedContainer} id="chat-opened-container">
         <Grid item xs={12} style={styles.chatHeaderContainer} id="chat-header-container">
-          <h3>{chat.topic}</h3> <Button onClick={() => this.unselectChat()}>close this chat</Button>
-          <span>
-            Chat with {getOtherParticipantName(userId, chat.participants)}
-            | Last update: {getMessageFormatedDate(latestMessage)}
-          </span>
+          <Grid container>
+            <Grid item xs={12}>
+              <h3 style={{ margin: 0 }}>{chat.topic}</h3>
+            </Grid>
+            <Grid item xs={9} style={{ paddingTop: '10px', fontSize: '13px' }}>
+              <span>
+                Chat with {getOtherParticipantName(userId, chat.participants)}
+                | Last update: {getMessageFormatedDate(latestMessage)}
+              </span>
+            </Grid>
+            <Grid item xs={3}>
+              <Button onClick={() => this.unselectChat()}>close this chat</Button>
+            </Grid>
+          </Grid>
         </Grid>
         <Grid item xs={12} style={styles.messagesContainer} id="chat-messages-container">
           {this.listChatMessages()}
@@ -222,26 +235,34 @@ class MyChats extends Component {
             onKeyPress={this.handleKeyPress}
             fullWidth
             rowsMax="4"
-            margin="normal"
-            variant="outlined" />
+            margin="none"
+            variant="outlined"
+            style={{ marginTop: '8px' }}
+            InputProps={{
+              classes: {
+                input: classes.input,
+              },
+            }} />
         </Grid>
         <Grid item xs={1} style={styles.newMessageContainer}>
-          <IconButton onClick={this.sendAMessage}>
+          <IconButton
+            onClick={this.sendAMessage}
+            style={{ color: '#8cbadd' }}>
             <SendIcon fontSize="large" />
           </IconButton>
         </Grid>
-      </Grid>);
+      </Grid >);
   }
 
   chatsCards = () => {
     return (
       <Grid container>
-        <Grid item xs={3}>
+        <Grid item xs={3} style={{ backgroundColor: '#8cbadd' }}>
           <List>
             {this.chatList()}
           </List>
         </Grid>
-        <Grid item xs={9} style={{ borderLeft: '1px solid lightgray' }}>
+        <Grid item xs={9} style={{ borderLeft: '1px solid #e8e8e8' }}>
           {this.openThisChat()}
         </Grid>
       </Grid>
@@ -279,6 +300,7 @@ class MyChats extends Component {
 }
 
 MyChats.propTypes = {
+  classes: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   chatData: PropTypes.shape({
     loading: PropTypes.bool,
     chats: PropTypes.arrayOf(PropTypes.object),
@@ -306,4 +328,4 @@ const mapStateToProps = state => ({
   currentChat: getCurrentSelectedChat(state),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(Radium(MyChats));
+export default connect(mapStateToProps, mapDispatchToProps)(withStyles(mui)(Radium(MyChats)));

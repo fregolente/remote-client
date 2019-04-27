@@ -1,5 +1,5 @@
 export const cardContent = {
-  minHeight: '200px',
+  paddingBottom: 0,
 };
 
 export const chip = {

@@ -1,3 +1,4 @@
+/* eslint-disable no-return-assign */
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { push } from 'react-router-redux';
@@ -35,7 +36,18 @@ import { getMyCasesStatus } from '~/state/cases/selectors';
 // Utilities
 import { getFromLocalStorage } from '~/utilities/localStorage';
 
-import styles, { caseCard, mainContainer, cardsContainer, headerStyle, textHeaderStyle, button } from './styles';
+import
+styles,
+{
+  caseCard,
+  mainContainer,
+  cardsContainer,
+  headerStyle,
+  textHeaderStyle,
+  button,
+  formFilter,
+  formHeader,
+} from './styles';
 
 class MyCases extends Component {
   constructor(props) {
@@ -146,8 +158,8 @@ class MyCases extends Component {
         </Grid>
 
         <Grid item xs={3} className={classes.filterContainer}>
-          <form>
-            <h4>Filters</h4>
+          <form style={formFilter}>
+            <h4 style={formHeader}>Filters</h4>
             <Grid container>
               <Grid item xs={12}>
                 <FormControl variant="outlined" className={classes.formControl}>
@@ -157,8 +169,18 @@ class MyCases extends Component {
                     name="title"
                     id="title"
                     label="Search title"
-                    margin="normal"
-                    variant="outlined" />
+                    margin="none"
+                    variant="outlined"
+                    InputLabelProps={{
+                      classes: {
+                        outlined: classes.outlined,
+                      },
+                    }}
+                    InputProps={{
+                      classes: {
+                        input: classes.input,
+                      },
+                    }} />
                 </FormControl>
               </Grid>
               <Grid item xs={12}>
@@ -169,13 +191,24 @@ class MyCases extends Component {
                     name="description"
                     id="description"
                     label="Description"
-                    margin="normal"
-                    variant="outlined" />
+                    margin="none"
+                    variant="outlined"
+                    InputLabelProps={{
+                      classes: {
+                        outlined: classes.outlined,
+                      },
+                    }}
+                    InputProps={{
+                      classes: {
+                        input: classes.input,
+                      },
+                    }} />
                 </FormControl>
               </Grid>
               <Grid item xs={12}>
                 <FormControl variant="outlined" className={classes.formControl}>
                   <InputLabel
+                    classes={{ outlined: classes.outlined }}
                     ref={ref => this.InputLabelRef = ref}
                     htmlFor="region">
                     Region
@@ -185,6 +218,7 @@ class MyCases extends Component {
                     onChange={this.handleChange}
                     input={
                       <OutlinedInput
+                        classes={{ input: classes.input }}
                         labelWidth={this.state.labelWidth}
                         name="region"
                         id="region" />
@@ -196,6 +230,7 @@ class MyCases extends Component {
               <Grid item xs={12}>
                 <FormControl variant="outlined" className={classes.formControl}>
                   <InputLabel
+                    classes={{ outlined: classes.outlined }}
                     ref={ref => this.InputLabelRef = ref}
                     htmlFor="area">
                     Practice Area
@@ -205,6 +240,7 @@ class MyCases extends Component {
                     onChange={this.handleChange}
                     input={
                       <OutlinedInput
+                        classes={{ input: classes.input }}
                         labelWidth={this.state.labelWidth}
                         name="area"
                         id="area" />
@@ -216,6 +252,7 @@ class MyCases extends Component {
               <Grid item xs={12}>
                 <FormControl variant="outlined" className={classes.formControl}>
                   <InputLabel
+                    classes={{ outlined: classes.outlined }}
                     ref={ref => this.InputLabelRef = ref}
                     htmlFor="pType">
                     Price Type
@@ -225,6 +262,7 @@ class MyCases extends Component {
                     onChange={this.handleChange}
                     input={
                       <OutlinedInput
+                        classes={{ input: classes.input }}
                         labelWidth={this.state.labelWidth}
                         name="pType"
                         id="pType" />
@@ -249,7 +287,7 @@ class MyCases extends Component {
           {showError && (<p>An error occured</p>)}
           {showEmptyCases && (<p>Create a case to get started!</p>)}
         </Grid>
-      </Grid>
+      </Grid >
     );
   }
 }

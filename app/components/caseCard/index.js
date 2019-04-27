@@ -354,11 +354,11 @@ class CaseCard extends Component {
             </Typography>
             <Typography>
               {this.getDescription(description)}
-              <br />
-              {`${this.getCaseRegion(region)} | ${this.getCasePracticeArea(practiceArea)}`}
+            </Typography>
+            <Typography style={{ paddingTop: '25px' }}>
+              <strong>{`${this.getCaseRegion(region)} | ${this.getCasePracticeArea(practiceArea)}`}</strong>
             </Typography>
           </CardContent>
-          <Divider />
           <CardActions>
             {isInExplorerPage ? this.showLawyerButtons() : this.showUserButtons()}
           </CardActions>

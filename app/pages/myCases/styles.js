@@ -29,6 +29,20 @@ export const cardsContainer = {
   padding: '8px',
 };
 
+export const formFilter = {
+  borderRadius: '5px',
+  backgroundColor: '#f1f1f1',
+  paddingBottom: '15px',
+};
+
+export const formHeader = {
+  margin: 0,
+  padding: '10px 0',
+  backgroundColor: '#dbdcdc',
+  fontSize: '15px',
+};
+
+// eslint-disable-next-line no-unused-vars
 const styles = theme => ({
   formControl: {
     marginTop: '15px',
@@ -39,7 +53,6 @@ const styles = theme => ({
     backgroundColor: 'white',
     textAlign: 'center',
     minHeight: '800px',
-    borderRight: '1px solid lightgray',
   },
   bullet: {
     display: 'inline-block',
@@ -61,6 +74,12 @@ const styles = theme => ({
   },
   buttonSearch: {
     marginTop: '20px',
+  },
+  input: {
+    padding: '14px',
+  },
+  outlined: {
+    transform: 'translate(14px, 15px) scale(1)',
   },
 });
 

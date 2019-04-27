@@ -28,17 +28,18 @@ export const chatMessageContainer = {
 
 export const chatMessageText = {
   margin: '5px',
-  backgroundColor: '#00d94a',
+  backgroundColor: '#8cbadd',
   borderRadius: '8px',
   padding: '8px',
   maxWidth: '450px',
-  color: '#fff',
+  color: '#FFF',
 };
 
 export const myChatMessageText = {
   ...chatMessageText,
-  backgroundColor: '#37aafb',
+  backgroundColor: '#bdbdbd',
   float: 'right',
+  color: '#333',
 };
 
 export const messageTextTimestamp = {
