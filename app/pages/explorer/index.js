@@ -34,7 +34,13 @@ import CaseCard from '~/components/caseCard';
 import { utilitiesSelector } from '~/state/utilities/selectors';
 import { getExplorerPageData } from '~/state/cases/selectors';
 
-import styles, { casesContainer } from './styles';
+import
+styles,
+{
+  casesContainer,
+  formFilter,
+  formHeader,
+} from './styles';
 
 const HELPER_TEXT = `Use this page to explore user created cases and apply to
 those you see fit. Use the left column to filter cases and search title text.`;
@@ -112,7 +118,7 @@ class Explorer extends Component {
         caseApplyAction={this.props.applyToACase}
         caseFavoriteAction={this.props.favoriteACase}
         isInExplorerPage={isInExplorerPage}
-        columns={4}
+        columns={12}
         userCase={c}
         key={`caseCard---${id}`} />);
     });
@@ -156,9 +162,9 @@ class Explorer extends Component {
               <Divider />
             </div>)}
         </Grid>
-        <Grid item xs={2} className={classes.filterContainer}>
-          <form>
-            <h4>Filters</h4>
+        <Grid item xs={3} className={classes.filterContainer}>
+          <form style={formFilter}>
+            <h4 style={formHeader}>Filters</h4>
             <Grid container>
               <Grid item xs={12}>
                 <FormControl variant="outlined" className={classes.formControl}>
@@ -168,8 +174,18 @@ class Explorer extends Component {
                     name="title"
                     id="title"
                     label="Search title"
-                    margin="normal"
-                    variant="outlined" />
+                    margin="none"
+                    variant="outlined"
+                    InputLabelProps={{
+                      classes: {
+                        outlined: classes.outlined,
+                      },
+                    }}
+                    InputProps={{
+                      classes: {
+                        input: classes.input,
+                      },
+                    }} />
                 </FormControl>
               </Grid>
               <Grid item xs={12}>
@@ -180,13 +196,24 @@ class Explorer extends Component {
                     name="description"
                     id="description"
                     label="Description"
-                    margin="normal"
-                    variant="outlined" />
+                    margin="none"
+                    variant="outlined"
+                    InputLabelProps={{
+                      classes: {
+                        outlined: classes.outlined,
+                      },
+                    }}
+                    InputProps={{
+                      classes: {
+                        input: classes.input,
+                      },
+                    }} />
                 </FormControl>
               </Grid>
               <Grid item xs={12}>
                 <FormControl variant="outlined" className={classes.formControl}>
                   <InputLabel
+                    classes={{ outlined: classes.outlined }}
                     ref={ref => this.InputLabelRef = ref}
                     htmlFor="region">
                     Region
@@ -196,6 +223,7 @@ class Explorer extends Component {
                     onChange={this.handleChange}
                     input={
                       <OutlinedInput
+                        classes={{ input: classes.input }}
                         labelWidth={this.state.labelWidth}
                         name="region"
                         id="region" />
@@ -207,6 +235,7 @@ class Explorer extends Component {
               <Grid item xs={12}>
                 <FormControl variant="outlined" className={classes.formControl}>
                   <InputLabel
+                    classes={{ outlined: classes.outlined }}
                     ref={ref => this.InputLabelRef = ref}
                     htmlFor="area">
                     Practice Area
@@ -216,6 +245,7 @@ class Explorer extends Component {
                     onChange={this.handleChange}
                     input={
                       <OutlinedInput
+                        classes={{ input: classes.input }}
                         labelWidth={this.state.labelWidth}
                         name="area"
                         id="area" />
@@ -227,6 +257,7 @@ class Explorer extends Component {
               <Grid item xs={12}>
                 <FormControl variant="outlined" className={classes.formControl}>
                   <InputLabel
+                    classes={{ outlined: classes.outlined }}
                     ref={ref => this.InputLabelRef = ref}
                     htmlFor="pType">
                     Price Type
@@ -236,6 +267,7 @@ class Explorer extends Component {
                     onChange={this.handleChange}
                     input={
                       <OutlinedInput
+                        classes={{ input: classes.input }}
                         labelWidth={this.state.labelWidth}
                         name="pType"
                         id="pType" />
@@ -253,7 +285,7 @@ class Explorer extends Component {
             </Grid>
           </form>
         </Grid>
-        <Grid item xs={10} style={casesContainer}>
+        <Grid item xs={9} style={casesContainer}>
           <Grid container spacing={8}>
             {isLoading && <p>Loading Cases...</p>}
             {hasError && errorMessage}

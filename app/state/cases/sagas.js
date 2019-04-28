@@ -42,9 +42,18 @@ function* watchCreateNewCase() {
   yield takeLatest(CREATE_CASE, createNewCase);
 }
 
-function* getUserCases() {
+function* getUserCases(action) {
   try {
-    const response = yield call(casesAPI.listUserCases);
+    const { filters } = action;
+    const {
+      title,
+      description,
+      region,
+      practiceArea,
+      priceType,
+    } = filters;
+
+    const response = yield call(casesAPI.listUserCases, title, description, region, practiceArea, priceType);
     const { success, error, cases } = response;
 
     if (success === false && error) {
@@ -85,6 +94,7 @@ function* getAppliedLawyers(action) {
   try {
     const { caseId } = action;
     const response = yield call(casesAPI.getAppliedLawyers, caseId);
+    console.log('watchEditUserCases', caseId, response);
     const { success, error, lawyers } = response;
 
     if (success === false && error) {

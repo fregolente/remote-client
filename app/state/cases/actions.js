@@ -35,9 +35,10 @@ export function createCaseError(error) {
 
 export const GET_USER_CASES = 'GET_USER_CASES';
 
-export function getUserCases() {
+export function getUserCases(filters = {}) {
   return {
     type: GET_USER_CASES,
+    filters,
   };
 }
 

@@ -186,7 +186,7 @@ class FullCase extends Component {
     const lawyerCards = appliedLawyers.map((l) => {
       const subtitle = `Graduated at ${l.institution} in ${getFormattedDate(l.graduationDate, graduationDateFormat)}`;
       return (
-        <Grid item xs={4} key={generate()}>
+        <Grid item xs={12} key={generate()}>
           <Card style={styles.lawyerCard}>
             <CardHeader
               avatar={<Avatar aria-label="Lawyer initials">{getSimpleUserInitials(l.user)}</Avatar>}

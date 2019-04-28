@@ -1,33 +1,24 @@
-import { fade } from '@material-ui/core/styles/colorManipulator';
-
 const styles = theme => ({
   root: {
     flexGrow: 1,
   },
   cover: {
     '& $name, & $subheading': {
-      color: theme.palette.common.white
+      color: theme.palette.primary.main,
     },
     position: 'relative',
     width: '100%',
-    overflow: 'hidden',
-    backgroundColor: theme.palette.primary.main,
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'flex-end',
-    borderRadius: 2,
-    backgroundSize: 'cover',
     textAlign: 'center',
-    boxShadow: theme.shadows[7]
+    boxShadow: theme.shadows[7],
   },
   content: {
-    background: fade(theme.palette.secondary.main, 0.3),
     height: '100%',
     width: '100%',
     padding: `20px ${theme.spacing.unit * 3}px 30px`
   },
-  name: {},
-  subheading: {},
+  name: {
+    color: theme.palette.primary.main,
+  },
   avatar: {
     margin: '0 auto',
     width: 120,
@@ -39,8 +30,8 @@ const styles = theme => ({
     top: 10,
     right: 10,
     '& button': {
-      color: theme.palette.common.white
-    }
+      color: theme.palette.common.white,
+    },
   },
   verified: {
     margin: theme.spacing.unit,

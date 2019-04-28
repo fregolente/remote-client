@@ -11,8 +11,30 @@ function createNewCase(newCase) {
     .then(data => data);
 }
 
-function listUserCases() {
-  return fetch(`${API_URL}/case`, {
+function listUserCases(title, description, region, practiceArea, priceType) {
+  let fetchURL = `${API_URL}/case?`;
+
+  if (title) {
+    fetchURL = `${fetchURL}&title=${title}`;
+  }
+
+  if (description) {
+    fetchURL = `${fetchURL}&description=${description}`;
+  }
+
+  if (region) {
+    fetchURL = `${fetchURL}&region=${region}`;
+  }
+
+  if (practiceArea) {
+    fetchURL = `${fetchURL}&practiceArea=${practiceArea}`;
+  }
+
+  if (priceType) {
+    fetchURL = `${fetchURL}&priceType=${priceType}`;
+  }
+
+  return fetch(fetchURL, {
     method: 'GET',
     headers: baseHeader(),
   })

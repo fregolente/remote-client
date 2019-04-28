@@ -7,7 +7,6 @@ import PropTypes from 'prop-types';
 
 import Button from '@material-ui/core/Button';
 import Card from '@material-ui/core/Card';
-import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import MultiChipSelect from '~/components/downshiftMultiple';
 import FormControl from '@material-ui/core/FormControl';
@@ -34,14 +33,14 @@ import { parseRegisterFormDataToMongoUser } from '~/utilities/user';
 
 // Actions
 import { editUserRequest } from '~/state/currentUser/actions';
+import * as styles from './styles';
 
 const userAvatar = '/images/avatars/pp_boy2.svg';
 
-import * as styles from './styles';
 class ProfilePage extends Component {
   constructor(props) {
     super(props);
-    this.props = props
+    this.props = props;
 
     this.utilities = getFromLocalStorage('utilities');
 
@@ -58,221 +57,6 @@ class ProfilePage extends Component {
 
   componentWillMount() {
     this.parseStateToForm();
-  }
-
-  parseStateToForm = () => {
-    const { user } = this.props;
-    let lawyerInfo = {};
-    let userRegionSelected = [];
-    let practiceAreaSelected = [];
-
-    if (user.userRegion) {
-      userRegionSelected = user.userRegion.map(region => region.label);
-    }
-
-    if (user.userType.value === 1) {
-      if (user.lawyerInfo.practiceArea) {
-        const { practiceArea } = this.utilities;
-        practiceAreaSelected = user.lawyerInfo.practiceArea.map(areaId => {
-          const area = practiceArea.filter(area => area.id === areaId)[0];
-          return area.label;
-        });
-      }
-    }
-
-    if (user.userType.value === 1) {
-      lawyerInfo = R.omit(['practiceArea'], user.lawyerInfo);
-    }
-
-    this.setState({
-      id: user._id,
-      first: user.first,
-      last: user.last,
-      email: user.email,
-      phone: user.phone,
-      userRegion: userRegionSelected,
-      practiceArea: practiceAreaSelected,
-      userType: user.userType.value.toString(),
-      gender: user.gender.value.toString(),
-      customGender: user.customGender,
-      ...lawyerInfo,
-    });
-  }
-
-  handleRadioChange = name => event => {
-    if (event) {
-      const value = event.target.value;
-      if (name === 'gender' && value !== '3') {
-        this.setState({ customGender: '' });
-      }
-      this.setState({ [name]: value });
-    }
-  }
-
-  handleInputChange = event => {
-    const capitalize = R.compose(
-      R.join(''),
-      R.juxt([R.compose(R.toUpper, R.head), R.tail])
-    );;
-
-    const idToVarName = (id) => {
-      const nameArr = id.split('-');
-      let returnName = null;
-      nameArr.forEach((value, index) => {
-        if (index === 0) {
-          returnName = value;
-        } else {
-          returnName = returnName.concat(capitalize(value));
-        }
-      })
-
-      return returnName;
-    }
-
-
-    if (event) {
-      const name = event.target.id;
-      const varName = idToVarName(name);
-
-      const value = event.target.value;
-      this.setState({ [varName]: value });
-    }
-  }
-
-  handleDateChange = (date) => {
-    this.setState({ graduationDate: date });
-  }
-
-  handleEditChange = () => {
-    this.setState({ editProfile: !this.state.editProfile });
-  }
-
-  handlePracticeAreaChange = selectedItem => {
-    if (this.state.practiceAreaOptions.includes(selectedItem)) {
-      this.removeSelectedPracticeArea(selectedItem);
-    } else {
-      this.addSelectedPracticeArea(selectedItem);
-    }
-  };
-
-  addSelectedPracticeArea(item) {
-    this.setState(({ practiceArea }) => ({
-      practiceAreaInput: '',
-      practiceArea: [...practiceArea, item],
-    }));
-  }
-
-  removeSelectedPracticeArea = item => {
-    this.setState(({ practiceArea }) => ({
-      practiceAreaInput: '',
-      practiceArea: practiceArea.filter(i => i !== item),
-    }));
-  };
-
-  handlePracticeAreaChangeInput = inputVal => {
-    const t = inputVal.split(",");
-    if (JSON.stringify(t) !== JSON.stringify(this.state.practiceArea)) {
-      this.setState({ practiceAreaInput: inputVal });
-    }
-  };
-
-  renderLawyerInfo = () => {
-    if (this.state.userType === '1') {
-      return (<div>
-        <Typography variant="button">
-          Lawyer Information
-        </Typography>
-        <div style={styles.formRow}>
-          <FormControl style={styles.readOnlySelect}>
-            {!this.state.editProfile && (<Typography style={styles.selectLabelStyle} variant="caption">
-              Practice Area
-            </Typography>)}
-            <div>
-              <MultiChipSelect
-                id={'practice-area'}
-                label={'Practice Area'}
-                onChange={this.handlePracticeAreaChange}
-                readOnly={!this.state.editProfile}
-                selectedItem={this.state.practiceArea}
-                onRemoveItem={this.removeSelectedPracticeArea}
-                inputValue={this.state.practiceAreaInput}
-                onInputValueChange={this.handlePracticeAreaChangeInput}
-                availableItems={this.state.practiceAreaOptions} />
-            </div>
-          </FormControl>
-        </div>
-        <div style={styles.formRow}>
-          <FormControl style={styles.formGroupField}>
-            <InputLabel htmlFor="institution">Graduated Institution</InputLabel>
-            <Input id="institution" value={this.state.institution} onChange={this.handleInputChange} readOnly={!this.state.editProfile} />
-          </FormControl>
-        </div>
-        <div style={styles.formRow}>
-          <FormControl style={styles.formGroupField}>
-            <MuiPickersUtilsProvider utils={MomentUtils}>
-              <DatePicker
-                keyboard
-                label="Graduation date"
-                format="MM/DD/YYYY"
-                placeholder="12/10/2018"
-                mask={[/\d/, /\d/, '/', /\d/, /\d/, '/', /\d/, /\d/, /\d/, /\d/]}
-                value={this.state.graduationDate}
-                onChange={this.handleDateChange}
-                maxDate={new Date()}
-                animateYearScrolling={false}
-                InputProps={{
-                  inputProps: {
-                    readOnly: !this.state.editProfile,
-                  }
-                }} />
-            </MuiPickersUtilsProvider>
-          </FormControl>
-        </div>
-        <div style={styles.formRow}>
-          <FormControl style={styles.formGroupField}>
-            <InputLabel htmlFor="linkedin-URL">Linkedin URL</InputLabel>
-            <Input
-              id="linkedin-URL"
-              value={this.state.linkedinURL}
-              onChange={this.handleInputChange}
-              readOnly={!this.state.editProfile}
-              startAdornment={<InputAdornment position="start">http://</InputAdornment>} />
-          </FormControl>
-        </div>
-        <div style={styles.formRow}>
-          <FormControl style={styles.formGroupField}>
-            <InputLabel htmlFor="biography">Biography</InputLabel>
-            <Input
-              id="biography"
-              value={this.state.biography}
-              onChange={this.handleInputChange}
-              readOnly={!this.state.editProfile}
-              multiline />
-          </FormControl>
-        </div>
-      </div>);
-    }
-
-    return null;
-  }
-
-  renderOptions = (optionsArray) => {
-    return optionsArray.map((option) => {
-      return (<FormControlLabel
-        key={option.id}
-        value={option.value.toString()}
-        control={<Radio />}
-        label={option.label}
-        disabled={!this.state.editProfile} />);
-    });
-  }
-
-  toggleEditProfile = () => {
-    this.setState({ editProfile: !this.state.editProfile })
-  }
-
-  onSelectPracticeArea = (selectedValues) => {
-    this.setState({ practiceArea: [...selectedValues] });
   }
 
   onSubmit = () => {
@@ -292,7 +76,7 @@ class ProfilePage extends Component {
 
     const formValues = {
       ...passOnState,
-      graduationDate: moment(graduationDate).format("YYYY-MM-DD HH:mm:ss"),
+      graduationDate: moment(graduationDate).format('YYYY-MM-DD HH:mm:ss'),
       userType: R.find(R.propEq('value', Number(userType)))(this.utilities.userType),
       gender: R.find(R.propEq('value', Number(gender)))(this.utilities.gender),
       userRegion: userRegion.map(region => R.find(R.propEq('label', region))(this.utilities.userRegion)),
@@ -300,17 +84,157 @@ class ProfilePage extends Component {
     };
 
     const parsedUser = parseRegisterFormDataToMongoUser(formValues);
+    // eslint-disable-next-line react/prop-types
     this.props.editUserRequest(parsedUser);
     this.setState({ editProfile: !this.state.editProfile });
   }
 
-  handleUserRegionChange = selectedItem => {
+  onSelectPracticeArea = (selectedValues) => {
+    this.setState({ practiceArea: [...selectedValues] });
+  }
+
+  parseStateToForm = () => {
+    const { user } = this.props;
+    let lawyerInfo = {};
+    let userRegionSelected = [];
+    let practiceAreaSelected = [];
+
+    if (user.userRegion) {
+      userRegionSelected = user.userRegion.map(region => region.label);
+    }
+
+    if (user.userType.value === 1) {
+      if (user.lawyerInfo.practiceArea) {
+        const { practiceArea } = this.utilities;
+        practiceAreaSelected = user.lawyerInfo.practiceArea.map((areaId) => {
+          const area = practiceArea.filter(a => a.id === areaId)[0];
+          return area.label;
+        });
+      }
+    }
+
+    if (user.userType.value === 1) {
+      lawyerInfo = R.omit(['practiceArea'], user.lawyerInfo);
+    }
+
+    this.setState({
+      // eslint-disable-next-line no-underscore-dangle
+      id: user._id,
+      first: user.first,
+      last: user.last,
+      email: user.email,
+      phone: user.phone,
+      userRegion: userRegionSelected,
+      practiceArea: practiceAreaSelected,
+      userType: user.userType.value.toString(),
+      gender: user.gender.value.toString(),
+      customGender: user.customGender,
+      ...lawyerInfo,
+    });
+  }
+
+  handleRadioChange = name => (event) => {
+    if (event) {
+      const { value } = event.target;
+      if (name === 'gender' && value !== '3') {
+        this.setState({ customGender: '' });
+      }
+      this.setState({ [name]: value });
+    }
+  }
+
+  handleInputChange = (event) => {
+    const capitalize = R.compose(
+      R.join(''),
+      R.juxt([R.compose(R.toUpper, R.head), R.tail])
+    );
+
+    const idToVarName = (id) => {
+      const nameArr = id.split('-');
+      let returnName = null;
+      nameArr.forEach((value, index) => {
+        if (index === 0) {
+          returnName = value;
+        } else {
+          returnName = returnName.concat(capitalize(value));
+        }
+      });
+
+      return returnName;
+    };
+
+
+    if (event) {
+      const name = event.target.id;
+      const varName = idToVarName(name);
+
+      const { value } = event.target;
+      this.setState({ [varName]: value });
+    }
+  }
+
+  handleDateChange = (date) => {
+    this.setState({ graduationDate: date });
+  }
+
+  handleEditChange = () => {
+    this.setState({ editProfile: !this.state.editProfile });
+  }
+
+  handlePracticeAreaChange = (selectedItem) => {
+    if (this.state.practiceAreaOptions.includes(selectedItem)) {
+      this.removeSelectedPracticeArea(selectedItem);
+    } else {
+      this.addSelectedPracticeArea(selectedItem);
+    }
+  };
+
+  addSelectedPracticeArea(item) {
+    this.setState(({ practiceArea }) => ({
+      practiceAreaInput: '',
+      practiceArea: [...practiceArea, item],
+    }));
+  }
+
+  removeSelectedPracticeArea = (item) => {
+    this.setState(({ practiceArea }) => ({
+      practiceAreaInput: '',
+      practiceArea: practiceArea.filter(i => i !== item),
+    }));
+  };
+
+  handlePracticeAreaChangeInput = (inputVal) => {
+    const t = inputVal.split(',');
+    if (JSON.stringify(t) !== JSON.stringify(this.state.practiceArea)) {
+      this.setState({ practiceAreaInput: inputVal });
+    }
+  };
+
+  handleUserRegionChange = (selectedItem) => {
     if (this.state.userRegionOptions.includes(selectedItem)) {
       this.removeSelectedUserRegion(selectedItem);
     } else {
       this.addSelectedUserRegion(selectedItem);
     }
   };
+
+  handleUserRegionChangeInput = (inputVal) => {
+    const t = inputVal.split(',');
+    if (JSON.stringify(t) !== JSON.stringify(this.state.userRegion)) {
+      this.setState({ userRegionInput: inputVal });
+    }
+  };
+
+  removeSelectedUserRegion = (item) => {
+    this.setState(({ userRegion }) => ({
+      userRegionInput: '',
+      userRegion: userRegion.filter(i => i !== item),
+    }));
+  };
+
+  toggleEditProfile = () => {
+    this.setState({ editProfile: !this.state.editProfile })
+  }
 
   addSelectedUserRegion(item) {
     this.setState(({ userRegion }) => ({
@@ -319,19 +243,105 @@ class ProfilePage extends Component {
     }));
   }
 
-  removeSelectedUserRegion = item => {
-    this.setState(({ userRegion }) => ({
-      userRegionInput: '',
-      userRegion: userRegion.filter(i => i !== item),
-    }));
-  };
-
-  handleUserRegionChangeInput = inputVal => {
-    const t = inputVal.split(",");
-    if (JSON.stringify(t) !== JSON.stringify(this.state.userRegion)) {
-      this.setState({ userRegionInput: inputVal });
+  renderLawyerInfo = () => {
+    if (this.state.userType === '1') {
+      return (
+        <div>
+          <Typography variant="button">
+            Lawyer Information
+          </Typography>
+          <div style={styles.formRow}>
+            <FormControl style={styles.readOnlySelect}>
+              {!this.state.editProfile &&
+                (
+                  <Typography style={styles.selectLabelStyle} variant="caption">
+                    Practice Area
+                  </Typography>
+                )}
+              <div>
+                <MultiChipSelect
+                  id="practice-area"
+                  label="Practice Area"
+                  onChange={this.handlePracticeAreaChange}
+                  readOnly={!this.state.editProfile}
+                  selectedItem={this.state.practiceArea}
+                  onRemoveItem={this.removeSelectedPracticeArea}
+                  inputValue={this.state.practiceAreaInput}
+                  onInputValueChange={this.handlePracticeAreaChangeInput}
+                  availableItems={this.state.practiceAreaOptions} />
+              </div>
+            </FormControl>
+          </div>
+          <div style={styles.formRow}>
+            <FormControl style={styles.formGroupField}>
+              <InputLabel htmlFor="institution">Graduated Institution</InputLabel>
+              <Input
+                id="institution"
+                value={this.state.institution}
+                onChange={this.handleInputChange}
+                readOnly={!this.state.editProfile} />
+            </FormControl>
+          </div>
+          <div style={styles.formRow}>
+            <FormControl style={styles.formGroupField}>
+              <MuiPickersUtilsProvider utils={MomentUtils}>
+                <DatePicker
+                  keyboard
+                  label="Graduation date"
+                  format="MM/DD/YYYY"
+                  placeholder="12/10/2018"
+                  mask={[/\d/, /\d/, '/', /\d/, /\d/, '/', /\d/, /\d/, /\d/, /\d/]}
+                  value={this.state.graduationDate}
+                  onChange={this.handleDateChange}
+                  maxDate={new Date()}
+                  animateYearScrolling={false}
+                  InputProps={{
+                    inputProps: {
+                      readOnly: !this.state.editProfile,
+                    },
+                  }} />
+              </MuiPickersUtilsProvider>
+            </FormControl>
+          </div>
+          <div style={styles.formRow}>
+            <FormControl style={styles.formGroupField}>
+              <InputLabel htmlFor="linkedin-URL">Linkedin URL</InputLabel>
+              <Input
+                id="linkedin-URL"
+                value={this.state.linkedinURL}
+                onChange={this.handleInputChange}
+                readOnly={!this.state.editProfile}
+                startAdornment={<InputAdornment position="start">http://</InputAdornment>} />
+            </FormControl>
+          </div>
+          <div style={styles.formRow}>
+            <FormControl style={styles.formGroupField}>
+              <InputLabel htmlFor="biography">Biography</InputLabel>
+              <Input
+                id="biography"
+                value={this.state.biography}
+                onChange={this.handleInputChange}
+                readOnly={!this.state.editProfile}
+                multiline />
+            </FormControl>
+          </div>
+        </div>
+      );
     }
-  };
+
+    return null;
+  }
+
+  renderOptions = (optionsArray) => {
+    return optionsArray.map((option) => {
+      return (<FormControlLabel
+        key={option.id}
+        value={option.value.toString()}
+        control={<Radio />}
+        label={option.label}
+        disabled={!this.state.editProfile} />);
+    });
+  }
 
   render() {
     const {
@@ -346,45 +356,49 @@ class ProfilePage extends Component {
       <Grid container>
         <PageHelmet title="My Profile" />
         <Cover
-          coverImg="/images/material_bg.svg"
+          coverImg="/images/profile-bg.png"
           avatar={userAvatar}
           name={`${this.state.first} ${this.state.last}`}
           desc={this.state.biography} />
 
-        <Grid container alignItems='center'>
+        <Grid container alignItems="center">
           <Grid item sm={1} xs={false} />
           <Grid item sm={10} xs={12}>
-            <Card id="user-edit-card" style={{ maxHeight: `${this.state.contentHeight}px`, overflowY: 'auto' }}>
+            <Card id="user-edit-card" style={{ backgroundColor: '#f1f1f1', maxHeight: `${this.state.contentHeight}px`, overflowY: 'auto' }}>
               <CardContent>
                 { /* Button to enable editing */
                   this.state.editProfile ?
-                    (<div style={styles.topButtonGroup}>
-                      <Button
-                        variant="contained"
-                        color="primary"
-                        type="submit"
-                        style={{ marginRight: '10px' }}
-                        onClick={() => this.toggleEditProfile()}>
-                        Cancel editing
-                    </Button>
-                      <Button
-                        disabled={!this.state.editProfile}
-                        variant="contained"
-                        color="primary"
-                        type="submit"
-                        onClick={() => this.onSubmit()}>
-                        Save
+                    (
+                      <div style={styles.topButtonGroup}>
+                        <Button
+                          variant="contained"
+                          color="primary"
+                          type="submit"
+                          style={{ marginRight: '10px' }}
+                          onClick={() => this.toggleEditProfile()}>
+                          Cancel editing
                         </Button>
-                    </div>) :
-                    (<div style={styles.topButtonGroup}>
-                      <Button
-                        variant="contained"
-                        color="secondary"
-                        type="submit"
-                        onClick={() => this.toggleEditProfile()}>
-                        Edit Profile
+                        <Button
+                          disabled={!this.state.editProfile}
+                          variant="contained"
+                          color="primary"
+                          type="submit"
+                          onClick={() => this.onSubmit()}>
+                          Save
                         </Button>
-                    </div>)
+                      </div>) :
+                    (
+                      <div style={styles.topButtonGroup}>
+                        <Button
+                          style={{ backgroundColor: '#636363' }}
+                          variant="contained"
+                          color="secondary"
+                          type="submit"
+                          onClick={() => this.toggleEditProfile()}>
+                          Edit Profile
+                        </Button>
+                      </div>
+                    )
                 }
 
                 <div style={styles.formRow}>
@@ -399,30 +413,46 @@ class ProfilePage extends Component {
 
                   <FormControl style={styles.formGroupField}>
                     <InputLabel htmlFor="last">Last Name</InputLabel>
-                    <Input id="last" value={this.state.last} onChange={this.handleInputChange} readOnly={!this.state.editProfile} />
+                    <Input
+                      id="last"
+                      value={this.state.last}
+                      onChange={this.handleInputChange}
+                      readOnly={!this.state.editProfile} />
                   </FormControl>
                 </div>
                 <div style={styles.formRow}>
                   <FormControl style={styles.formGroupField}>
                     <InputLabel htmlFor="email">Email</InputLabel>
-                    <Input id="email" type="email" value={this.state.email} onChange={this.handleInputChange} readOnly={true} />
+                    <Input
+                      id="email"
+                      type="email"
+                      value={this.state.email}
+                      onChange={this.handleInputChange}
+                      readOnly />
                   </FormControl>
                 </div>
                 <div style={styles.formRow}>
                   <FormControl style={styles.formGroupField}>
                     <InputLabel htmlFor="phone">Phone</InputLabel>
-                    <Input id="phone" value={this.state.phone} onChange={this.handleInputChange} readOnly={!this.state.editProfile} />
+                    <Input
+                      id="phone"
+                      value={this.state.phone}
+                      onChange={this.handleInputChange}
+                      readOnly={!this.state.editProfile} />
                   </FormControl>
 
 
                   <FormControl style={styles.readOnlySelect}>
-                    {!this.state.editProfile && (<Typography style={styles.selectLabelStyle} variant="button">
-                      User Region
-                    </Typography>)}
+                    {!this.state.editProfile &&
+                      (
+                        <Typography style={styles.selectLabelStyle} variant="button">
+                          User Region
+                        </Typography>
+                      )}
                     <div id="multi-chip=select">
                       <MultiChipSelect
-                        id={'user-region'}
-                        label={'User Region'}
+                        id="user-region"
+                        label="User Region"
                         onChange={this.handleUserRegionChange}
                         readOnly={!this.state.editProfile}
                         selectedItem={this.state.userRegion}
@@ -463,18 +493,16 @@ class ProfilePage extends Component {
                 {this.renderLawyerInfo()}
 
               </CardContent>
-              <CardActions>
-
-              </CardActions>
             </Card>
           </Grid>
         </Grid>
       </Grid>
-    )
+    );
   }
 }
 
 ProfilePage.propTypes = {
+  // eslint-disable-next-line react/forbid-prop-types
   user: PropTypes.object.isRequired,
 };
 

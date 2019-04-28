@@ -50,7 +50,7 @@ export const actionButton = {
 };
 
 export const lawyerCard = {
-  marginRight: '10px',
+  marginTop: '10px',
 };
 
 export const textField = {
